@@ -1,3 +1,5 @@
+import '../css/style.css'; // Import CSS
+
 // Get HTML elements
 const sigma1Input = document.getElementById('sigma1');
 const sigma2Input = document.getElementById('sigma2');
