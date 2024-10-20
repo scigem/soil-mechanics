@@ -1,4 +1,4 @@
-import '../css/style.css'; // Import CSS
+import '../css/main.css'; // Import CSS
 
 // Get HTML elements
 const sigma1Input = document.getElementById('sigma1');
