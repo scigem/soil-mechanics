@@ -2,7 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-    entry: './src/index.js', // Entry point of your app
+    entry: './src/js/mohrs-circle.js', // Entry point of your app
     output: {
         filename: 'bundle.js', // Output bundle name
         path: path.resolve(__dirname, 'dist'), // Output directory
