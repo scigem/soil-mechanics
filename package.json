@@ -4,9 +4,9 @@
   "description": "An interactive tool for visualising soil mechanics concepts such as Mohr's Circle and Mohr-Coulomb failure criteria.",
   "main": "src/js/index.js",
   "scripts": {
-    "start": "webpack serve --open --config webpack.config.js",   // For local development with live reloading
-    "build": "webpack --config webpack.config.js",                // For building the project into the dist folder
-    "deploy": "gh-pages -d dist"                                  // For deploying to GitHub Pages manually
+    "start": "webpack serve --open --config webpack.config.js",
+    "build": "webpack --config webpack.config.js",
+    "deploy": "gh-pages -d dist"
   },
   "repository": {
     "type": "git",
