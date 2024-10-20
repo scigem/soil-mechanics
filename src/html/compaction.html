@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Compaction Simulator</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+
+<body>
+
+    <div class="controls">
+        <div>
+            <label for="Vs">V<sub>s</sub>:</label>
+            <input type="range" id="Vs" name="Vs" min="0" max="100" value="50">
+            <span id="VsValue">50</span> cm<sup>3</sup>
+        </div>
+        <div>
+            <label for="Vw">V<sub>w</sub>:</label>
+            <input type="range" id="Vw" name="Vw" min="0" max="100" value="50">
+            <span id="VwValue">50</span> cm<sup>3</sup>
+        </div>
+
+        <div>
+            <label for="Va">V<sub>a</sub>:</label>
+            <input type="range" id="Va" name="Va" min="0" max="100" value="50">
+            <span id="VaValue">50</span> cm<sup>3</sup>
+        </div>
+    </div>
+
+    <div class="graphs-container">
+        <div id="dryWeightGraph" class="graph"></div>
+        <div id="ternaryGraph" class="graph"></div>
+    </div>
+
+    <div class="values-container" id="valuesContainer">
+        <!-- <p>V<sub>s</sub> = <span id="VsValue"></span> cm<sup>3</sup></p> -->
+        <p>ρ<sub>w</sub> = 1 g/cm<sup>3</sup></p>
+        <p>G<sub>s</sub> = 2.7</p>
+        <p>V = <span id="VValue"></span> cm<sup>3</sup></p>
+        <p>V<sub>v</sub> = <span id="VvValue"></span> cm<sup>3</sup></p>
+        <p>m<sub>w</sub> = <span id="mwValue"></span> g</p>
+        <p>m<sub>s</sub> = <span id="msValue"></span> g</p>
+        <p>m = <span id="mValue"></span> g</p>
+        <p>mc = <span id="mcValue"></span></p>
+        <p>e = <span id="eValue"></span></p>
+        <p>&nu; = <span id="nuValue"></span></p>
+        <p>n = <span id="nValue"></span></p>
+        <p>S = <span id="SValue"></span></p>
+        <p>A = <span id="AValue"></span></p>
+        <p>&rho;<sub>dry</sub> = <span id="rhodValue"></span></p>
+        <p>&rho;<sub>bulk</sub> = <span id="rhobValue"></span></p>
+        <p>&rho;<sub>sat</sub> = <span id="rhosatValue"></span></p>
+        <p>&gamma;<sub>dry</sub> = <span id="gammadValue"></span></p>
+        <p>&gamma;<sub>bulk</sub> = <span id="gammabValue"></span></p>
+        <p>&gamma;<sub>sat</sub> = <span id="gammasatValue"></span></p>
+    </div>
+
+</body>
+
+</html>

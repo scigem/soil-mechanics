@@ -2,9 +2,12 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-    entry: './src/js/mohrs-circle.js', // Entry point of your app
+    entry: {
+        mohrs_circle: './src/js/mohrs-circle.js',
+        compaction: './src/js/compaction.js',
+    },
     output: {
-        filename: 'bundle.js', // Output bundle name
+        // filename: 'bundle.js', // Output bundle name
         path: path.resolve(__dirname, 'dist'), // Output directory
         clean: true, // Clean the dist folder before each build
     },
@@ -33,8 +36,18 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: './src/html/mohrs-circle.html', // Specify HTML template
+            filename: 'mohrs-circle.html',
+            template: './src/html/mohrs-circle.html',
+            chunks: ['mohrs_circle']
+        }),
+        new HtmlWebpackPlugin({
+            filename: 'compaction.html',
+            template: './src/html/compaction.html',
+            chunks: ['compaction']
         }),
     ],
+    externals: {
+        plotly: 'plotly'
+    },
     mode: 'development',
 };
