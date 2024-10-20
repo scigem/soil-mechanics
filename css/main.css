@@ -1,0 +1,40 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+header, section {
+    margin-bottom: 30px;
+}
+
+#input-section, #results-section {
+    max-width: 600px;
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.input-group label {
+    width: 200px;
+}
+
+.input-group input {
+    flex: 1;
+    padding: 5px;
+}
+
+#visualization-section {
+    text-align: center;
+}
+
+#mohrCanvas {
+    border: 1px solid #ccc;
+}
+
+button {
+    padding: 10px 20px;
+    cursor: pointer;
+}
