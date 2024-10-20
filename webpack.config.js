@@ -33,7 +33,7 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: './src/html/index.html', // Specify HTML template
+            template: './src/html/mohrs-circle.html', // Specify HTML template
         }),
     ],
     mode: 'development',
