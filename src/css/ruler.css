@@ -6,8 +6,10 @@ body {
 }
 
 .container {
+    width: 100%;
     max-width: 900px;
     margin: 0 auto;
+    position: relative;
 }
 
 h1 {
@@ -16,7 +18,7 @@ h1 {
 }
 
 .ruler-container {
-    margin-bottom: 40px; /* Increased margin to accommodate labels */
+    margin-bottom: 40px;
     position: relative;
 }
 
@@ -32,7 +34,7 @@ h1 {
     border-radius: 5px;
 }
 
-.ruler::before {
+.ruler::before, .ruler::after {
     content: "";
     position: absolute;
     height: 100%;
@@ -67,4 +69,24 @@ h1 {
 
 #void-ratio .mark, #porosity .mark, #solid-fraction .mark {
     height: 100%;
+}
+
+.vertical-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: calc(100% - 20px);
+    width: 2px;
+    background-color: red;
+    z-index: 10;
+    pointer-events: none;
+    display: none;
+}
+
+/* Style for the numeric markers */
+.marker {
+    position: absolute;
+    top: 55px; /* Below the ruler labels */
+    font-size: 12px;
+    transform:
 }
