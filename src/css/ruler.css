@@ -1,0 +1,70 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.ruler-container {
+    margin-bottom: 40px; /* Increased margin to accommodate labels */
+    position: relative;
+}
+
+.axis-label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.ruler {
+    height: 40px;
+    background-color: #e0e0e0;
+    position: relative;
+    border-radius: 5px;
+}
+
+.ruler::before {
+    content: "";
+    position: absolute;
+    height: 100%;
+    width: 2px;
+    background-color: #333;
+}
+
+.ruler::before {
+    left: 0;
+}
+
+.ruler::after {
+    right: 0;
+}
+
+.mark {
+    background-color: #000;
+    width: 2px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+}
+
+.label {
+    position: absolute;
+    top: 45px; /* Below the ruler */
+    transform: translateX(-50%);
+    font-size: 12px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+#void-ratio .mark, #porosity .mark, #solid-fraction .mark {
+    height: 100%;
+}

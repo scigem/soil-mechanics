@@ -5,6 +5,7 @@ module.exports = {
     entry: {
         mohrs_circle: './src/js/mohrs-circle.js',
         compaction: './src/js/compaction.js',
+        ruler: './src/js/ruler.js',
     },
     output: {
         // filename: 'bundle.js', // Output bundle name
@@ -44,6 +45,11 @@ module.exports = {
             filename: 'compaction.html',
             template: './src/html/compaction.html',
             chunks: ['compaction']
+        }),
+        new HtmlWebpackPlugin({
+            filename: 'ruler.html',
+            template: './src/html/ruler.html',
+            chunks: ['ruler']
         }),
     ],
     externals: {
