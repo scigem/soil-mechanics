@@ -105,6 +105,13 @@ function update() {
         xaxis: { title: 'Moisture Content (mc)', range: [0, max_mc], linewidth: 4 }, // xmin set to 0 with Unicode
         yaxis: { title: 'Dry Unit Weight (ρ<sub>d</sub>)', linewidth: 4, range: [0, gamma_d_max] },
         autosize: true,
+        showlegend: true,
+        legend: {
+            x: 1,
+            xanchor: 'right',
+            y: 1,
+            bgcolor: 'rgba(255, 255, 255, 0.5)',
+        }
     });
 
     // Plot stacked rectangles (soil, water, air)
@@ -133,7 +140,14 @@ function update() {
         title: 'Volume Distribution (Soil, Water, Air)',
         barmode: 'stack',
         xaxis: { title: 'Components' },
-        yaxis: { title: 'Volume (cm<sup>3</sup>)', range: [0, V] }
+        yaxis: { title: 'Volume (cm<sup>3</sup>)', range: [0, V] },
+        showlegend: true,
+        legend: {
+            x: 1,
+            xanchor: 'right',
+            y: 1,
+            bgcolor: 'rgba(255, 255, 255, 0.5)',
+        }
     });
 }
 
