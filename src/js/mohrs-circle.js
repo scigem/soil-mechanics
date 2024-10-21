@@ -12,6 +12,7 @@ const resultsText = document.getElementById('results-text');
 const canvas = document.getElementById('mohrCanvas');
 const ctx = canvas.getContext('2d');
 
+
 // Default values
 let sigma1 = parseFloat(sigma1Input.value);
 let sigma2 = parseFloat(sigma2Input.value);
@@ -175,8 +176,8 @@ function drawFailureEnvelope() {
     const tanPhi = Math.tan(phiRad);
 
     // Failure line from sigma = 0 to sigma = maxSigma
-    const sigmaStart = 0;
-    const tauStart = cohesion;
+    const sigmaStart = -cohesion/tanPhi;
+    const tauStart = 0;
 
     const sigmaEnd = maxSigma;
     const tauEnd = cohesion + sigmaEnd * tanPhi;
@@ -188,10 +189,18 @@ function drawFailureEnvelope() {
     const x2 = centerX + sigmaEnd * scale;
     const y2 = centerY - tauEnd * scale;
 
+    const y3 = centerY + tauEnd * scale;
     // Draw failure envelope
     ctx.beginPath();
     ctx.moveTo(x1, y1);
     ctx.lineTo(x2, y2);
+    ctx.strokeStyle = '#00f';
+    ctx.stroke();
+
+    // Draw failure envelope
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y3);
     ctx.strokeStyle = '#00f';
     ctx.stroke();
 
@@ -200,8 +209,10 @@ function drawFailureEnvelope() {
     ctx.beginPath();
     ctx.moveTo(x1, y1);
     ctx.lineTo(x2, y2);
-    ctx.lineTo(x2, centerY + canvas.height / 2);
-    ctx.lineTo(x1, centerY + canvas.height / 2);
+    // ctx.lineTo(x2, centerY + canvas.height / 2);
+    // ctx.lineTo(x1, centerY + canvas.height / 2);
+    ctx.lineTo(x2, y3);
+    ctx.lineTo(x1, y1);
     ctx.closePath();
     ctx.fill();
 }
