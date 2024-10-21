@@ -1,4 +1,5 @@
-import '../css/main.css'; // Import CSS
+import '../css/main.css';
+import '../css/compaction.css';
 
 const rho_w = 1; // assuming water density is 1 for simplicity
 const G_s = 2.7; // typical value for specific gravity of soil solids
@@ -10,14 +11,21 @@ document.getElementById("Va").addEventListener('input', update);
 
 console.log("Hello from compaction.js");
 
-function calculateNoAirVoidsLine() {
+function calculateNoAirVoidsLine(max_mc) {
     let m_c_values = [];
     let rho_d_values = [];
-    for (let mc = 0; mc <= 1; mc += 0.01) {
+
+    if (!isFinite(max_mc)) {
+        max_mc = 100;
+    }
+    let delta = max_mc / 100;
+    
+    for (let mc = 0; mc <= max_mc; mc += delta) {
         let rho_d_no_air_voids = (rho_w * G_s) / (1 + mc * G_s);
         m_c_values.push(mc);
         rho_d_values.push(rho_d_no_air_voids);
     }
+
     return { m_c_values, rho_d_values };
 }
 
@@ -67,13 +75,20 @@ function update() {
     document.getElementById("gammabValue").textContent = gamma_b.toFixed(2);
     document.getElementById("gammasatValue").textContent = gamma_sat.toFixed(2);
 
-
+    let max_mc = Math.max(1, m_c);
 
     // Calculate no air voids line
-    const noAirVoidsLine = calculateNoAirVoidsLine();
-
+    const noAirVoidsLine = calculateNoAirVoidsLine(max_mc);
     // Plot dry unit weight vs. moisture content with no air voids line
     Plotly.newPlot('dryWeightGraph', [
+        {
+            x: noAirVoidsLine.m_c_values,
+            y: noAirVoidsLine.rho_d_values,
+            mode: 'lines',
+            type: 'scatter',
+            name: 'No Air Voids Line',
+            line: { dash: 'dash', color: 'red', width: 4 }
+        },
         {
             x: [m_c], // current moisture content
             y: [rho_d], // current dry unit weight
@@ -82,45 +97,42 @@ function update() {
             name: 'Current State',
             text: [`ρ<sub>d</sub> = ${rho_d.toFixed(2)}`],
             hoverinfo: 'text',
+            marker: { size: 15, color: 'black' }
         },
-        {
-            x: noAirVoidsLine.m_c_values,
-            y: noAirVoidsLine.rho_d_values,
-            mode: 'lines',
-            type: 'scatter',
-            name: 'No Air Voids Line',
-            line: { dash: 'dash', color: 'red', width: 4 }
-        }
     ], {
         title: 'Dry Unit Weight vs. Moisture Content',
-        xaxis: { title: 'Moisture Content (mc)', range: [0, 1], linewidth: 4 }, // xmin set to 0 with Unicode
+        xaxis: { title: 'Moisture Content (mc)', range: [0, max_mc], linewidth: 4 }, // xmin set to 0 with Unicode
         yaxis: { title: 'Dry Unit Weight (ρ<sub>d</sub>)', linewidth: 4 },
         autosize: true,
     });
 
-    // Plot V_w/V_s/V_v ternary graph
+    // Plot stacked rectangles (soil, water, air)
     Plotly.newPlot('ternaryGraph', [{
-        type: 'scatterternary',
-        mode: 'markers',
-        a: [V_w],
-        b: [V_s],
-        c: [V_a],
-        marker: {
-            symbol: 100,
-            color: 'blue',
-            size: 10
-        },
-        text: [`V<sub>w</sub> = ${V_w}, V<sub>s</sub> = ${V_s}, V<sub>v</sub> = ${V_a}`],
-        hoverinfo: 'text'
-    }], {
-        ternary: {
-            sum: V_w + V_s + V_a,
-            aaxis: { title: 'V<sub>w</sub>', linewidth: 4 },
-            baxis: { title: 'V<sub>s</sub>', linewidth: 4 },
-            caxis: { title: 'V<sub>a</sub>', linewidth: 4 },
-        },
-        title: 'V<sub>w</sub>/V<sub>s</sub>/V<sub>a</sub> Ternary Graph',
-        autosize: true
+        x: ['Volume Distribution'],
+        y: [V_s],
+        name: 'Soil',
+        type: 'bar',
+        marker: { color: 'brown' }
+    },
+    {
+        x: ['Volume Distribution'],
+        y: [V_w],
+        name: 'Water',
+        type: 'bar',
+        marker: { color: 'blue' }
+    },
+    {
+        x: ['Volume Distribution'],
+        y: [V_a],
+        name: 'Air',
+        type: 'bar',
+        marker: { color: 'lightgrey' }
+    }
+    ], {
+        title: 'Volume Distribution (Soil, Water, Air)',
+        barmode: 'stack',
+        xaxis: { title: 'Components' },
+        yaxis: { title: 'Volume (cm<sup>3</sup>)', range: [0, V] }
     });
 }
 

@@ -1,4 +1,5 @@
-import '../css/main.css'; // Import CSS
+import '../css/main.css';
+import '../css/mohrs-circle.css';
 
 // Get HTML elements
 const sigma1Input = document.getElementById('sigma1');
@@ -56,10 +57,14 @@ function update() {
     const sigmaN = (sigma1 + sigma2) / 2 + (sigma1 - sigma2) / 2 * Math.cos(2 * thetaRad);
     const tau = (sigma1 - sigma2) / 2 * Math.sin(2 * thetaRad);
 
+    let N_phi = (1 + Math.sin(frictionAngle * Math.PI / 180)) / (1 - Math.sin(frictionAngle * Math.PI / 180));
+    let sigma_1_threshold = sigma2*N_phi + 2*cohesion*Math.sqrt(N_phi);
+
     // Calculate Factor of Safety
     const phiRad = (frictionAngle * Math.PI) / 180;
-    const tauFailure = cohesion + sigmaN * Math.tan(phiRad);
-    const factorOfSafety = tauFailure / tau;
+    // const tauFailure = cohesion + sigmaN * Math.tan(phiRad);
+    // const factorOfSafety = Math.abs(tauFailure / tau);
+    const factorOfSafety = sigma_1_threshold / sigma1;
 
     // Update results text
     resultsText.innerHTML = `
@@ -77,27 +82,35 @@ function update() {
     drawFailureEnvelope();
 }
 
-// Function to draw Mohr's Circle
+// Function to draw Mohr's Circle with equal scaling
 function drawMohrsCircle() {
     const centerX = canvas.width / 2;
     const centerY = canvas.height / 2;
     const radius = Math.abs((sigma1 - sigma2) / 2);
 
-    // Scaling factors
-    const scaleX = canvas.width / (2 * (Math.max(Math.abs(sigma1), Math.abs(sigma2)) + 20));
-    const scaleY = canvas.height / (2 * (radius + 20));
+    // Use a unified scaling factor for both axes to maintain equal scaling
+    const scale = Math.min(canvas.width, canvas.height) / (2 * (Math.max(Math.abs(sigma1), Math.abs(sigma2)) + 20));
 
     // Circle center
-    const cX = centerX + ((sigma1 + sigma2) / 2) * scaleX;
+    const cX = centerX + ((sigma1 + sigma2) / 2) * scale;
     const cY = centerY;
 
     // Draw circle
     ctx.beginPath();
-    ctx.arc(cX, cY, radius * scaleX, 0, 2 * Math.PI);
+    ctx.arc(cX, cY, radius * scale, 0, 2 * Math.PI);
     ctx.strokeStyle = '#000';
     ctx.stroke();
 
     // Draw axes
+    drawAxes(scale);
+}
+
+// Function to draw axes with labels and tick marks
+function drawAxes(scale) {
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+
+    // Draw x and y axes
     ctx.beginPath();
     ctx.moveTo(0, centerY);
     ctx.lineTo(canvas.width, centerY);
@@ -106,10 +119,27 @@ function drawMohrsCircle() {
     ctx.strokeStyle = '#888';
     ctx.stroke();
 
-    // Label axes
+    // Add labels
     ctx.fillStyle = '#000';
-    ctx.fillText('σ', canvas.width - 30, centerY - 10);
-    ctx.fillText('τ', centerX + 10, 20);
+    ctx.fillText('σ (Stress)', canvas.width - 50, centerY - 10);
+    ctx.fillText('τ (Shear)', centerX + 10, 20);
+
+    // Add tick marks and values for the x-axis (σ)
+    for (let i = -5; i <= 5; i++) {
+        const x = centerX + i * 20 * scale;
+        ctx.moveTo(x, centerY - 5);
+        ctx.lineTo(x, centerY + 5);
+        ctx.fillText((i * 20).toString(), x - 10, centerY + 20);
+    }
+
+    // Add tick marks and values for the y-axis (τ)
+    for (let i = -5; i <= 5; i++) {
+        const y = centerY - i * 20 * scale;
+        ctx.moveTo(centerX - 5, y);
+        ctx.lineTo(centerX + 5, y);
+        ctx.fillText((i * 20).toString(), centerX + 10, y + 5);
+    }
+    ctx.stroke();
 }
 
 // Function to draw the current stress point
@@ -117,13 +147,12 @@ function drawStressPoint(sigmaN, tau) {
     const centerX = canvas.width / 2;
     const centerY = canvas.height / 2;
 
-    // Scaling factors
-    const scaleX = canvas.width / (2 * (Math.max(Math.abs(sigma1), Math.abs(sigma2)) + 20));
-    const scaleY = canvas.height / (2 * (Math.abs((sigma1 - sigma2) / 2) + 20));
+    // Use the unified scale
+    const scale = Math.min(canvas.width, canvas.height) / (2 * (Math.max(Math.abs(sigma1), Math.abs(sigma2)) + 20));
 
     // Calculate position
-    const x = centerX + sigmaN * scaleX;
-    const y = centerY - tau * scaleY;
+    const x = centerX + sigmaN * scale;
+    const y = centerY - tau * scale;
 
     // Draw point
     ctx.beginPath();
@@ -138,9 +167,8 @@ function drawFailureEnvelope() {
     const centerY = canvas.height / 2;
     const maxSigma = Math.max(Math.abs(sigma1), Math.abs(sigma2)) + 20;
 
-    // Scaling factors
-    const scaleX = canvas.width / (2 * maxSigma);
-    const scaleY = canvas.height / (2 * (Math.abs((sigma1 - sigma2) / 2) + 20));
+    // Use the unified scale
+    const scale = Math.min(canvas.width, canvas.height) / (2 * maxSigma);
 
     // Calculate points
     const phiRad = (frictionAngle * Math.PI) / 180;
@@ -154,11 +182,11 @@ function drawFailureEnvelope() {
     const tauEnd = cohesion + sigmaEnd * tanPhi;
 
     // Convert to canvas coordinates
-    const x1 = centerX + sigmaStart * scaleX;
-    const y1 = centerY - tauStart * scaleY;
+    const x1 = centerX + sigmaStart * scale;
+    const y1 = centerY - tauStart * scale;
 
-    const x2 = centerX + sigmaEnd * scaleX;
-    const y2 = centerY - tauEnd * scaleY;
+    const x2 = centerX + sigmaEnd * scale;
+    const y2 = centerY - tauEnd * scale;
 
     // Draw failure envelope
     ctx.beginPath();

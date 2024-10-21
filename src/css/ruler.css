@@ -1,20 +1,8 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 20px;
-}
-
 .container {
     width: 100%;
     max-width: 900px;
     margin: 0 auto;
     position: relative;
-}
-
-h1 {
-    text-align: center;
-    margin-bottom: 20px;
 }
 
 .ruler-container {
@@ -34,7 +22,7 @@ h1 {
     border-radius: 5px;
 }
 
-.ruler::before, .ruler::after {
+.ruler::before {
     content: "";
     position: absolute;
     height: 100%;
@@ -73,9 +61,9 @@ h1 {
 
 .vertical-line {
     position: absolute;
-    top: 0;
+    top: 23px;
     left: 0;
-    height: calc(100% - 20px);
+    height: calc(100% - 62px);
     width: 2px;
     background-color: red;
     z-index: 10;
@@ -86,7 +74,8 @@ h1 {
 /* Style for the numeric markers */
 .marker {
     position: absolute;
-    top: 55px; /* Below the ruler labels */
+    top: 40px; /* Below the ruler labels */
     font-size: 12px;
-    transform:
+    margin-left: 10px;
+    /* padding-bottom: 300px; */
 }
