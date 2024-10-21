@@ -12,6 +12,28 @@ const resultsText = document.getElementById('results-text');
 const canvas = document.getElementById('mohrCanvas');
 const ctx = canvas.getContext('2d');
 
+// Function to adjust canvas for retina display
+function resizeCanvasForRetina() {
+    const pixelRatio = window.devicePixelRatio || 1;
+    
+    // Save the original canvas width and height
+    const originalWidth = canvas.width;
+    const originalHeight = canvas.height;
+
+    // Set the actual canvas size to the pixel ratio
+    canvas.width = originalWidth * pixelRatio;
+    canvas.height = originalHeight * pixelRatio;
+    
+    // Scale the drawing context to account for the higher DPI
+    ctx.scale(pixelRatio, pixelRatio);
+
+    // Ensure the canvas element appears the same size by setting its style back to original dimensions
+    canvas.style.width = `${originalWidth}px`;
+    canvas.style.height = `${originalHeight}px`;
+}
+
+// Call the function to adjust canvas for retina
+resizeCanvasForRetina();
 
 // Default values
 let sigma1 = parseFloat(sigma1Input.value);
@@ -59,21 +81,18 @@ function update() {
     const tau = (sigma1 - sigma2) / 2 * Math.sin(2 * thetaRad);
 
     let N_phi = (1 + Math.sin(frictionAngle * Math.PI / 180)) / (1 - Math.sin(frictionAngle * Math.PI / 180));
-    let sigma_1_threshold = sigma2*N_phi + 2*cohesion*Math.sqrt(N_phi);
+    let sigma_1_threshold = sigma2 * N_phi + 2 * cohesion * Math.sqrt(N_phi);
 
     // Calculate Factor of Safety
-    const phiRad = (frictionAngle * Math.PI) / 180;
-    // const tauFailure = cohesion + sigmaN * Math.tan(phiRad);
-    // const factorOfSafety = Math.abs(tauFailure / tau);
     const factorOfSafety = sigma_1_threshold / sigma1;
 
     // Update results text
     resultsText.innerHTML = `
         <strong>Calculated Stresses:</strong><br>
         Normal Stress (σₙ): ${sigmaN.toFixed(2)}<br>
-        Shear Stress (τ): ${tau.toFixed(2)}<br>
+        Shear Stress (τ): ${tau.toFixed(2)}<br><br>
         <strong>Factor of Safety (FoS):</strong> ${factorOfSafety.toFixed(2)}<br>
-        ${factorOfSafety >= 1 ? '<span style="color:green;">Material is in safe condition.</span>' : '<span style="color:red;">Failure predicted!</span>'}
+        ${factorOfSafety >= 1 ? '<span style="color:green;">No failure.</span>' : '<span style="color:red;">Failure predicted!</span>'}
     `;
 
     // Draw stress point
@@ -85,12 +104,12 @@ function update() {
 
 // Function to draw Mohr's Circle with equal scaling
 function drawMohrsCircle() {
-    const centerX = canvas.width / 2;
-    const centerY = canvas.height / 2;
+    const centerX = canvas.width / (2 * window.devicePixelRatio);
+    const centerY = canvas.height / (2 * window.devicePixelRatio);
     const radius = Math.abs((sigma1 - sigma2) / 2);
 
     // Use a unified scaling factor for both axes to maintain equal scaling
-    const scale = Math.min(canvas.width, canvas.height) / (2 * (Math.max(Math.abs(sigma1), Math.abs(sigma2)) + 20));
+    const scale = Math.min(canvas.width, canvas.height) / (2 * (Math.max(Math.abs(sigma1), Math.abs(sigma2)) + 20)) / window.devicePixelRatio;
 
     // Circle center
     const cX = centerX + ((sigma1 + sigma2) / 2) * scale;
@@ -108,21 +127,21 @@ function drawMohrsCircle() {
 
 // Function to draw axes with labels and tick marks
 function drawAxes(scale) {
-    const centerX = canvas.width / 2;
-    const centerY = canvas.height / 2;
+    const centerX = canvas.width / (2 * window.devicePixelRatio);
+    const centerY = canvas.height / (2 * window.devicePixelRatio);
 
     // Draw x and y axes
     ctx.beginPath();
     ctx.moveTo(0, centerY);
-    ctx.lineTo(canvas.width, centerY);
+    ctx.lineTo(canvas.width / window.devicePixelRatio, centerY);
     ctx.moveTo(centerX, 0);
-    ctx.lineTo(centerX, canvas.height);
+    ctx.lineTo(centerX, canvas.height / window.devicePixelRatio);
     ctx.strokeStyle = '#888';
     ctx.stroke();
 
     // Add labels
     ctx.fillStyle = '#000';
-    ctx.fillText('σ (Stress)', canvas.width - 50, centerY - 10);
+    ctx.fillText('σ (Stress)', (canvas.width / window.devicePixelRatio) - 50, centerY - 10);
     ctx.fillText('τ (Shear)', centerX + 10, 20);
 
     // Add tick marks and values for the x-axis (σ)
@@ -145,11 +164,11 @@ function drawAxes(scale) {
 
 // Function to draw the current stress point
 function drawStressPoint(sigmaN, tau) {
-    const centerX = canvas.width / 2;
-    const centerY = canvas.height / 2;
+    const centerX = canvas.width / (2 * window.devicePixelRatio);
+    const centerY = canvas.height / (2 * window.devicePixelRatio);
 
     // Use the unified scale
-    const scale = Math.min(canvas.width, canvas.height) / (2 * (Math.max(Math.abs(sigma1), Math.abs(sigma2)) + 20));
+    const scale = Math.min(canvas.width, canvas.height) / (2 * (Math.max(Math.abs(sigma1), Math.abs(sigma2)) + 20)) / window.devicePixelRatio;
 
     // Calculate position
     const x = centerX + sigmaN * scale;
@@ -164,12 +183,12 @@ function drawStressPoint(sigmaN, tau) {
 
 // Function to draw Mohr-Coulomb failure envelope
 function drawFailureEnvelope() {
-    const centerX = canvas.width / 2;
-    const centerY = canvas.height / 2;
+    const centerX = canvas.width / (2 * window.devicePixelRatio);
+    const centerY = canvas.height / (2 * window.devicePixelRatio);
     const maxSigma = Math.max(Math.abs(sigma1), Math.abs(sigma2)) + 20;
 
     // Use the unified scale
-    const scale = Math.min(canvas.width, canvas.height) / (2 * maxSigma);
+    const scale = Math.min(canvas.width, canvas.height) / (2 * maxSigma) / window.devicePixelRatio;
 
     // Calculate points
     const phiRad = (frictionAngle * Math.PI) / 180;
@@ -190,6 +209,7 @@ function drawFailureEnvelope() {
     const y2 = centerY - tauEnd * scale;
 
     const y3 = centerY + tauEnd * scale;
+
     // Draw failure envelope
     ctx.beginPath();
     ctx.moveTo(x1, y1);
@@ -197,7 +217,7 @@ function drawFailureEnvelope() {
     ctx.strokeStyle = '#00f';
     ctx.stroke();
 
-    // Draw failure envelope
+    // Draw failure envelope shading
     ctx.beginPath();
     ctx.moveTo(x1, y1);
     ctx.lineTo(x2, y3);
@@ -209,8 +229,6 @@ function drawFailureEnvelope() {
     ctx.beginPath();
     ctx.moveTo(x1, y1);
     ctx.lineTo(x2, y2);
-    // ctx.lineTo(x2, centerY + canvas.height / 2);
-    // ctx.lineTo(x1, centerY + canvas.height / 2);
     ctx.lineTo(x2, y3);
     ctx.lineTo(x1, y1);
     ctx.closePath();

@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Interactive Mohr's Circle and Mohr-Coulomb Failure Criteria</title>
-    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
@@ -12,37 +11,41 @@
     </header>
 
     <section id="input-section">
-        <h2>Input Parameters</h2>
-        <div class="input-group">
-            <label for="sigma1">Major Principal Stress (σ₁):</label>
-            <input type="number" id="sigma1" value="100">
+        <div class="column">
+            <h2>Input Parameters</h2>
+            <div class="input-group">
+                <label for="sigma1">Major Principal Stress &sigma;<sub>1</sub> (kPa):</label>
+                <input type="number" id="sigma1" value="100">
+            </div>
+            <div class="input-group">
+                <label for="sigma2">Minor Principal Stress &sigma;<sub>3</sub> (kPa):</label>
+                <input type="number" id="sigma2" value="50">
+            </div>
+            <div class="input-group">
+                <label for="theta">Angle θ (deg):</label>
+                <input type="number" id="theta" value="0">
+            </div>
+            <div class="input-group">
+                <label for="cohesion">Cohesion c (kPa):</label>
+                <input type="number" id="cohesion" value="10">
+            </div>
+            <div class="input-group">
+                <label for="friction">Friction Angle φ (deg):</label>
+                <input type="number" id="friction" value="30">
+            </div>
+            <button id="reset-button">Reset</button>
         </div>
-        <div class="input-group">
-            <label for="sigma2">Minor Principal Stress (σ₂):</label>
-            <input type="number" id="sigma2" value="50">
+    <!-- </section> -->
+
+    <!-- <section id="results-section"> -->
+        <div class="column">
+            <h2>Results</h2>
+            <p id="results-text"></p>
         </div>
-        <div class="input-group">
-            <label for="theta">Angle θ (degrees):</label>
-            <input type="number" id="theta" value="0">
-        </div>
-        <div class="input-group">
-            <label for="cohesion">Cohesion (c):</label>
-            <input type="number" id="cohesion" value="10">
-        </div>
-        <div class="input-group">
-            <label for="friction">Friction Angle (φ in degrees):</label>
-            <input type="number" id="friction" value="30">
-        </div>
-        <button id="reset-button">Reset</button>
     </section>
 
     <section id="visualization-section">
         <canvas id="mohrCanvas" width="600" height="600"></canvas>
-    </section>
-
-    <section id="results-section">
-        <h2>Results</h2>
-        <p id="results-text"></p>
     </section>
     
 </body>

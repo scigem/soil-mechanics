@@ -1,5 +1,9 @@
 #input-section, #results-section {
-    max-width: 600px;
+    width: 100%;
+    max-width: 900px;
+    display: flex;
+    justify-content: center;
+    column-gap: 100px;
 }
 
 .input-group {
@@ -9,7 +13,7 @@
 }
 
 .input-group label {
-    width: 200px;
+    width: 300px;
 }
 
 .input-group input {
@@ -23,4 +27,12 @@
 
 #mohrCanvas {
     border: 1px solid #ccc;
+}
+
+.column {
+    min-width: 300px;
+    /* display: inline-block; */
+    /* vertical-align: top; */
+    /* width: 50%; */
+    /* padding-: 50px; */
 }
