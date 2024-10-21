@@ -8,6 +8,10 @@
 <script defer src="compaction.js"></script></head>
 
 <body>
+    <header>
+        <h1>Compaction</h1>
+        <p>Explore how compaction changes material index properties.</p>
+    </header>
 
     <div class="controls">
         <div>
@@ -15,6 +19,7 @@
             <input type="range" id="Vs" name="Vs" min="0" max="100" value="50">
             <span id="VsValue">50</span> cm<sup>3</sup>
         </div>
+
         <div>
             <label for="Vw">V<sub>w</sub>:</label>
             <input type="range" id="Vw" name="Vw" min="0" max="100" value="50">
@@ -29,14 +34,18 @@
     </div>
 
     <div class="graphs-container">
-        <div id="dryWeightGraph" class="graph"></div>
         <div id="ternaryGraph" class="graph"></div>
+        <div id="dryWeightGraph" class="graph"></div>
     </div>
 
-    <div class="values-container" id="valuesContainer">
-        <!-- <p>V<sub>s</sub> = <span id="VsValue"></span> cm<sup>3</sup></p> -->
+    <h2>Material properties</h2>
+    <div>
         <p>ρ<sub>w</sub> = 1 g/cm<sup>3</sup></p>
         <p>G<sub>s</sub> = 2.7</p>
+    </div>
+
+    <h2>Derived quantities</h2>
+    <div class="values-container" id="valuesContainer">
         <p>V = <span id="VValue"></span> cm<sup>3</sup></p>
         <p>V<sub>v</sub> = <span id="VvValue"></span> cm<sup>3</sup></p>
         <p>m<sub>w</sub> = <span id="mwValue"></span> g</p>
