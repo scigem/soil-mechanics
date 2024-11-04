@@ -113,3 +113,34 @@ container.addEventListener('mouseleave', () => {
     markerPorosity.style.display = 'none';
     markerSolidFraction.style.display = 'none';
 });
+
+// Show vertical line on mouse move or touch move
+function handleMove(event) {
+    const containerRect = container.getBoundingClientRect();
+    const xPos = (event.touches ? event.touches[0].clientX : event.clientX) - containerRect.left;
+
+    if (xPos >= 0 && xPos <= containerRect.width) {
+        verticalLine.style.left = `${xPos}px`;
+        verticalLine.style.display = 'block';
+
+        const voidRatioValue = calculateValue('void-ratio', xPos, containerRect.width);
+        const porosityValue = calculateValue('porosity', xPos, containerRect.width);
+        const solidFractionValue = calculateValue('solid-fraction', xPos, containerRect.width);
+
+        markerVoidRatio.innerText = voidRatioValue;
+        markerVoidRatio.style.left = `${xPos}px`;
+        markerVoidRatio.style.display = 'block';
+
+        markerPorosity.innerText = porosityValue;
+        markerPorosity.style.left = `${xPos}px`;
+        markerPorosity.style.display = 'block';
+
+        markerSolidFraction.innerText = solidFractionValue;
+        markerSolidFraction.style.left = `${xPos}px`;
+        markerSolidFraction.style.display = 'block';
+    }
+}
+
+// Add event listeners for both mouse and touch events
+container.addEventListener('mousemove', handleMove);
+container.addEventListener('touchmove', handleMove);
