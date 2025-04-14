@@ -144,3 +144,28 @@ function handleMove(event) {
 // Add event listeners for both mouse and touch events
 container.addEventListener('mousemove', handleMove);
 container.addEventListener('touchmove', handleMove);
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Set ranges for each arrow
+    const ranges = {
+        'loose-to-dense': { start: 10, end: 90 }, // Full range
+        // 'sand-range': { start: 50, end: 70 },    // Sand range
+        // 'clay-range': { start: 10, end: 80 }     // Clay range
+    };
+
+    // Update arrow widths and positions
+    Object.keys(ranges).forEach(id => {
+        const arrow = document.getElementById(id).querySelector('.double-arrow');
+        const range = ranges[id];
+
+        // Calculate width and position based on range
+        const width = range.end - range.start;
+        const left = range.start;
+
+        // Apply styles
+        arrow.style.width = `${width}%`;
+        arrow.style.left = `${left}%`;
+        arrow.style.position = 'absolute';
+
+    });
+});

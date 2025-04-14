@@ -27,3 +27,77 @@ button {
     padding: 10px 20px;
     cursor: pointer;
 }
+
+.arrow-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Ensures "Loose" and "Dense" are at the ends */
+    margin: 20px 0; /* Add vertical spacing between containers */
+    height: 50px; /* Ensure enough height for the arrows and labels */
+}
+
+.double-arrow {
+    position: absolute;
+    top: 50%; /* Center the arrow vertically */
+    left: 0;
+    transform: translateY(-50%);
+    height: 2px;
+    background-color: black;
+}
+
+.double-arrow::before,
+.double-arrow::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-style: solid;
+}
+
+.double-arrow::before {
+    left: -10px;
+    border-width: 5px 10px 5px 0;
+    border-color: transparent black transparent transparent;
+}
+
+.double-arrow::after {
+    right: -10px;
+    border-width: 5px 0 5px 10px;
+    border-color: transparent transparent transparent black;
+}
+
+.label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+}
+
+.label.left {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.label.right {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.range-label {
+    position: absolute;
+    top: 50%; /* Center vertically within the arrow */
+    left: 50%; /* Center horizontally within the arrow */
+    transform: translate(-50%, -50%);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    background-color: white;
+    padding: 2px 5px;
+    border: 1px solid black;
+    border-radius: 3px;
+    pointer-events: none; /* Prevent the label from interfering with mouse events */
+}
