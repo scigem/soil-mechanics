@@ -70,14 +70,17 @@ h1 {
 
 .label {
     position: absolute;
-    top: 45px; /* Below the ruler */
+    top: 45px;
+    /* Below the ruler */
     transform: translateX(-50%);
-    font-size: 12px;
+    /* font-size: 12px; */
     text-align: center;
     white-space: nowrap;
 }
 
-#void-ratio .mark, #porosity .mark, #solid-fraction .mark {
+#void-ratio .mark,
+#porosity .mark,
+#solid-fraction .mark {
     height: 100%;
 }
 
@@ -96,7 +99,8 @@ h1 {
 /* Style for the numeric markers */
 .marker {
     position: absolute;
-    top: 40px; /* Below the ruler labels */
+    top: 40px;
+    /* Below the ruler labels */
     font-size: 12px;
     margin-left: 10px;
     /* padding-bottom: 300px; */

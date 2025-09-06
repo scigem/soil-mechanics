@@ -1,38 +1,204 @@
-#input-section, #results-section {
-    width: 100%;
-    max-width: 900px;
+/* Mohr's Circle Specific Styles */
+
+#input-section {
+    background: var(--surface-color);
+    border-radius: var(--border-radius);
+    padding: 1.25rem;
+    box-shadow: var(--shadow-md);
+    margin-bottom: 0;
+    border: 1px solid var(--border-color);
     display: flex;
-    justify-content: center;
-    column-gap: 100px;
+    flex-direction: column;
+    height: fit-content;
+}
+
+.column {
+    min-width: 0;
+    /* Prevents grid blowout */
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 .input-group {
     display: flex;
-    align-items: center;
-    margin-bottom: 10px;
+    flex-direction: column;
+    margin-bottom: 0.75rem;
 }
 
 .input-group label {
-    width: 300px;
+    font-weight: 500;
+    font-size: 0.85rem;
+    color: var(--text-primary);
+    margin-bottom: 0.4rem;
+    display: flex;
+    align-items: center;
 }
 
 .input-group input {
-    flex: 1;
-    padding: 5px;
+    padding: 0.5rem;
+    border: 2px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 0.9rem;
+    transition: var(--transition);
+    background: var(--surface-color);
+    color: var(--text-primary);
 }
 
+.input-group input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgb(59 130 246 / 0.1);
+}
+
+.input-group input:hover {
+    border-color: var(--secondary-color);
+}
+
+#reset-button {
+    margin-top: 0.75rem;
+    width: 100%;
+    justify-self: stretch;
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+}
+
+/* Results Section */
+#results-text {
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+    border: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--text-primary);
+    white-space: pre-line;
+    margin: 0;
+    text-align: left;
+}
+
+/* Visualization Section */
 #visualization-section {
+    background: var(--surface-color);
+    border-radius: var(--border-radius);
+    padding: 1.25rem;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-color);
     text-align: center;
+    position: relative;
 }
 
 #mohrCanvas {
-    border: 1px solid #ccc;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    width: 100%;
+    aspect-ratio: 4/3;
+    max-width: 100%;
+    box-shadow: var(--shadow-sm);
+    background: var(--surface-color);
+    display: block;
 }
 
-.column {
-    min-width: 300px;
-    /* display: inline-block; */
-    /* vertical-align: top; */
-    /* width: 50%; */
-    /* padding-: 50px; */
+/* Results Overlay */
+#results-overlay {
+    position: absolute;
+    top: 2rem;
+    left: 2.5rem;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: var(--shadow-md);
+    max-width: 250px;
+    z-index: 10;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .main-layout {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    #input-section {
+        margin-bottom: 1rem;
+    }
+}
+
+@media (max-width: 968px) {
+    #input-section {
+        padding: 1.25rem;
+    }
+
+    #visualization-section {
+        padding: 1.25rem;
+    }
+
+    #results-overlay {
+        top: 1.25rem;
+        left: 1.25rem;
+        max-width: 200px;
+    }
+}
+
+@media (max-width: 640px) {
+    #input-section {
+        padding: 1rem;
+        margin: 0 -0.5rem 2rem;
+        border-radius: 8px;
+    }
+
+    #visualization-section {
+        padding: 1rem;
+        margin: 0 -0.5rem;
+        border-radius: 8px;
+    }
+
+    #results-overlay {
+        position: static;
+        margin: 1rem 0 0 0;
+        max-width: none;
+        background: var(--background-color);
+        backdrop-filter: none;
+    }
+
+    .input-group {
+        margin-bottom: 1rem;
+    }
+
+    .input-group input {
+        padding: 0.625rem;
+    }
+
+    #mohrCanvas {
+        width: 100%;
+        height: 350px;
+        max-width: 100%;
+    }
+
+    h2 {
+        font-size: 1.25rem;
+    }
+}
+
+/* Enhanced Visual Elements */
+.input-group label sub {
+    font-size: 0.8em;
+    color: var(--text-secondary);
+}
+
+/* Loading and Interactive States */
+.input-group input:disabled {
+    background-color: var(--background-color);
+    color: var(--text-secondary);
+    cursor: not-allowed;
+}
+
+/* Smooth transitions for all interactive elements */
+.input-group input,
+button,
+#mohrCanvas {
+    transition: var(--transition);
 }

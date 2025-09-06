@@ -1,52 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive Mohr's Circle and Mohr-Coulomb Failure Criteria</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
-    <header>
-        <h1>Mohr's Circle and Mohr-Coulomb Failure Criteria</h1>
-        <p>Explore stress states and failure conditions by adjusting the parameters below.</p>
-    </header>
+    <div class="container">
+        <header>
+            <h1>Mohr's Circle and Mohr-Coulomb Failure Criteria</h1>
+            <!-- <p>Explore stress states and failure conditions by adjusting the parameters below.</p> -->
+        </header>
 
-    <section id="input-section">
-        <div class="column">
-            <h2>Input Parameters</h2>
-            <div class="input-group">
-                <label for="sigma1">Major Principal Stress &sigma;<sub>1</sub> (kPa):</label>
-                <input type="number" id="sigma1" value="100">
-            </div>
-            <div class="input-group">
-                <label for="sigma2">Minor Principal Stress &sigma;<sub>3</sub> (kPa):</label>
-                <input type="number" id="sigma2" value="50">
-            </div>
-            <div class="input-group">
-                <label for="theta">Angle θ (deg):</label>
-                <input type="number" id="theta" value="0">
-            </div>
-            <div class="input-group">
-                <label for="cohesion">Cohesion c (kPa):</label>
-                <input type="number" id="cohesion" value="10">
-            </div>
-            <div class="input-group">
-                <label for="friction">Friction Angle φ (deg):</label>
-                <input type="number" id="friction" value="30">
-            </div>
-            <button id="reset-button">Reset</button>
+        <div class="main-layout">
+            <section id="input-section">
+                <div class="column">
+                    <h2>Input Parameters</h2>
+                    <div class="input-group">
+                        <label for="sigma1">Major Principal Stress σ<sub>1</sub> (kPa):</label>
+                        <input type="number" id="sigma1" value="100">
+                    </div>
+                    <div class="input-group">
+                        <label for="sigma2">Minor Principal Stress σ<sub>3</sub> (kPa):</label>
+                        <input type="number" id="sigma2" value="50">
+                    </div>
+                    <div class="input-group">
+                        <label for="theta">Angle θ (deg):</label>
+                        <input type="number" id="theta" value="0">
+                    </div>
+                    <div class="input-group">
+                        <label for="cohesion">Cohesion c (kPa):</label>
+                        <input type="number" id="cohesion" value="10">
+                    </div>
+                    <div class="input-group">
+                        <label for="friction">Friction Angle φ (deg):</label>
+                        <input type="number" id="friction" value="30">
+                    </div>
+                    <button id="reset-button">Reset</button>
+                </div>
+            </section>
+
+            <section id="visualization-section">
+                <canvas id="mohrCanvas"></canvas>
+                <div id="results-overlay">
+                    <p id="results-text"></p>
+                </div>
+            </section>
         </div>
-    <!-- </section> -->
+    </div>
 
-    <!-- <section id="results-section"> -->
-        <div class="column">
-            <h2>Results</h2>
-            <p id="results-text"></p>
-        </div>
-    </section>
-
-    <section id="visualization-section">
-        <canvas id="mohrCanvas" width="600" height="600"></canvas>
-    </section>
-    
 </body>
+
 </html>

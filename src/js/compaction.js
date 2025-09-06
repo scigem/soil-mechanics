@@ -19,7 +19,7 @@ function calculateNoAirVoidsLine(max_mc) {
         max_mc = 20;
     }
     let delta = max_mc / 20;
-    
+
     for (let mc = 0; mc <= max_mc; mc += delta) {
         let rho_d_no_air_voids = (rho_w * G_s) / (1 + mc * G_s);
         m_c_values.push(mc);
@@ -102,7 +102,7 @@ function update() {
         },
     ], {
         title: 'Dry Unit Weight vs. Moisture Content',
-        xaxis: { title: 'Moisture Content (mc)', range: [0, max_mc], linewidth: 4 }, // xmin set to 0 with Unicode
+        xaxis: { title: 'Moisture Cont<ent (m<sub>c</sub>)', range: [0, max_mc], linewidth: 4 }, // xmin set to 0 with Unicode
         yaxis: { title: 'Dry Unit Weight (ρ<sub>d</sub>)', linewidth: 4, range: [0, gamma_d_max] },
         autosize: true,
         showlegend: true,
