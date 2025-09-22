@@ -9,11 +9,9 @@ document.getElementById("Vw").addEventListener('input', update);
 document.getElementById("Vs").addEventListener('input', update);
 document.getElementById("Va").addEventListener('input', update);
 
-console.log("Hello from compaction.js");
-
 function calculateNoAirVoidsLine(max_mc) {
     let m_c_values = [];
-    let rho_d_values = [];
+    let gamma_d_values = [];
 
     if (!isFinite(max_mc)) {
         max_mc = 20;
@@ -21,9 +19,9 @@ function calculateNoAirVoidsLine(max_mc) {
     let delta = max_mc / 20;
 
     for (let mc = 0; mc <= max_mc; mc += delta) {
-        let rho_d_no_air_voids = (rho_w * G_s) / (1 + mc * G_s);
+        let gamma_d_no_air_voids = g*(rho_w * G_s) / (1 + mc * G_s);
         m_c_values.push(mc);
-        rho_d_values.push(rho_d_no_air_voids);
+        gamma_d_values.push(gamma_d_no_air_voids);
     }
 
     return { m_c_values, rho_d_values };
@@ -76,7 +74,7 @@ function update() {
     document.getElementById("gammasatValue").textContent = gamma_sat.toFixed(2);
 
     let max_mc = Math.max(1, m_c);
-    let gamma_d_max = (rho_w * G_s);
+    let gamma_d_max = (rho_w * G_s * g);
 
     // Calculate no air voids line
     const noAirVoidsLine = calculateNoAirVoidsLine(max_mc);
@@ -84,7 +82,7 @@ function update() {
     Plotly.newPlot('dryWeightGraph', [
         {
             x: noAirVoidsLine.m_c_values,
-            y: noAirVoidsLine.rho_d_values,
+            y: noAirVoidsLine.gamma_d_values,
             mode: 'lines',
             type: 'scatter',
             name: 'No Air Voids Line',
@@ -96,7 +94,7 @@ function update() {
             mode: 'markers',
             type: 'scatter',
             name: 'Current State',
-            text: [`ρ<sub>d</sub> = ${rho_d.toFixed(2)}`],
+            text: [`γ<sub>dry</sub> = ${gamma_d.toFixed(2)}`],
             hoverinfo: 'text',
             marker: { size: 15, color: 'black' }
         },
