@@ -103,7 +103,7 @@ function update() {
     ], {
         title: 'Dry Unit Weight vs. Moisture Content',
         xaxis: { title: 'Moisture Content (m<sub>c</sub>)', range: [0, max_mc], linewidth: 4 }, // xmin set to 0 with Unicode
-        yaxis: { title: 'Dry Unit Weight (&gamma;<sub>dry</sub>)', linewidth: 4, range: [0, gamma_d_max] },
+        yaxis: { title: 'Dry Unit Weight (γ<sub>dry</sub>)', linewidth: 4, range: [0, gamma_d_max] },
         autosize: true,
         showlegend: true,
         legend: {
