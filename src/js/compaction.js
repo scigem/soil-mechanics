@@ -19,12 +19,12 @@ function calculateNoAirVoidsLine(max_mc) {
     let delta = max_mc / 20;
 
     for (let mc = 0; mc <= max_mc; mc += delta) {
-        let gamma_d_no_air_voids = g*(rho_w * G_s) / (1 + mc * G_s);
+        let gamma_d_no_air_voids = g * (rho_w * G_s) / (1 + mc * G_s);
         m_c_values.push(mc);
         gamma_d_values.push(gamma_d_no_air_voids);
     }
 
-    return { m_c_values, rho_d_values };
+    return { m_c_values, gamma_d_values };
 }
 
 function update() {
@@ -100,8 +100,8 @@ function update() {
         },
     ], {
         title: 'Dry Unit Weight vs. Moisture Content',
-        xaxis: { title: 'Moisture Content (m<sub>c</sub>)', range: [0, max_mc], linewidth: 4 }, // xmin set to 0 with Unicode
-        yaxis: { title: 'Dry Unit Weight (γ<sub>dry</sub>)', linewidth: 4, range: [0, gamma_d_max] },
+        xaxis: { title: 'Moisture Content, m<sub>c</sub> (-)', range: [0, max_mc], linewidth: 4 }, // xmin set to 0 with Unicode
+        yaxis: { title: 'Dry Unit Weight, γ<sub>dry</sub> (kN/m³)', linewidth: 4, range: [0, gamma_d_max] },
         autosize: true,
         showlegend: true,
         legend: {

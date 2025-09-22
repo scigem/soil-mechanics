@@ -1,4 +1,7 @@
 /* Compaction Specific Styles */
+.main-layout {
+    grid-template-columns: 45% 1fr;
+}
 
 #input-section {
     background: var(--surface-color);
@@ -159,10 +162,10 @@
 /* Visualization Section */
 #visualization-section {
     background: var(--surface-color);
-    border-radius: var(--border-radius);
-    padding: 1.25rem;
-    box-shadow: var(--shadow-md);
-    border: 1px solid var(--border-color);
+    /* border-radius: var(--border-radius); */
+    /* padding: 1.25rem; */
+    /* box-shadow: var(--shadow-md); */
+    /* border: 1px solid var(--border-color); */
     text-align: center;
     position: relative;
     height: fit-content;
