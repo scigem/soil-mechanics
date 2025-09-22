@@ -43,7 +43,7 @@ function update() {
     let e = V_v / V_s;
     let S = V_w / V_v;
     let A = V_a / V_v;
-    let rho_d = m_s / V; // correct formula for dry unit weight
+    let rho_d = m_s / V;
     let rho_b = (m_s + m_w) / V;
     let rho_sat = (G_s + e) * rho_w / (1 + e);
     let nu = V_s / V;
@@ -92,7 +92,7 @@ function update() {
         },
         {
             x: [m_c], // current moisture content
-            y: [rho_d], // current dry unit weight
+            y: [gamma_d], // current dry unit weight
             mode: 'markers',
             type: 'scatter',
             name: 'Current State',
@@ -103,7 +103,7 @@ function update() {
     ], {
         title: 'Dry Unit Weight vs. Moisture Content',
         xaxis: { title: 'Moisture Content (m<sub>c</sub>)', range: [0, max_mc], linewidth: 4 }, // xmin set to 0 with Unicode
-        yaxis: { title: 'Dry Unit Weight (ρ<sub>d</sub>)', linewidth: 4, range: [0, gamma_d_max] },
+        yaxis: { title: 'Dry Unit Weight (&gamma;<sub>dry</sub>)', linewidth: 4, range: [0, gamma_d_max] },
         autosize: true,
         showlegend: true,
         legend: {
