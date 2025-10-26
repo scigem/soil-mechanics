@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Critical State Line</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <!-- <header>
+            <h1>Critical State Line</h1>
+        </header> -->
+
+        <div class="main-layout">
+            <section id="input-section">
+                <div class="column">
+                    <h2>Critical State Parameters</h2>
+                    <div class="input-group">
+                        <label for="M">Critical State Slope M:</label>
+                        <input type="number" id="M" value="1.2" step="0.1" min="0.1" max="3.0">
+                    </div>
+                    <div class="input-group">
+                        <label for="Gamma">Critical State Intercept Γ:</label>
+                        <input type="number" id="Gamma" value="2.0" step="0.1" min="1.0" max="5.0">
+                    </div>
+                    <div class="input-group">
+                        <label for="lambda">Compression Index λ:</label>
+                        <input type="number" id="lambda" value="0.15" step="0.01" min="0.01" max="0.5">
+                    </div>
+                    <div class="input-group">
+                        <label for="N">Normal Compression Line N:</label>
+                        <input type="number" id="N" value="2.5" step="0.1" min="1.0" max="5.0">
+                    </div>
+
+                    <h3>View Controls</h3>
+                    <div class="input-group">
+                        <label for="sigma-scale">σ Axis Scale:</label>
+                        <select id="sigma-scale">
+                            <option value="linear">Linear</option>
+                            <option value="log">Logarithmic</option>
+                        </select>
+                    </div>
+                    <div class="button-group">
+                        <button id="view-tau-sigma">τ-σ View</button>
+                        <button id="view-e-sigma">e-σ View</button>
+                        <button id="view-3d">3D View</button>
+                        <button id="reset-button">Reset</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="visualization-section">
+                <div id="plot-container"></div>
+                <div id="info-panel">
+                    <h3>Critical State Theory</h3>
+                    <p>The critical state line represents the ultimate shear strength of soil in both stress space (τ vs σ) and void ratio space (e vs ln σ).</p>
+                    <ul>
+                        <li><strong>M:</strong> Critical state slope in stress space</li>
+                        <li><strong>Γ:</strong> Critical state intercept in void ratio space</li>
+                        <li><strong>λ:</strong> Compression index</li>
+                        <li><strong>N:</strong> Normal compression line intercept</li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+    </div>
+
+</body>
+
+</html>

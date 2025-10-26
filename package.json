@@ -1,5 +1,5 @@
 {
-  "name": "Soil Mechanics Visualisation Tools",
+  "name": "soil-mechanics-visualisation-tools",
   "version": "1.0.0",
   "description": "An interactive tool for visualising soil mechanics concepts such as Mohr's Circle and Mohr-Coulomb failure criteria.",
   "main": "src/js/index.js",
@@ -22,11 +22,11 @@
     "gh-pages": "^5.0.0",
     "html-webpack-plugin": "^5.6.2",
     "style-loader": "^3.3.4",
-    "webpack": "^5.95.0",
-    "webpack-cli": "^4.10.0",
+    "webpack": "^5.102.1",
+    "webpack-cli": "^6.0.1",
     "webpack-dev-server": "^5.2.2"
   },
   "dependencies": {
-    "plotly": "^1.0.6"
+    "plotly.js-dist": "^2.26.0"
   }
 }
