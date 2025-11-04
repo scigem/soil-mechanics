@@ -7,6 +7,7 @@ module.exports = {
         compaction: './src/js/compaction.js',
         ruler: './src/js/ruler.js',
         critical_state: './src/js/critical-state.js',
+        system_dynamics: './src/js/system-dynamics.js',
     },
     output: {
         // filename: 'bundle.js', // Output bundle name
@@ -58,6 +59,11 @@ module.exports = {
             filename: 'critical-state.html',
             template: './src/html/critical-state.html',
             chunks: ['critical_state']
+        }),
+        new HtmlWebpackPlugin({
+            filename: 'system-dynamics.html',
+            template: './src/html/system-dynamics.html',
+            chunks: ['system_dynamics']
         }),
     ],
     mode: 'development',

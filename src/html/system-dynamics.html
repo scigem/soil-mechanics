@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Dynamics</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <div class="main-layout">
+            <section id="input-section">
+                <div class="column">
+                    <h2>System Dynamics Models</h2>
+
+                    <div class="input-group">
+                        <label for="model-select">Select Model:</label>
+                        <select id="model-select">
+                            <option value="exp-growth">Exponential Growth</option>
+                            <option value="exp-decay">Exponential Decay</option>
+                            <option value="const-input">Constant Input with Decay</option>
+                            <option value="logistic">Logistic Growth (No Harvest)</option>
+                            <option value="logistic-stock-harvest">Logistic Growth (Stock-Dependent Harvest)</option>
+                            <option value="logistic-const-harvest-critical">Logistic Growth (Const Harvest, H=1)</option>
+                            <option value="logistic-const-harvest-under">Logistic Growth (Const Harvest, H<1)< /option>
+                            <option value="logistic-const-harvest-over">Logistic Growth (Const Harvest, H>1)</option>
+                        </select>
+                    </div>
+
+                    <div id="parameters-container">
+                        <!-- Parameters will be dynamically inserted here -->
+                    </div>
+
+                    <h3>Time Controls</h3>
+                    <div class="input-group">
+                        <label for="t-max">Maximum Time (t<sub>max</sub>):</label>
+                        <input type="number" id="t-max" value="10" step="1" min="1" max="100">
+                    </div>
+
+                    <div class="button-group">
+                        <button id="reset-button">Reset Parameters</button>
+                    </div>
+
+                    <div id="equation-display">
+                        <!-- Differential equation will be displayed here -->
+                    </div>
+                </div>
+            </section>
+
+            <section id="visualization-section">
+                <div id="plot-container"></div>
+                <div id="info-panel">
+                    <h3>System Dynamics</h3>
+                    <p>Explore various differential equation models and their solutions over time.</p>
+                    <ul>
+                        <li><strong>x(t):</strong> System state at time t</li>
+                        <li><strong>dx/dt:</strong> Rate of change of the system</li>
+                        <li><strong>Parameters:</strong> Control system behavior (growth rate, carrying capacity, etc.)</li>
+                    </ul>
+                    <div id="solution-display">
+                        <!-- Analytical solution will be displayed here -->
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+</body>
+
+</html>
