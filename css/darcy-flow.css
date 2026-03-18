@@ -123,12 +123,68 @@
     color: var(--primary-color);
 }
 
-.graph {
+.visualization-header {
+    margin-bottom: 1rem;
+}
+
+.visualization-header p {
+    color: var(--text-secondary);
+}
+
+.schematic {
     min-height: 420px;
     border: 1px solid var(--border-color);
-    border-radius: 8px;
+    border-radius: 12px;
     overflow: hidden;
     box-shadow: var(--shadow-sm);
+    background: linear-gradient(180deg, #f8fbff 0%, #eef4ff 100%);
+}
+
+.schematic svg {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.schematic text {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    fill: #1f2937;
+}
+
+.schematic .datum-label,
+.schematic .dimension-label,
+.schematic .caption-label,
+.schematic .head-line-label,
+.schematic .flow-label,
+.schematic .delta-label,
+.schematic .caption-note {
+    font-size: 14px;
+}
+
+.schematic .caption-strong {
+    font-size: 15px;
+    font-weight: 700;
+    fill: #5b3a1f;
+}
+
+.schematic .datum-label,
+.schematic .caption-note {
+    fill: #64748b;
+}
+
+.schematic .head-line-label {
+    fill: #2563eb;
+    font-weight: 600;
+}
+
+.schematic .flow-label {
+    fill: #0f766e;
+    font-weight: 600;
+}
+
+.schematic .delta-label {
+    fill: #dc2626;
+    font-weight: 600;
 }
 
 .info-panel {
@@ -157,7 +213,18 @@
         min-width: 4.5rem;
     }
 
-    .graph {
+    .schematic {
         min-height: 320px;
+    }
+
+    .schematic .datum-label,
+    .schematic .dimension-label,
+    .schematic .caption-label,
+    .schematic .head-line-label,
+    .schematic .flow-label,
+    .schematic .delta-label,
+    .schematic .caption-note,
+    .schematic .caption-strong {
+        font-size: 16px;
     }
 }

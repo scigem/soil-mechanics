@@ -14,15 +14,19 @@
     <div class="container">
         <header>
             <h1>Sieve Analysis</h1>
-            <p>Enter the mass retained on each sieve to generate a grading curve.</p>
         </header>
 
         <div class="main-layout">
             <div class="column">
                 <section id="input-section">
                     <h2>Mass retained</h2>
-                    <p class="section-copy">Sieve sizes are fixed to a standard stack so students can focus on the sample masses.</p>
                     <div id="sieveInputs" class="sieve-inputs"></div>
+                </section>
+            </div>
+
+            <div class="column">
+                <section id="visualization-section">
+                    <div id="gradingCurveGraph" class="graph"></div>
                 </section>
 
                 <section id="results-section">
@@ -57,12 +61,6 @@
                             <span id="ccValue">—</span>
                         </div>
                     </div>
-                </section>
-            </div>
-
-            <div class="column">
-                <section id="visualization-section">
-                    <div id="gradingCurveGraph" class="graph"></div>
                 </section>
             </div>
         </div>

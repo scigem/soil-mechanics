@@ -14,7 +14,6 @@
     <div class="container">
         <header>
             <h1>Darcy Flow</h1>
-            <p>Adjust the key inputs in Darcy's law and watch the head loss and discharge update.</p>
         </header>
 
         <div class="main-layout">
@@ -83,9 +82,9 @@
 
             <div class="column">
                 <section id="visualization-section">
-                    <div id="headProfile" class="graph"></div>
+                    <div id="headProfile" class="schematic" aria-label="Darcy flow schematic"></div>
                     <div class="info-panel">
-                        <p><strong>Interpretation:</strong> The slope of the line is the hydraulic gradient, and Darcy flux increases linearly with both conductivity and gradient.</p>
+                        <p><strong>Interpretation:</strong> Head is the height water rises in a standpipe above a common datum. Water flows through the soil from the higher head on the left to the lower head on the right, and the drop over the specimen length gives the hydraulic gradient <span id="gradientEquationText">i = Δh / L</span>.</p>
                     </div>
                 </section>
             </div>
