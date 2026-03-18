@@ -15,6 +15,7 @@ Available tools:
  - [Void ratio explainer](https://scigem.github.io/soil-mechanics/html/ruler.html)
  - [Sieve analysis grading curve](https://scigem.github.io/soil-mechanics/html/sieve-analysis.html)
  - [Elastic strip footing displacement field](https://scigem.github.io/soil-mechanics/html/elastic-footing.html)
+ - [1D consolidation explorer](https://scigem.github.io/soil-mechanics/html/consolidation.html)
  - [Newmark's chart](https://scigem.github.io/soil-mechanics/html/newmarks-chart.html)
  - [System dynamics](https://scigem.github.io/soil-mechanics/html/system-dynamics.html)
  - [Critical state line visualisation](https://scigem.github.io/soil-mechanics/html/critical-state.html)
