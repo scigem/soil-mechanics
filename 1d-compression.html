@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1D Compression Explorer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>1D Compression Explorer</h1>
+            <p>Trace a load-unload path in e-log σ′ space and see how the preconsolidation stress σ′<sub>pc</sub> shifts with stress history.</p>
+        </header>
+
+        <div class="main-layout">
+            <div class="column">
+                <section id="input-section">
+                    <h2>Stress History</h2>
+
+                    <div class="input-group">
+                        <label for="initial-stress">Initial vertical stress σ′<sub>0</sub> (kPa):</label>
+                        <div class="slider-container">
+                            <input type="range" id="initial-stress" min="20" max="250" value="50" step="5">
+                            <span class="slider-value" id="initialStressValue">50</span>
+                            <span class="unit">kPa</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="precon-stress">Initial preconsolidation stress σ′<sub>pc</sub> (kPa):</label>
+                        <div class="slider-container">
+                            <input type="range" id="precon-stress" min="30" max="400" value="150" step="5">
+                            <span class="slider-value" id="preconStressValue">150</span>
+                            <span class="unit">kPa</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="peak-stress">Peak loading stress σ′<sub>max</sub> (kPa):</label>
+                        <div class="slider-container">
+                            <input type="range" id="peak-stress" min="30" max="600" value="300" step="5">
+                            <span class="slider-value" id="peakStressValue">300</span>
+                            <span class="unit">kPa</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="final-stress">Stress after unloading σ′<sub>f</sub> (kPa):</label>
+                        <div class="slider-container">
+                            <input type="range" id="final-stress" min="20" max="500" value="100" step="5">
+                            <span class="slider-value" id="finalStressValue">100</span>
+                            <span class="unit">kPa</span>
+                        </div>
+                    </div>
+
+                    <h2>Compressibility</h2>
+
+                    <div class="input-group">
+                        <label for="lambda">Virgin compression slope λ:</label>
+                        <div class="slider-container">
+                            <input type="range" id="lambda" min="0.08" max="0.35" value="0.18" step="0.01">
+                            <span class="slider-value" id="lambdaValue">0.18</span>
+                            <span class="unit">-</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="kappa">Swelling / recompression slope κ:</label>
+                        <div class="slider-container">
+                            <input type="range" id="kappa" min="0.01" max="0.10" value="0.04" step="0.005">
+                            <span class="slider-value" id="kappaValue">0.040</span>
+                            <span class="unit">-</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="precon-void-ratio">Void ratio at initial σ′<sub>pc</sub>:</label>
+                        <div class="slider-container">
+                            <input type="range" id="precon-void-ratio" min="0.60" max="1.40" value="1.00" step="0.02">
+                            <span class="slider-value" id="preconVoidRatioValue">1.00</span>
+                            <span class="unit">e</span>
+                        </div>
+                    </div>
+
+                    <button id="reset-button" type="button">Reset to Default</button>
+                </section>
+
+                <section id="results-section">
+                    <h2>Important Outputs</h2>
+                    <div class="results-grid">
+                        <div class="result-item">
+                            <span class="label">Initial OCR</span>
+                            <span id="initialOCR">3.00</span>
+                        </div>
+                        <div class="result-item emphasis">
+                            <span class="label">Current OCR</span>
+                            <span id="currentOCR">3.00</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="label">σ′<sub>pc</sub> movement</span>
+                            <span id="preconMovement">150 → 300 kPa</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="label">Initial void ratio</span>
+                            <span id="initialVoidRatio">1.04</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="label">Peak void ratio</span>
+                            <span id="peakVoidRatio">0.88</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="label">Final void ratio</span>
+                            <span id="finalVoidRatio">0.92</span>
+                        </div>
+                    </div>
+                    <p class="result-note" id="pathSummary">Peak stress exceeds the initial σ′pc, so the soil yields and the new σ′pc becomes the past maximum stress.</p>
+                </section>
+            </div>
+
+            <div class="column">
+                <section id="visualization-section">
+                    <div id="compressionPlot" class="graph"></div>
+                    <div class="info-panel">
+                        <p><strong>Loading:</strong> The path follows the shallow κ line until σ′<sub>pc</sub>, then the steeper λ line during virgin compression.</p>
+                        <p><strong>Unloading:</strong> After reaching a new maximum stress, the unloading-reloading line pivots to that point, so σ′<sub>pc</sub> moves to the right and OCR changes.</p>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="./js/1d-compression.js"></script>
+</body>
+
+</html>
