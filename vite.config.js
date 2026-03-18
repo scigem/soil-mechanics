@@ -14,6 +14,7 @@ module.exports = defineConfig(({ command }) => ({
             input: {
                 'mohrs-circle': path.resolve(__dirname, 'html/mohrs-circle.html'),
                 compaction: path.resolve(__dirname, 'html/compaction.html'),
+                'darcy-flow': path.resolve(__dirname, 'html/darcy-flow.html'),
                 consolidation: path.resolve(__dirname, 'html/consolidation.html'),
                 ruler: path.resolve(__dirname, 'html/ruler.html'),
                 'sieve-analysis': path.resolve(__dirname, 'html/sieve-analysis.html'),
