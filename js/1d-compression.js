@@ -143,7 +143,7 @@ function updateOutputs(state, results) {
     const yielded = state.peakStress > state.preconStress;
     document.getElementById('initialOCR').textContent = formatOCR(results.initialOCR);
     document.getElementById('currentOCR').textContent = formatOCR(results.currentOCR);
-    document.getElementById('preconMovement').textContent = `${state.preconStress.toFixed(0)} → ${results.updatedPreconStress.toFixed(0)} kPa`;
+    // document.getElementById('preconMovement').textContent = `${state.preconStress.toFixed(0)} → ${results.updatedPreconStress.toFixed(0)} kPa`;
     document.getElementById('initialVoidRatio').textContent = formatVoidRatio(results.initialVoidRatio);
     document.getElementById('peakVoidRatio').textContent = formatVoidRatio(results.peakVoidRatio);
     document.getElementById('finalVoidRatio').textContent = formatVoidRatio(results.finalVoidRatio);
@@ -336,10 +336,10 @@ function createPlot(state, results) {
     }
 
     const layout = {
-        title: {
-            text: `Stress path: ${state.initialStress.toFixed(0)} → ${state.peakStress.toFixed(0)} → ${state.finalStress.toFixed(0)} kPa`,
-            font: { size: 16 },
-        },
+        // title: {
+        //     text: `Stress path: ${state.initialStress.toFixed(0)} → ${state.peakStress.toFixed(0)} → ${state.finalStress.toFixed(0)} kPa`,
+        //     font: { size: 16 },
+        // },
         xaxis: {
             title: 'Effective vertical stress σ′v (kPa)',
             type: 'log',
