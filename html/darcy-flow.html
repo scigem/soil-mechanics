@@ -8,18 +8,16 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <script type="module" crossorigin src="/soil-mechanics/assets/darcy-flow-CmXgppTW.js"></script>
+  <script type="module" crossorigin src="/soil-mechanics/assets/darcy-flow-D_OttSDy.js"></script>
   <link rel="modulepreload" crossorigin href="/soil-mechanics/assets/main-CHv88UQI.js">
-  <link rel="modulepreload" crossorigin href="/soil-mechanics/assets/plotly-Blke_pAn.js">
   <link rel="stylesheet" crossorigin href="/soil-mechanics/assets/main-1i5AokFJ.css">
-  <link rel="stylesheet" crossorigin href="/soil-mechanics/assets/darcy-flow-cyXQOAvk.css">
+  <link rel="stylesheet" crossorigin href="/soil-mechanics/assets/darcy-flow-Cik1dUTk.css">
 </head>
 
 <body>
     <div class="container">
         <header>
             <h1>Darcy Flow</h1>
-            <p>Adjust the key inputs in Darcy's law and watch the head loss and discharge update.</p>
         </header>
 
         <div class="main-layout">
@@ -88,9 +86,9 @@
 
             <div class="column">
                 <section id="visualization-section">
-                    <div id="headProfile" class="graph"></div>
+                    <div id="headProfile" class="schematic" aria-label="Darcy flow schematic"></div>
                     <div class="info-panel">
-                        <p><strong>Interpretation:</strong> The slope of the line is the hydraulic gradient, and Darcy flux increases linearly with both conductivity and gradient.</p>
+                        <p><strong>Interpretation:</strong> Head is the height water rises in a standpipe above a common datum. Water flows through the soil from the higher head on the left to the lower head on the right, and the drop over the specimen length gives the hydraulic gradient <span id="gradientEquationText">i = Δh / L</span>.</p>
                     </div>
                 </section>
             </div>

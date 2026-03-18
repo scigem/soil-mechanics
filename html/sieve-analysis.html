@@ -8,26 +8,30 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <script type="module" crossorigin src="/soil-mechanics/assets/sieve-analysis-CoTBNdz1.js"></script>
+  <script type="module" crossorigin src="/soil-mechanics/assets/sieve-analysis-zwz3-HOE.js"></script>
   <link rel="modulepreload" crossorigin href="/soil-mechanics/assets/main-CHv88UQI.js">
   <link rel="modulepreload" crossorigin href="/soil-mechanics/assets/plotly-Blke_pAn.js">
   <link rel="stylesheet" crossorigin href="/soil-mechanics/assets/main-1i5AokFJ.css">
-  <link rel="stylesheet" crossorigin href="/soil-mechanics/assets/sieve-analysis-Ch0pqLDk.css">
+  <link rel="stylesheet" crossorigin href="/soil-mechanics/assets/sieve-analysis-U5pnaoxN.css">
 </head>
 
 <body>
     <div class="container">
         <header>
             <h1>Sieve Analysis</h1>
-            <p>Enter the mass retained on each sieve to generate a grading curve.</p>
         </header>
 
         <div class="main-layout">
             <div class="column">
                 <section id="input-section">
                     <h2>Mass retained</h2>
-                    <p class="section-copy">Sieve sizes are fixed to a standard stack so students can focus on the sample masses.</p>
                     <div id="sieveInputs" class="sieve-inputs"></div>
+                </section>
+            </div>
+
+            <div class="column">
+                <section id="visualization-section">
+                    <div id="gradingCurveGraph" class="graph"></div>
                 </section>
 
                 <section id="results-section">
@@ -62,12 +66,6 @@
                             <span id="ccValue">—</span>
                         </div>
                     </div>
-                </section>
-            </div>
-
-            <div class="column">
-                <section id="visualization-section">
-                    <div id="gradingCurveGraph" class="graph"></div>
                 </section>
             </div>
         </div>
