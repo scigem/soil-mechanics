@@ -8,18 +8,17 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <script type="module" crossorigin src="/soil-mechanics/assets/1d-compression-DJnSiZNH.js"></script>
+  <script type="module" crossorigin src="/soil-mechanics/assets/1d-compression-B6YH-Wd5.js"></script>
   <link rel="modulepreload" crossorigin href="/soil-mechanics/assets/main-CHv88UQI.js">
   <link rel="modulepreload" crossorigin href="/soil-mechanics/assets/plotly-Blke_pAn.js">
   <link rel="stylesheet" crossorigin href="/soil-mechanics/assets/main-1i5AokFJ.css">
-  <link rel="stylesheet" crossorigin href="/soil-mechanics/assets/1d-compression-C266gdrR.css">
+  <link rel="stylesheet" crossorigin href="/soil-mechanics/assets/1d-compression-CKDsQ6-k.css">
 </head>
 
 <body>
     <div class="container">
         <header>
-            <h1>1D Compression Explorer</h1>
-            <p>Trace a load-unload path in e-log σ′ space and see how the preconsolidation stress σ′<sub>pc</sub> shifts with stress history.</p>
+            <h1>1D Compression</h1>
         </header>
 
         <div class="main-layout">
@@ -95,6 +94,13 @@
                     <button id="reset-button" type="button">Reset to Default</button>
                 </section>
 
+
+            </div>
+
+            <div class="column">
+                <section id="visualization-section">
+                    <div id="compressionPlot" class="graph"></div>
+                </section>
                 <section id="results-section">
                     <h2>Important Outputs</h2>
                     <div class="results-grid">
@@ -105,10 +111,6 @@
                         <div class="result-item emphasis">
                             <span class="label">Current OCR</span>
                             <span id="currentOCR">3.00</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="label">σ′<sub>pc</sub> movement</span>
-                            <span id="preconMovement">150 → 300 kPa</span>
                         </div>
                         <div class="result-item">
                             <span class="label">Initial void ratio</span>
@@ -124,16 +126,6 @@
                         </div>
                     </div>
                     <p class="result-note" id="pathSummary">Peak stress exceeds the initial σ′pc, so the soil yields and the new σ′pc becomes the past maximum stress.</p>
-                </section>
-            </div>
-
-            <div class="column">
-                <section id="visualization-section">
-                    <div id="compressionPlot" class="graph"></div>
-                    <div class="info-panel">
-                        <p><strong>Loading:</strong> The path follows the shallow κ line until σ′<sub>pc</sub>, then the steeper λ line during virgin compression.</p>
-                        <p><strong>Unloading:</strong> After reaching a new maximum stress, the unloading-reloading line pivots to that point, so σ′<sub>pc</sub> moves to the right and OCR changes.</p>
-                    </div>
                 </section>
             </div>
         </div>
