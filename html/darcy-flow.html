@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Darcy Flow</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Darcy Flow</h1>
+            <p>Adjust the key inputs in Darcy's law and watch the head loss and discharge update.</p>
+        </header>
+
+        <div class="main-layout">
+            <div class="column">
+                <section id="input-section">
+                    <h2>Parameters</h2>
+
+                    <div class="input-group">
+                        <label for="conductivity">Hydraulic Conductivity k:</label>
+                        <div class="slider-container">
+                            <input type="range" id="conductivity" name="conductivity" min="-6" max="-2" value="-4" step="0.1">
+                            <span class="slider-value" id="conductivityValue">1.0 × 10<sup>-4</sup></span>
+                            <span class="unit">m/s</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="headLoss">Head Loss Δh:</label>
+                        <div class="slider-container">
+                            <input type="range" id="headLoss" name="headLoss" min="0.1" max="10" value="2" step="0.1">
+                            <span class="slider-value" id="headLossValue">2.0</span>
+                            <span class="unit">m</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="length">Flow Length L:</label>
+                        <div class="slider-container">
+                            <input type="range" id="length" name="length" min="0.1" max="10" value="4" step="0.1">
+                            <span class="slider-value" id="lengthValue">4.0</span>
+                            <span class="unit">m</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="area">Cross-sectional Area A:</label>
+                        <div class="slider-container">
+                            <input type="range" id="area" name="area" min="0.01" max="1" value="0.2" step="0.01">
+                            <span class="slider-value" id="areaValue">0.20</span>
+                            <span class="unit">m²</span>
+                        </div>
+                    </div>
+
+                    <button id="reset-button">Reset to Default</button>
+                </section>
+
+                <section id="results-section">
+                    <h2>Key Results</h2>
+                    <div class="results-grid">
+                        <div class="result-item">
+                            <span class="label">Hydraulic Gradient i</span>
+                            <span id="gradientValue"></span>
+                        </div>
+                        <div class="result-item">
+                            <span class="label">Darcy Flux q</span>
+                            <span id="fluxValue"></span>
+                        </div>
+                        <div class="result-item">
+                            <span class="label">Discharge Q</span>
+                            <span id="dischargeValue"></span>
+                        </div>
+                    </div>
+                    <p class="equation">Q = k A Δh / L</p>
+                </section>
+            </div>
+
+            <div class="column">
+                <section id="visualization-section">
+                    <div id="headProfile" class="graph"></div>
+                    <div class="info-panel">
+                        <p><strong>Interpretation:</strong> The slope of the line is the hydraulic gradient, and Darcy flux increases linearly with both conductivity and gradient.</p>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="../js/darcy-flow.js"></script>
+</body>
+
+</html>

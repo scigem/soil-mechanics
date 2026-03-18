@@ -11,6 +11,7 @@ Production build:
 
 Available tools:
  - [Soil compaction](https://scigem.github.io/soil-mechanics/html/compaction.html)
+ - [Darcy flow](https://scigem.github.io/soil-mechanics/html/darcy-flow.html)
  - [Mohr's circle and failure criteria](https://scigem.github.io/soil-mechanics/html/mohrs-circle.html)
  - [Void ratio explainer](https://scigem.github.io/soil-mechanics/html/ruler.html)
  - [Elastic strip footing displacement field](https://scigem.github.io/soil-mechanics/html/elastic-footing.html)
