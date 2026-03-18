@@ -1,0 +1,217 @@
+/* Elastic Footing Specific Styles */
+
+.column {
+    background: var(--surface-color);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-color);
+}
+
+/* Input Groups */
+.input-group {
+    margin-bottom: 1.5rem;
+}
+
+.input-group label {
+    display: block;
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+/* Slider Containers */
+.slider-container {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.slider-container input[type="range"] {
+    flex: 1;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--border-color);
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    transition: var(--transition);
+}
+
+.slider-container input[type="range"]::-webkit-slider-thumb {
+    appearance: none;
+    -webkit-appearance: none;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    cursor: pointer;
+    border: 2px solid white;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+}
+
+.slider-container input[type="range"]::-webkit-slider-thumb:hover {
+    background: var(--primary-hover);
+    transform: scale(1.1);
+    box-shadow: var(--shadow-md);
+}
+
+.slider-container input[type="range"]::-moz-range-thumb {
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    cursor: pointer;
+    border: 2px solid white;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+}
+
+.slider-value {
+    font-weight: 600;
+    color: var(--text-primary);
+    min-width: 3rem;
+    text-align: center;
+    background: var(--background-color);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+    font-size: 0.9rem;
+}
+
+.unit {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    min-width: 2rem;
+    text-align: left;
+}
+
+/* Select Dropdown */
+select {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background: var(--surface-color);
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    transition: var(--transition);
+}
+
+select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(100, 110, 246, 0.1);
+}
+
+/* Results Section */
+.results-grid {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.result-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    background: var(--background-color);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+    transition: var(--transition);
+}
+
+.result-item:hover {
+    background: #f8f9ff;
+    border-color: var(--primary-color);
+}
+
+.result-item .label {
+    font-weight: 500;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+}
+
+.result-item span:last-child {
+    font-weight: 600;
+    color: var(--primary-color);
+    font-size: 0.95rem;
+}
+
+/* Graph Container */
+.graph-container {
+    margin-bottom: 1.5rem;
+}
+
+.graph {
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-color);
+    min-height: 500px;
+}
+
+/* Info Panel */
+.info-panel {
+    background: #f8f9ff;
+    border: 1px solid #e0e4ff;
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    margin-top: 1rem;
+}
+
+.info-panel p {
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.info-panel p:last-child {
+    margin-bottom: 0;
+}
+
+.info-panel strong {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+/* Button Styling */
+#reset-button {
+    width: 100%;
+    margin-top: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .slider-container {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    
+    .slider-container input[type="range"] {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    
+    .graph {
+        min-height: 400px;
+    }
+    
+    .results-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Animation for value changes */
+@keyframes valueChange {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.slider-value.changed {
+    animation: valueChange 0.3s ease-in-out;
+}

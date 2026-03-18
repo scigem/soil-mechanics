@@ -131,8 +131,8 @@ function update() {
 
     // Update results text
     resultsText.innerHTML = `<strong>Calculated Stresses:</strong>
-        Normal Stress (σₙ): ${sigmaN.toFixed(2)}
-        Shear Stress (τ): ${tau.toFixed(2)}
+        Normal Stress σₙ: ${sigmaN.toFixed(2)}
+        Shear Stress τ: ${tau.toFixed(2)}
         <strong>Factor of Safety (FoS):</strong> ${factorOfSafety.toFixed(2)}
         ${factorOfSafety >= 1 ? '<span style="color:green;">No failure.</span>' : '<span style="color:red;">Failure predicted!</span>'}
     `;
@@ -195,7 +195,7 @@ function drawAxes(scale, canvasWidth, canvasHeight) {
     // Add main axis labels with better positioning
     ctx.save();
     ctx.textAlign = 'left';
-    ctx.fillText('σ (Normal Stress, kPa)', canvasWidth - 180, centerY + 40);
+    ctx.fillText('Normal Stress, σₙ (kPa)', canvasWidth - 180, centerY + 40);
     ctx.restore();
 
     ctx.save();
@@ -204,7 +204,7 @@ function drawAxes(scale, canvasWidth, canvasHeight) {
     ctx.translate(0, -40);
     ctx.textAlign = 'center';
     ctx.textBaseline = 'bottom';
-    ctx.fillText('τ (Shear Stress, kPa)', 0, 0);
+    ctx.fillText('Shear Stress, τ (kPa)', 0, 0);
     ctx.restore();
 
     // Add tick marks and values for the x-axis (σ)

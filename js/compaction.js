@@ -1,5 +1,6 @@
 import '../css/main.css';
 import '../css/compaction.css';
+import Plotly from 'plotly.js-dist';
 
 const rho_w = 1; // assuming water density is 1 for simplicity
 const G_s = 2.7; // typical value for specific gravity of soil solids

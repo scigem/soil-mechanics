@@ -4,8 +4,10 @@
   "description": "An interactive tool for visualising soil mechanics concepts such as Mohr's Circle and Mohr-Coulomb failure criteria.",
   "main": "src/js/index.js",
   "scripts": {
-    "start": "webpack serve --open --config webpack.config.js",
-    "build": "webpack --config webpack.config.js",
+    "start": "vite",
+    "dev": "vite",
+    "preview": "vite preview",
+    "build": "vite build",
     "deploy": "gh-pages -d dist"
   },
   "repository": {
@@ -15,16 +17,8 @@
   "author": "Benjy Marks",
   "license": "GPLv3+",
   "devDependencies": {
-    "@babel/core": "^7.25.8",
-    "@babel/preset-env": "^7.25.8",
-    "babel-loader": "^8.4.1",
-    "css-loader": "^6.11.0",
     "gh-pages": "^5.0.0",
-    "html-webpack-plugin": "^5.6.2",
-    "style-loader": "^3.3.4",
-    "webpack": "^5.102.1",
-    "webpack-cli": "^6.0.1",
-    "webpack-dev-server": "^5.2.2"
+    "vite": "^6.0.0"
   },
   "dependencies": {
     "plotly.js-dist": "^2.26.0"

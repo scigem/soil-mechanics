@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elastic Strip Footing Displacement Field</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> -->
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Elastic Strip Footing Displacement Field</h1>
+            <p>Explore the displacement field in an elastic half-space under a uniformly loaded strip footing</p>
+        </header>
+
+        <div class="main-layout">
+            <!-- Parameters Column -->
+            <div class="column">
+                <section id="input-section">
+                    <h2>Loading Parameters</h2>
+                    
+                    <div class="input-group">
+                        <label for="load">Load q (kPa):</label>
+                        <div class="slider-container">
+                            <input type="range" id="load" name="load" min="10" max="500" value="100" step="10">
+                            <span class="slider-value" id="loadValue">100</span>
+                            <span class="unit">kPa</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="width">Footing Half-Width B (m):</label>
+                        <div class="slider-container">
+                            <input type="range" id="width" name="width" min="0.5" max="5" value="2" step="0.1">
+                            <span class="slider-value" id="widthValue">2</span>
+                            <span class="unit">m</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="depth">Domain Depth (m):</label>
+                        <div class="slider-container">
+                            <input type="range" id="depth" name="depth" min="5" max="20" value="10" step="1">
+                            <span class="slider-value" id="depthValue">10</span>
+                            <span class="unit">m</span>
+                        </div>
+                    </div>
+
+                    <h2>Elastic Properties</h2>
+                    
+                    <div class="input-group">
+                        <label for="youngs">Young's Modulus E (MPa):</label>
+                        <div class="slider-container">
+                            <input type="range" id="youngs" name="youngs" min="1" max="100" value="20" step="1">
+                            <span class="slider-value" id="youngsValue">20</span>
+                            <span class="unit">MPa</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="poisson">Poisson's Ratio ν:</label>
+                        <div class="slider-container">
+                            <input type="range" id="poisson" name="poisson" min="0.1" max="0.49" value="0.3" step="0.01">
+                            <span class="slider-value" id="poissonValue">0.3</span>
+                            <span class="unit">-</span>
+                        </div>
+                    </div>
+
+                    <h2>Display Options</h2>
+                    
+                    <div class="input-group">
+                        <label for="component">Displacement Component:</label>
+                        <select id="component" name="component">
+                            <option value="vertical">Vertical (uy)</option>
+                            <option value="horizontal">Horizontal (ux)</option>
+                            <option value="magnitude">Magnitude |u|</option>
+                        </select>
+                    </div>
+
+                    <button id="reset-button">Reset to Default</button>
+                </section>
+
+                <!-- <section id="results-section">
+                    <h3>Key Results</h3>
+                    <div class="results-grid" id="valuesContainer">
+                        <div class="result-item">
+                            <span class="label">Max Vertical Displacement:</span>
+                            <span id="maxVertical"></span> mm
+                        </div>
+                        <div class="result-item">
+                            <span class="label">Max Horizontal Displacement:</span>
+                            <span id="maxHorizontal"></span> mm
+                        </div>
+                        <div class="result-item">
+                            <span class="label">Settlement at Center:</span>
+                            <span id="centerSettlement"></span> mm
+                        </div>
+                        <div class="result-item">
+                            <span class="label">Settlement at Edge:</span>
+                            <span id="edgeSettlement"></span> mm
+                        </div>
+                    </div>
+                </section> -->
+            </div>
+
+            <!-- Visualization Column -->
+            <div class="column">
+                <section id="visualization-section">
+                    <div class="graph-container">
+                        <div id="displacementField" class="graph"></div>
+                    </div>
+                    <div class="info-panel">
+                        <p><strong>Theory:</strong> This visualization shows the displacement field in an elastic half-space under a uniformly loaded strip footing using Boussinesq-type solutions.</p>
+                        <p><strong>Note:</strong> The displacement field assumes plane strain conditions and linear elastic behavior.</p>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+    <script type="module" src="../js/elastic-footing.js"></script>
+</body>
+
+</html>

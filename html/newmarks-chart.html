@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Newmark's Chart</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Newmark's Chart</h1>
+            <p>Draw your foundation to scale on the chart. The chart calculates the vertical stress increase beneath the centre of the chart.</p>
+        </header>
+
+        <div class="main-layout">
+            <div class="column">
+                <section id="input-section">
+                    <h2>Chart Controls</h2>
+
+                    <div class="input-group">
+                        <label for="pressure">Applied pressure q (kPa):</label>
+                        <input type="number" id="pressure" value="150" min="0" step="5">
+                    </div>
+
+                    <div class="input-group">
+                        <div class="input-group">
+                            <label for="rings">Rings:</label>
+                            <input type="number" id="rings" value="10" min="4" max="50" step="1">
+                        </div>
+
+                        <div class="input-group">
+                            <label for="sectors">Sectors:</label>
+                            <input type="number" id="sectors" value="20" min="8" max="100" step="2">
+                        </div>
+                    </div>
+
+                    <div class="button-row">
+                        <button id="clear-drawing" type="button">Clear Drawing</button>
+                        <button id="reset-button" type="button" class="secondary-button">Reset Defaults</button>
+                    </div>
+                </section>
+
+                <section id="scale-section">
+                    <h2>Depth and Scale Helpers</h2>
+
+                    <div class="input-group">
+                        <label for="depth">Depth z (m):</label>
+                        <input type="number" id="depth" value="5" min="0.1" step="0.1">
+                    </div>
+                </section>
+
+                <section id="results-section">
+                    <h2>Results</h2>
+
+                    <div class="results-grid">
+                        <div class="result-item">
+                            <span class="label">Unit influence per cell</span>
+                            <span id="unit-influence">0.0000</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="label">Covered cells</span>
+                            <span id="covered-cells">0</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="label">Influence value I</span>
+                            <span id="influence-value">0.0000</span>
+                        </div>
+                        <div class="result-item emphasis">
+                            <span class="label">Stress increase Δσ<sub>z</sub></span>
+                            <span id="stress-result">0.00 kPa</span>
+                        </div>
+                    </div>
+
+                    <div class="formula-card">
+                        <h3>Calculation</h3>
+                        <p id="formula-text">Δσ<sub>z</sub> = q × I</p>
+                        <!-- <p id="assumption-text">The chart is truncated at the selected r/z cutoff, so the total captured influence is less than 1.0.</p> -->
+                    </div>
+                </section>
+            </div>
+
+            <div class="column chart-column">
+                <section id="visualization-section">
+                    <div class="chart-frame">
+                        <svg id="newmark-chart" viewBox="0 0 800 800" aria-label="Newmark influence chart"></svg>
+                        <!-- <div id="chart-scale-readout">z = 5.00 m, chart radius = 30.00 m</div> -->
+                        <div id="chart-hint">Drag on the chart to sketch a loaded area.</div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="../js/newmarks-chart.js"></script>
+</body>
+
+</html>

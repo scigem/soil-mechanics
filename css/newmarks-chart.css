@@ -1,0 +1,315 @@
+.column {
+    background: var(--surface-color);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-color);
+}
+
+.chart-column {
+    min-width: 0;
+}
+
+.input-group {
+    margin-bottom: 1rem;
+}
+
+.input-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 0.4rem;
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 0.7rem 0.8rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    font: inherit;
+    color: var(--text-primary);
+    background: var(--surface-color);
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(100, 110, 246, 0.12);
+}
+
+.button-row {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+}
+
+.secondary-button {
+    background: white;
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+.secondary-button:hover {
+    background: var(--background-color);
+    border-color: var(--primary-color);
+}
+
+.helper-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+}
+
+.helper-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 0.85rem 0.95rem;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+    background: linear-gradient(180deg, rgba(100, 110, 246, 0.04), rgba(255, 255, 255, 0.95));
+}
+
+.helper-item-wide {
+    grid-column: 1 / -1;
+}
+
+.helper-item .label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.helper-item span:last-child {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.results-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+}
+
+.result-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 0.85rem 0.95rem;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+    background: var(--background-color);
+}
+
+.result-item .label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.result-item span:last-child {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.result-item.emphasis {
+    background: linear-gradient(135deg, rgba(100, 110, 246, 0.12), rgba(255, 152, 0, 0.14));
+    border-color: rgba(100, 110, 246, 0.25);
+}
+
+.formula-card {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    border: 1px solid rgba(100, 110, 246, 0.18);
+    background: linear-gradient(180deg, rgba(100, 110, 246, 0.06), rgba(255, 255, 255, 0.92));
+}
+
+.formula-card h3 {
+    margin-bottom: 0.35rem;
+    font-size: 1rem;
+}
+
+.formula-card p {
+    color: var(--text-secondary);
+    margin-bottom: 0.35rem;
+}
+
+.formula-card p:last-child {
+    margin-bottom: 0;
+}
+
+.chart-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.chart-header p {
+    color: var(--text-secondary);
+}
+
+.legend-chip {
+    padding: 0.55rem 0.8rem;
+    border-radius: 999px;
+    background: rgba(255, 152, 0, 0.12);
+    color: #9b5a00;
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.chart-frame {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    background:
+        radial-gradient(circle at 20% 20%, rgba(100, 110, 246, 0.08), transparent 32%),
+        linear-gradient(180deg, #ffffff 0%, #f7f8fc 100%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+#newmark-chart {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+    touch-action: none;
+    cursor: crosshair;
+}
+
+#chart-hint {
+    position: absolute;
+    left: 50%;
+    bottom: 1rem;
+    transform: translateX(-50%);
+    padding: 0.55rem 0.9rem;
+    border-radius: 999px;
+    background: rgba(33, 33, 33, 0.82);
+    color: white;
+    font-size: 0.85rem;
+    pointer-events: none;
+}
+
+#chart-scale-readout {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    padding: 0.55rem 0.8rem;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(33, 33, 33, 0.1);
+    color: var(--text-primary);
+    font-size: 0.85rem;
+    font-weight: 600;
+    box-shadow: var(--shadow-sm);
+    pointer-events: none;
+}
+
+.chart-grid,
+.drawing-layer {
+    pointer-events: none;
+}
+
+.chart-cell {
+    fill: rgba(100, 110, 246, 0.03);
+    stroke: rgba(33, 33, 33, 0.2);
+    stroke-width: 1;
+}
+
+.chart-cell.covered {
+    fill: rgba(255, 152, 0, 0.38);
+    stroke: rgba(194, 108, 0, 0.55);
+}
+
+.chart-circle {
+    fill: none;
+    stroke: rgba(33, 33, 33, 0.16);
+    stroke-width: 1.2;
+}
+
+.chart-axis {
+    stroke: rgba(33, 33, 33, 0.22);
+    stroke-width: 1;
+}
+
+.chart-label {
+    fill: var(--text-secondary);
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+}
+
+.scale-bar {
+    stroke: rgba(33, 33, 33, 0.75);
+    stroke-width: 2.5;
+}
+
+.scale-bar-cap {
+    stroke: rgba(33, 33, 33, 0.75);
+    stroke-width: 2.5;
+}
+
+.scale-bar-label {
+    fill: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.polygon-preview {
+    fill: none;
+    stroke: rgba(255, 152, 0, 0.9);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.polygon-final {
+    fill: rgba(255, 152, 0, 0.24);
+    stroke: rgba(255, 152, 0, 0.95);
+    stroke-width: 3;
+    stroke-linejoin: round;
+}
+
+@media (max-width: 900px) {
+    .results-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .helper-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .chart-header {
+        flex-direction: column;
+    }
+
+    .legend-chip {
+        white-space: normal;
+    }
+}
+
+@media (max-width: 640px) {
+    .input-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .button-row {
+        flex-direction: column;
+    }
+
+    .button-row button {
+        width: 100%;
+    }
+}

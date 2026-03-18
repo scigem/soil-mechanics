@@ -1,6 +1,5 @@
 name: Build and Deploy to gh-pages
 
-# Trigger the workflow on pushes to the main branch
 on:
   push:
     branches:
@@ -11,27 +10,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout the latest code
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      # Step 2: Set up Node.js environment
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '22'  # Specify the Node.js version (or the latest stable)
+          node-version: '22'
+          cache: npm
 
-      # Step 3: Install dependencies
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
-      # Step 4: Build the project using Webpack
-      - name: Build project
+      - name: Build project with Vite
         run: npm run build
 
-      # Step 5: Deploy to gh-pages branch
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
