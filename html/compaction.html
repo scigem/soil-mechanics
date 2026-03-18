@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compaction Simulator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script type="module" crossorigin src="/soil-mechanics/assets/compaction-i_kACyv0.js"></script>
+  <link rel="modulepreload" crossorigin href="/soil-mechanics/assets/main-CHv88UQI.js">
+  <link rel="modulepreload" crossorigin href="/soil-mechanics/assets/plotly-Blke_pAn.js">
+  <link rel="stylesheet" crossorigin href="/soil-mechanics/assets/main-1i5AokFJ.css">
+  <link rel="stylesheet" crossorigin href="/soil-mechanics/assets/compaction-DqLcdYUV.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Compaction Simulator</h1>
+            <!-- <p>Explore how compaction changes material index properties</p> -->
+        </header>
+
+        <div class="main-layout">
+            <!-- Parameters Column -->
+            <div class="column">
+                <section id="input-section">
+                    <h2>Parameters</h2>
+
+                    <div class="input-group">
+                        <label for="Vs">V<sub>s</sub> (Volume of Solids):</label>
+                        <div class="slider-container">
+                            <input type="range" id="Vs" name="Vs" min="0" max="100" value="50">
+                            <span class="slider-value" id="VsValue">50</span>
+                            <span class="unit">cm³</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="Vw">V<sub>w</sub> (Volume of Water):</label>
+                        <div class="slider-container">
+                            <input type="range" id="Vw" name="Vw" min="0" max="100" value="50">
+                            <span class="slider-value" id="VwValue">50</span>
+                            <span class="unit">cm³</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="Va">V<sub>a</sub> (Volume of Air):</label>
+                        <div class="slider-container">
+                            <input type="range" id="Va" name="Va" min="0" max="100" value="50">
+                            <span class="slider-value" id="VaValue">50</span>
+                            <span class="unit">cm³</span>
+                        </div>
+                    </div>
+
+                    <!-- <div class="material-properties"> -->
+                    <h3>Material Properties</h3>
+                    <p>ρ<sub>w</sub> = 1 g/cm³, G<sub>s</sub> = 2.7</p>
+                    <!-- </div> -->
+                </section>
+
+                <section id="results-section">
+                    <div id="results-overlay">
+                        <h3>Derived Quantities</h3>
+                        <div class="results-grid" id="valuesContainer">
+                            <div class="result-item">
+                                <span class="label">V:</span>
+                                <span id="VValue"></span> cm³
+                            </div>
+                            <div class="result-item">
+                                <span class="label">V<sub>v</sub>:</span>
+                                <span id="VvValue"></span> cm³
+                            </div>
+                            <div class="result-item">
+                                <span class="label">m<sub>w</sub>:</span>
+                                <span id="mwValue"></span> g
+                            </div>
+                            <div class="result-item">
+                                <span class="label">m<sub>s</sub>:</span>
+                                <span id="msValue"></span> g
+                            </div>
+                            <div class="result-item">
+                                <span class="label">m:</span>
+                                <span id="mValue"></span> g
+                            </div>
+                            <div class="result-item">
+                                <span class="label">mc:</span>
+                                <span id="mcValue"></span>
+                            </div>
+                            <div class="result-item">
+                                <span class="label">e:</span>
+                                <span id="eValue"></span>
+                            </div>
+                            <div class="result-item">
+                                <span class="label">ν:</span>
+                                <span id="nuValue"></span>
+                            </div>
+                            <div class="result-item">
+                                <span class="label">n:</span>
+                                <span id="nValue"></span>
+                            </div>
+                            <div class="result-item">
+                                <span class="label">S:</span>
+                                <span id="SValue"></span>
+                            </div>
+                            <div class="result-item">
+                                <span class="label">A:</span>
+                                <span id="AValue"></span>
+                            </div>
+                            <div class="result-item">
+                                <span class="label">ρ<sub>dry</sub>:</span>
+                                <span id="rhodValue"></span> g/cm³
+                            </div>
+                            <div class="result-item">
+                                <span class="label">ρ<sub>bulk</sub>:</span>
+                                <span id="rhobValue"></span> g/cm³
+                            </div>
+                            <div class="result-item">
+                                <span class="label">ρ<sub>sat</sub>:</span>
+                                <span id="rhosatValue"></span> g/cm³
+                            </div>
+                            <div class="result-item">
+                                <span class="label">γ<sub>dry</sub>:</span>
+                                <span id="gammadValue"></span> kN/m³
+                            </div>
+                            <div class="result-item">
+                                <span class="label">γ<sub>bulk</sub>:</span>
+                                <span id="gammabValue"></span> kN/m³
+                            </div>
+                            <div class="result-item">
+                                <span class="label">γ<sub>sat</sub>:</span>
+                                <span id="gammasatValue"></span> kN/m³
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Visualization Column -->
+            <div class="column">
+                <section id="visualization-section">
+                    <!-- <h2>Compaction Visualization</h2> -->
+                    <div class="graphs-container">
+                        <div id="ternaryGraph" class="graph"></div>
+                        <div id="dryWeightGraph" class="graph"></div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
