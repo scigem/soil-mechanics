@@ -121,15 +121,19 @@ function buildStateResults(state) {
     );
     const peakVoidRatio = voidRatioOnLoading(state.peakStress, state);
     const updatedPreconStress = Math.max(state.preconStress, state.peakStress);
-    const finalVoidRatio = state.finalStress === updatedPreconStress
+    const updatedPreconVoidRatio = state.peakStress > state.preconStress
         ? peakVoidRatio
-        : voidRatioOnCurrentReloading(state.finalStress, updatedPreconStress, peakVoidRatio, state.kappa);
+        : state.preconVoidRatio;
+    const finalVoidRatio = state.finalStress === updatedPreconStress
+        ? updatedPreconVoidRatio
+        : voidRatioOnCurrentReloading(state.finalStress, updatedPreconStress, updatedPreconVoidRatio, state.kappa);
 
     return {
         initialVoidRatio,
         peakVoidRatio,
         finalVoidRatio,
         updatedPreconStress,
+        updatedPreconVoidRatio,
         initialOCR: state.preconStress / state.initialStress,
         currentOCR: updatedPreconStress / state.finalStress,
     };
@@ -145,7 +149,7 @@ function updateOutputs(state, results) {
     document.getElementById('finalVoidRatio').textContent = formatVoidRatio(results.finalVoidRatio);
     document.getElementById('pathSummary').textContent = yielded
         ? 'Peak stress exceeds the initial σ′pc, so the soil yields and the new σ′pc becomes the past maximum stress.'
-        : 'Peak stress stays below the initial σ′pc, so the whole path remains on the recompression line and OCR is unchanged by loading.';
+        : 'Peak stress stays below the initial σ′pc, so σ′pc does not move and the whole path remains on the same recompression line.';
 }
 
 function createPlot(state, results) {
@@ -172,7 +176,7 @@ function createPlot(state, results) {
     const currentReloading = currentReloadRange.map((stress) => voidRatioOnCurrentReloading(
         stress,
         results.updatedPreconStress,
-        results.peakVoidRatio,
+        results.updatedPreconVoidRatio,
         state.kappa,
     ));
 
@@ -333,7 +337,7 @@ function createPlot(state, results) {
 
     const layout = {
         title: {
-            text: `Load from ${formatStress(state.initialStress)} to ${formatStress(state.peakStress)}, then unload to ${formatStress(state.finalStress)}`,
+            text: `Stress path: ${state.initialStress.toFixed(0)} → ${state.peakStress.toFixed(0)} → ${state.finalStress.toFixed(0)} kPa`,
             font: { size: 16 },
         },
         xaxis: {
@@ -345,11 +349,14 @@ function createPlot(state, results) {
             title: 'Void ratio e',
             range: [yMin, yMax],
         },
-        margin: { l: 70, r: 20, t: 55, b: 60 },
+        margin: { l: 70, r: 20, t: 88, b: 60 },
         legend: {
             orientation: 'h',
             x: 0,
-            y: 1.18,
+            y: 1.06,
+            xanchor: 'left',
+            yanchor: 'bottom',
+            font: { size: 11 },
         },
         paper_bgcolor: 'white',
         plot_bgcolor: '#fafafa',
