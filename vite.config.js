@@ -16,6 +16,7 @@ module.exports = defineConfig(({ command }) => ({
                 'compaction': path.resolve(__dirname, 'compaction.html'),
                 'darcy-flow': path.resolve(__dirname, 'darcy-flow.html'),
                 'consolidation': path.resolve(__dirname, 'consolidation.html'),
+                '1d-compression': path.resolve(__dirname, '1d-compression.html'),
                 'ruler': path.resolve(__dirname, 'ruler.html'),
                 'sieve-analysis': path.resolve(__dirname, 'sieve-analysis.html'),
                 'critical-state': path.resolve(__dirname, 'critical-state.html'),
