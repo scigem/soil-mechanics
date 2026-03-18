@@ -13,6 +13,7 @@ Available tools:
  - [Soil compaction](https://scigem.github.io/soil-mechanics/html/compaction.html)
  - [Mohr's circle and failure criteria](https://scigem.github.io/soil-mechanics/html/mohrs-circle.html)
  - [Void ratio explainer](https://scigem.github.io/soil-mechanics/html/ruler.html)
+ - [Sieve analysis grading curve](https://scigem.github.io/soil-mechanics/html/sieve-analysis.html)
  - [Elastic strip footing displacement field](https://scigem.github.io/soil-mechanics/html/elastic-footing.html)
  - [Newmark's chart](https://scigem.github.io/soil-mechanics/html/newmarks-chart.html)
  - [System dynamics](https://scigem.github.io/soil-mechanics/html/system-dynamics.html)

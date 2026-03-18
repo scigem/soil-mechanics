@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sieve Analysis</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Sieve Analysis</h1>
+            <p>Enter the mass retained on each sieve to generate a grading curve.</p>
+        </header>
+
+        <div class="main-layout">
+            <div class="column">
+                <section id="input-section">
+                    <h2>Mass retained</h2>
+                    <p class="section-copy">Sieve sizes are fixed to a standard stack so students can focus on the sample masses.</p>
+                    <div id="sieveInputs" class="sieve-inputs"></div>
+                </section>
+
+                <section id="results-section">
+                    <h2>Key results</h2>
+                    <div class="results-grid">
+                        <div class="result-item">
+                            <span class="label">Total mass</span>
+                            <span><span id="totalMassValue">0</span> g</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="label">Passing 0.075 mm</span>
+                            <span id="finesValue">0%</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="label">D<sub>10</sub></span>
+                            <span id="d10Value">—</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="label">D<sub>30</sub></span>
+                            <span id="d30Value">—</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="label">D<sub>60</sub></span>
+                            <span id="d60Value">—</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="label">C<sub>u</sub></span>
+                            <span id="cuValue">—</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="label">C<sub>c</sub></span>
+                            <span id="ccValue">—</span>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div class="column">
+                <section id="visualization-section">
+                    <div id="gradingCurveGraph" class="graph"></div>
+                </section>
+            </div>
+        </div>
+    </div>
+    <script type="module" src="../js/sieve-analysis.js"></script>
+</body>
+
+</html>
