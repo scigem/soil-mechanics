@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1D Consolidation Explorer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>1D Consolidation Explorer</h1>
+            <p>See how excess pore pressure dissipates with time and depth, and how top and bottom drainage change the response.</p>
+        </header>
+
+        <div class="main-layout">
+            <div class="column">
+                <section id="input-section">
+                    <h2>Soil and Loading</h2>
+
+                    <div class="input-group">
+                        <label for="stress-increment">Stress increase Δσ (kPa):</label>
+                        <div class="slider-container">
+                            <input type="range" id="stress-increment" min="25" max="250" value="100" step="5">
+                            <span class="slider-value" id="stressIncrementValue">100</span>
+                            <span class="unit">kPa</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="layer-thickness">Layer thickness H (m):</label>
+                        <div class="slider-container">
+                            <input type="range" id="layer-thickness" min="2" max="12" value="6" step="0.5">
+                            <span class="slider-value" id="layerThicknessValue">6.0</span>
+                            <span class="unit">m</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="cv">Coefficient of consolidation c<sub>v</sub> (m²/day):</label>
+                        <div class="slider-container">
+                            <input type="range" id="cv" min="0.05" max="2" value="0.4" step="0.05">
+                            <span class="slider-value" id="cvValue">0.40</span>
+                            <span class="unit">m²/day</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="mv">Compressibility m<sub>v</sub> (m²/kN):</label>
+                        <div class="slider-container">
+                            <input type="range" id="mv" min="0.0002" max="0.002" value="0.0008" step="0.0001">
+                            <span class="slider-value" id="mvValue">0.0008</span>
+                            <span class="unit">m²/kN</span>
+                        </div>
+                    </div>
+
+                    <h2>Drainage</h2>
+
+                    <div class="checkbox-grid">
+                        <label class="checkbox-item" for="drainage-top">
+                            <input type="checkbox" id="drainage-top" checked>
+                            <span>Top drained</span>
+                        </label>
+                        <label class="checkbox-item" for="drainage-bottom">
+                            <input type="checkbox" id="drainage-bottom" checked>
+                            <span>Bottom drained</span>
+                        </label>
+                    </div>
+
+                    <h2>Time View</h2>
+
+                    <div class="input-group">
+                        <label for="t-max">Maximum time shown (days):</label>
+                        <div class="slider-container">
+                            <input type="range" id="t-max" min="30" max="365" value="180" step="5">
+                            <span class="slider-value" id="tMaxValue">180</span>
+                            <span class="unit">days</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="profile-time">Profile time (days):</label>
+                        <div class="slider-container">
+                            <input type="range" id="profile-time" min="0" max="180" value="45" step="1">
+                            <span class="slider-value" id="profileTimeValue">45</span>
+                            <span class="unit">days</span>
+                        </div>
+                    </div>
+
+                    <button id="reset-button" type="button">Reset to Default</button>
+                </section>
+
+                <section id="results-section">
+                    <h2>Important Outputs</h2>
+                    <div class="results-grid">
+                        <div class="result-item">
+                            <span class="label">Drainage condition</span>
+                            <span id="drainageCondition">Double drainage</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="label">Drainage path H<sub>dr</sub></span>
+                            <span id="drainagePath">3.00 m</span>
+                        </div>
+                        <div class="result-item emphasis">
+                            <span class="label">Settlement at profile time</span>
+                            <span id="currentSettlement">0.00 mm</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="label">Average degree of consolidation</span>
+                            <span id="currentDegree">0.0%</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="label">Final settlement</span>
+                            <span id="finalSettlement">0.00 mm</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="label">Mid-depth excess pore pressure</span>
+                            <span id="midDepthPressure">0.0 kPa</span>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div class="column">
+                <section id="visualization-section">
+                    <div class="graphs-container">
+                        <div id="settlementPlot" class="graph"></div>
+                        <div id="profilePlot" class="graph"></div>
+                    </div>
+                    <div class="info-panel">
+                        <p><strong>Interpretation:</strong> The settlement curve shows the time-dependent response. The profile shows how excess pore pressure varies with depth at the selected time.</p>
+                        <p><strong>Drainage:</strong> Drained boundaries force u = 0. Undrained boundaries trap water and slow dissipation.</p>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="../js/consolidation.js"></script>
+</body>
+
+</html>

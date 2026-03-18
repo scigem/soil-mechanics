@@ -14,6 +14,7 @@ Available tools:
  - [Mohr's circle and failure criteria](https://scigem.github.io/soil-mechanics/html/mohrs-circle.html)
  - [Void ratio explainer](https://scigem.github.io/soil-mechanics/html/ruler.html)
  - [Elastic strip footing displacement field](https://scigem.github.io/soil-mechanics/html/elastic-footing.html)
+ - [1D consolidation explorer](https://scigem.github.io/soil-mechanics/html/consolidation.html)
  - [Newmark's chart](https://scigem.github.io/soil-mechanics/html/newmarks-chart.html)
  - [System dynamics](https://scigem.github.io/soil-mechanics/html/system-dynamics.html)
  - [Critical state line visualisation](https://scigem.github.io/soil-mechanics/html/critical-state.html)
