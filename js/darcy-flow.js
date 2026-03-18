@@ -3,7 +3,7 @@ import '../css/darcy-flow.css';
 import Plotly from 'plotly.js-dist';
 
 const defaults = {
-    conductivity: -4,
+    conductivityExponent: -4,
     headLoss: 2,
     length: 4,
     area: 0.2,
@@ -16,9 +16,10 @@ sliderIds.forEach((id) => {
 });
 
 document.getElementById('reset-button').addEventListener('click', () => {
-    sliderIds.forEach((id) => {
-        document.getElementById(id).value = defaults[id];
-    });
+    document.getElementById('conductivity').value = defaults.conductivityExponent;
+    document.getElementById('headLoss').value = defaults.headLoss;
+    document.getElementById('length').value = defaults.length;
+    document.getElementById('area').value = defaults.area;
     updateVisualization();
 });
 
