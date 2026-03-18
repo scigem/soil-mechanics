@@ -5,10 +5,10 @@ import Plotly from 'plotly.js-dist';
 const DEFAULTS = {
     stressIncrement: 100,
     layerThickness: 6,
-    cv: 0.4,
-    mv: 0.0008,
-    tMax: 180,
-    profileTime: 45,
+    cv: 0.1,
+    mv: 0.0004,
+    tMax: 365,
+    profileTime: 30,
     drainageTop: true,
     drainageBottom: true,
 };
