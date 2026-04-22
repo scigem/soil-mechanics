@@ -56,19 +56,29 @@ function calculateDisplacements(x, y, q, B, E, nu) {
         const r2 = Math.sqrt(x2*x2 + y*y);
         
         // Vertical displacement
+        // theta1/theta2 use atan2 (continuous, range 0 to π for y > 0)
         const theta1 = Math.atan2(y, x1);
         const theta2 = Math.atan2(y, x2);
-        
+
+        // Derived by integrating the Flamant point-load solution over the strip [-B, +B].
+        // Both terms are even functions of x, giving the required left-right symmetry.
         uy = factor * (
-            x1 * Math.log(r1) - x2 * Math.log(r2) +
-            y * (theta1 - theta2) +
-            (1 - 2*nu) * (x1 * theta1 - x2 * theta2)
+            -(1 - nu) * (x1 * Math.log(r1) - x2 * Math.log(r2)) +
+            y * (1 - 2*nu) / 2 * (theta1 - theta2)
         );
-        
+
         // Horizontal displacement
+        // Must use standard Math.atan(y/xi) – range (-π/2, π/2) – so that the
+        // result is negative when xi < 0.  Math.atan2(y, xi) would return a
+        // value in (π/2, π) for xi < 0, introducing a spurious symmetric offset
+        // that breaks the required antisymmetry of ux.
+        // When xi = 0 the product xi·atan(y/xi) → 0; guard against 0/0.
+        const x1AtanTerm = x1 !== 0 ? x1 * Math.atan(y / x1) : 0;
+        const x2AtanTerm = x2 !== 0 ? x2 * Math.atan(y / x2) : 0;
+
         ux = factor * (
-            y * (Math.log(r1) - Math.log(r2)) +
-            (1 - 2*nu) * (theta1 - theta2) * y
+            nu * y * (Math.log(r1) - Math.log(r2)) -
+            (1 - 2*nu) / 2 * (x1AtanTerm - x2AtanTerm)
         );
     }
     
