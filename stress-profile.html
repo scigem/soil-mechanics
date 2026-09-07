@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stress Profile Explorer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Stress Profile</h1>
+        </header>
+
+        <div class="main-layout">
+            <div class="column">
+                <section id="input-section">
+                    <h2>Scenario</h2>
+
+                    <div class="input-group">
+                        <label for="water-table">Water table depth (negative = ponded water):</label>
+                        <div class="slider-container">
+                            <input type="range" id="water-table" min="-4" max="12" value="0" step="0.1">
+                            <span class="slider-value" id="waterTableValue">0.0</span>
+                            <span class="unit">m</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="surcharge">Surface surcharge <i>q</i>:</label>
+                        <div class="slider-container">
+                            <input type="range" id="surcharge" min="0" max="150" value="0" step="5">
+                            <span class="slider-value" id="surchargeValue">0</span>
+                            <span class="unit">kPa</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="capillary">Capillary rise <i>h</i><sub>c</sub> above water table:</label>
+                        <div class="slider-container">
+                            <input type="range" id="capillary" min="0" max="5" value="0" step="0.1">
+                            <span class="slider-value" id="capillaryValue">0.0</span>
+                            <span class="unit">m</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="probe">Probe depth:</label>
+                        <div class="slider-container">
+                            <input type="range" id="probe" min="0" max="12" value="8" step="0.1">
+                            <span class="slider-value" id="probeValue">8.0</span>
+                            <span class="unit">m</span>
+                        </div>
+                    </div>
+
+                    <h2>Layers</h2>
+
+                    <div class="layer-block" id="layer-1-block">
+                        <div class="layer-head"><span class="swatch" id="swatch-1"></span>Layer 1</div>
+                        <div class="input-group compact">
+                            <label for="t1">Thickness</label>
+                            <div class="slider-container">
+                                <input type="range" id="t1" min="0" max="10" value="5" step="0.5">
+                                <span class="slider-value" id="t1Value">5.0</span>
+                                <span class="unit">m</span>
+                            </div>
+                        </div>
+                        <div class="input-group compact">
+                            <label for="g1" title="Bulk unit weight">&gamma;<sub>bulk</sub></label>
+                            <div class="slider-container">
+                                <input type="range" id="g1" min="13" max="22" value="18" step="0.5">
+                                <span class="slider-value" id="g1Value">18.0</span>
+                                <span class="unit">kN/m³</span>
+                            </div>
+                        </div>
+                        <div class="input-group compact">
+                            <label for="gs1" title="Saturated unit weight">&gamma;<sub>sat</sub></label>
+                            <div class="slider-container">
+                                <input type="range" id="gs1" min="15" max="24" value="20" step="0.5">
+                                <span class="slider-value" id="gs1Value">20.0</span>
+                                <span class="unit">kN/m³</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layer-block" id="layer-2-block">
+                        <div class="layer-head"><span class="swatch" id="swatch-2"></span>Layer 2</div>
+                        <div class="input-group compact">
+                            <label for="t2">Thickness</label>
+                            <div class="slider-container">
+                                <input type="range" id="t2" min="0" max="10" value="3" step="0.5">
+                                <span class="slider-value" id="t2Value">3.0</span>
+                                <span class="unit">m</span>
+                            </div>
+                        </div>
+                        <div class="input-group compact">
+                            <label for="g2" title="Bulk unit weight">&gamma;<sub>bulk</sub></label>
+                            <div class="slider-container">
+                                <input type="range" id="g2" min="13" max="22" value="17" step="0.5">
+                                <span class="slider-value" id="g2Value">17.0</span>
+                                <span class="unit">kN/m³</span>
+                            </div>
+                        </div>
+                        <div class="input-group compact">
+                            <label for="gs2" title="Saturated unit weight">&gamma;<sub>sat</sub></label>
+                            <div class="slider-container">
+                                <input type="range" id="gs2" min="15" max="24" value="19" step="0.5">
+                                <span class="slider-value" id="gs2Value">19.0</span>
+                                <span class="unit">kN/m³</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layer-block" id="layer-3-block">
+                        <div class="layer-head"><span class="swatch" id="swatch-3"></span>Layer 3</div>
+                        <div class="input-group compact">
+                            <label for="t3">Thickness</label>
+                            <div class="slider-container">
+                                <input type="range" id="t3" min="0" max="10" value="4" step="0.5">
+                                <span class="slider-value" id="t3Value">4.0</span>
+                                <span class="unit">m</span>
+                            </div>
+                        </div>
+                        <div class="input-group compact">
+                            <label for="g3" title="Bulk unit weight">&gamma;<sub>bulk</sub></label>
+                            <div class="slider-container">
+                                <input type="range" id="g3" min="13" max="22" value="19" step="0.5">
+                                <span class="slider-value" id="g3Value">19.0</span>
+                                <span class="unit">kN/m³</span>
+                            </div>
+                        </div>
+                        <div class="input-group compact">
+                            <label for="gs3" title="Saturated unit weight">&gamma;<sub>sat</sub></label>
+                            <div class="slider-container">
+                                <input type="range" id="gs3" min="15" max="24" value="21" step="0.5">
+                                <span class="slider-value" id="gs3Value">21.0</span>
+                                <span class="unit">kN/m³</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="preset-row">
+                        <button id="freeze-button" type="button">Freeze reference</button>
+                        <button id="reset-button" type="button" class="secondary">Reset</button>
+                    </div>
+                </section>
+            </div>
+
+            <div class="column">
+                <section id="visualization-section">
+                    <div id="profilePlot" class="graph"></div>
+                </section>
+                <section id="results-section">
+                    <h2>At the probe depth</h2>
+                    <div class="results-grid">
+                        <div class="result-item">
+                            <span class="label">Total stress &sigma;</span>
+                            <span id="sigmaOut">157.0</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="label">Pore pressure <i>u</i></span>
+                            <span id="uOut">78.5</span>
+                        </div>
+                        <div class="result-item emphasis">
+                            <span class="label">Effective stress &sigma;&prime;</span>
+                            <span id="sigmaEffOut">78.5</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="label">Change vs reference</span>
+                            <span id="deltaOut">0.0</span>
+                        </div>
+                    </div>
+                    <p class="result-note" id="summaryNote"></p>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="./js/stress-profile.js"></script>
+</body>
+
+</html>

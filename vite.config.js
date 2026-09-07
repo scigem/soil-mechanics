@@ -23,6 +23,7 @@ module.exports = defineConfig(({ command }) => ({
                 'elastic-footing': path.resolve(__dirname, 'elastic-footing.html'),
                 'newmarks-chart': path.resolve(__dirname, 'newmarks-chart.html'),
                 'system-dynamics': path.resolve(__dirname, 'system-dynamics.html'),
+                'stress-profile': path.resolve(__dirname, 'stress-profile.html'),
             },
         },
     },
