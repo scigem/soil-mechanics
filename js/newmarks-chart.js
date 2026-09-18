@@ -1,5 +1,6 @@
 import '../css/main.css';
 import '../css/newmarks-chart.css';
+import { concentrationFactor } from './fan.js';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const VIEWBOX_SIZE = 800;
@@ -10,6 +11,7 @@ const DEFAULTS = {
     depth: 5,
     rings: 10,
     sectors: 20,
+    friction: 0,
 };
 
 const svg = document.getElementById('newmark-chart');
@@ -17,11 +19,13 @@ const pressureInput = document.getElementById('pressure');
 const depthInput = document.getElementById('depth');
 const ringsInput = document.getElementById('rings');
 const sectorsInput = document.getElementById('sectors');
+const frictionInput = document.getElementById('friction');
 const clearDrawingButton = document.getElementById('clear-drawing');
 const resetButton = document.getElementById('reset-button');
 const chartHint = document.getElementById('chart-hint');
 
 const unitInfluenceOutput = document.getElementById('unit-influence');
+const exponentOutput = document.getElementById('exponent');
 const coveredCellsOutput = document.getElementById('covered-cells');
 const influenceValueOutput = document.getElementById('influence-value');
 const stressResultOutput = document.getElementById('stress-result');
@@ -35,6 +39,7 @@ let chartState = {
     unitInfluence: 0,
     outerRatio: 0,
     polygonPoints: [],
+    polygonRatios: [],
 };
 
 let isDrawing = false;
@@ -91,16 +96,21 @@ function formatDecimal(value, digits = 4) {
     return Number.isFinite(value) ? value.toFixed(digits) : '0.0000';
 }
 
-function fullCircleInfluence(radiusRatio) {
-    return 1 - Math.pow(1 + radiusRatio * radiusRatio, -1.5);
-}
-
-function influenceToRadiusRatio(targetInfluence) {
+// Integrating Frohlich's kernel over a disc of radius a at depth z collapses
+// to a single power,
+//
+//     sigma_z / q = 1 - [1 + (a/z)^2]^(-n/2),
+//
+// so inverting it places the rings of the chart. That inverse is the only
+// place n enters: the sectors follow from axisymmetry, the unit influence is
+// still 1/(rings x sectors), and the scale line still represents the depth.
+// At n = 3 this is the textbook chart.
+function influenceToRadiusRatio(targetInfluence, exponent) {
     if (targetInfluence >= 1) {
         return Infinity;
     }
 
-    return Math.sqrt(Math.pow(1 / (1 - targetInfluence), 2 / 3) - 1);
+    return Math.sqrt(Math.pow(1 / (1 - targetInfluence), 2 / exponent) - 1);
 }
 
 function getConfig() {
@@ -108,13 +118,18 @@ function getConfig() {
     const depth = Math.max(0.1, parseFloat(depthInput.value) || DEFAULTS.depth);
     const rings = Math.max(4, Math.min(50, Math.round(parseFloat(ringsInput.value) || DEFAULTS.rings)));
     const sectors = Math.max(8, Math.min(100, Math.round(parseFloat(sectorsInput.value) || DEFAULTS.sectors)));
+    const friction = Math.max(0, Math.min(45, parseFloat(frictionInput.value) || 0));
 
     pressureInput.value = pressure;
     depthInput.value = depth;
     ringsInput.value = rings;
     sectorsInput.value = sectors;
+    frictionInput.value = friction;
 
-    return { pressure, depth, rings, sectors };
+    // Zero means "do not model the fabric": fall back to the classical chart.
+    const exponent = friction > 0 ? concentrationFactor(friction) : 3;
+
+    return { pressure, depth, rings, sectors, friction, exponent };
 }
 
 function getPolygonBounds(points) {
@@ -137,6 +152,31 @@ function getPolygonBounds(points) {
 
 function svgDistanceToRatio(distance) {
     return chartState.outerRatio ? (distance / OUTER_RADIUS) * chartState.outerRatio : 0;
+}
+
+// The drawn footing is stored in r/z, not in pixels.
+//
+// Changing the ring count moves the outermost drawn ring, which is at
+// I = (rings-1)/rings, so the chart covers a different span of r/z and is
+// redrawn at a different scale. Changing the friction angle does the same.
+// A footing held in pixels would silently become a different footing every
+// time either control moved, and the reported stress would climb with the
+// ring count instead of converging. Holding it in r/z keeps the physical
+// footing fixed, so rings and sectors are purely a refinement.
+function svgPointToRatio(point) {
+    const scale = chartState.outerRatio / OUTER_RADIUS;
+    return { x: (point.x - CENTER) * scale, y: (point.y - CENTER) * scale };
+}
+
+function ratioToSvgPoint(ratio) {
+    const scale = OUTER_RADIUS / chartState.outerRatio;
+    return { x: CENTER + ratio.x * scale, y: CENTER + ratio.y * scale };
+}
+
+function syncPolygonFromRatios() {
+    chartState.polygonPoints = chartState.outerRatio
+        ? chartState.polygonRatios.map(ratioToSvgPoint)
+        : [];
 }
 
 function updateScaleOutputs() {
@@ -216,6 +256,7 @@ function updateOutputs(coveredCells) {
     const influence = coveredCells * chartState.unitInfluence;
     const stressIncrease = chartState.config.pressure * influence;
 
+    exponentOutput.textContent = chartState.config.exponent.toFixed(2);
     unitInfluenceOutput.textContent = formatDecimal(chartState.unitInfluence);
     coveredCellsOutput.textContent = String(coveredCells);
     influenceValueOutput.textContent = formatDecimal(influence);
@@ -284,7 +325,7 @@ function buildChart() {
     const ringBoundaries = [0];
     for (let ringIndex = 1; ringIndex <= visibleRingCount; ringIndex += 1) {
         const targetInfluence = ringIndex / chartState.config.rings;
-        ringBoundaries.push(influenceToRadiusRatio(targetInfluence));
+        ringBoundaries.push(influenceToRadiusRatio(targetInfluence, chartState.config.exponent));
     }
     chartState.outerRatio = ringBoundaries[ringBoundaries.length - 1];
 
@@ -401,6 +442,7 @@ function buildChart() {
     svg.appendChild(guideGroup);
     svg.appendChild(drawingGroup);
 
+    syncPolygonFromRatios();
     setPathFromPoints(polygonPath, chartState.polygonPoints, true);
     setPathFromPoints(previewPath, [], false);
     recomputeCoverage();
@@ -408,6 +450,7 @@ function buildChart() {
 
 function clearDrawing() {
     chartState.polygonPoints = [];
+    chartState.polygonRatios = [];
     activePoints = [];
     isDrawing = false;
     activePointerId = null;
@@ -464,6 +507,7 @@ function finishDrawing(event) {
     }
 
     chartState.polygonPoints = simplifiedPoints;
+    chartState.polygonRatios = simplifiedPoints.map(svgPointToRatio);
     setPathFromPoints(polygonPath, chartState.polygonPoints, true);
     recomputeCoverage();
 }
@@ -473,11 +517,12 @@ function resetDefaults() {
     depthInput.value = DEFAULTS.depth;
     ringsInput.value = DEFAULTS.rings;
     sectorsInput.value = DEFAULTS.sectors;
+    frictionInput.value = DEFAULTS.friction;
     clearDrawing();
     buildChart();
 }
 
-[pressureInput, depthInput, ringsInput, sectorsInput].forEach((input) => {
+[pressureInput, depthInput, ringsInput, sectorsInput, frictionInput].forEach((input) => {
     input.addEventListener('input', () => {
         buildChart();
     });
