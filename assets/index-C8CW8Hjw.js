@@ -1062,13 +1062,18 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const o=`<!DOCTYPE html>
                     <div class="input-group">
                         <div class="input-group">
                             <label for="rings">Rings:</label>
-                            <input type="number" id="rings" value="10" min="4" max="50" step="1">
+                            <input type="number" id="rings" value="20" min="4" max="50" step="1">
                         </div>
 
                         <div class="input-group">
                             <label for="sectors">Sectors:</label>
-                            <input type="number" id="sectors" value="20" min="8" max="100" step="2">
+                            <input type="number" id="sectors" value="50" min="8" max="100" step="2">
                         </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="friction">Friction angle &phi; (&deg;), 0 for Boussinesq:</label>
+                        <input type="number" id="friction" value="0" min="0" max="45" step="0.5">
                     </div>
 
                     <div class="button-row">
@@ -1090,6 +1095,10 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const o=`<!DOCTYPE html>
                     <h2>Results</h2>
 
                     <div class="results-grid">
+                        <div class="result-item">
+                            <span class="label">Concentration factor <i>n</i></span>
+                            <span id="exponent">3.00</span>
+                        </div>
                         <div class="result-item">
                             <span class="label">Unit influence per cell</span>
                             <span id="unit-influence">0.0000</span>
@@ -1181,7 +1190,7 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const o=`<!DOCTYPE html>
     <script type="module" src="./js/ruler.js"><\/script>
 </body>
 
-</html>`,y=`<!DOCTYPE html>
+</html>`,f=`<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -1251,7 +1260,7 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const o=`<!DOCTYPE html>
     <script type="module" src="./js/sieve-analysis.js"><\/script>
 </body>
 
-</html>`,f=`<!DOCTYPE html>
+</html>`,y=`<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -1511,4 +1520,4 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const o=`<!DOCTYPE html>
     <script type="module" src="./js/system-dynamics.js"><\/script>
 </body>
 
-</html>`,k=Object.assign({"../1d-compression.html":o,"../compaction.html":r,"../consolidation.html":d,"../critical-state.html":c,"../darcy-flow.html":p,"../elastic-footing.html":u,"../footing-settlement.html":v,"../index.html":m,"../mohrs-circle.html":h,"../newmarks-chart.html":g,"../ruler.html":b,"../sieve-analysis.html":y,"../stress-profile.html":f,"../system-dynamics.html":w}),x=document.querySelector("#tool-grid"),l=(s,e)=>{const n=s.match(e);return n?n[1].replace(/\s+/g," ").trim():""},V=s=>s.replace(/[-_]+/g," ").replace(/\b\w/g,e=>e.toUpperCase()),C=Object.entries(k).map(([s,e])=>{const n=s.split("/").pop();if(!n||n==="index.html")return null;const i=l(e,/<h1[^>]*>([\s\S]*?)<\/h1>/i)||l(e,/<title>([\s\S]*?)<\/title>/i)||V(n.replace(/\.html$/,""));return{fileName:n,href:`./${n}`,title:i.replace(/<[^>]+>/g,"")}}).filter(Boolean).sort((s,e)=>s.title.localeCompare(e.title));x.replaceChildren(...C.map((s,e)=>{const n=document.createElement("a");n.className="tool-card",n.href=s.href;const i=document.createElement("span");i.className="tool-card-index",i.textContent=`Tool ${String(e+1).padStart(2,"0")}`;const a=document.createElement("h3");a.textContent=s.title;const t=document.createElement("p");return t.textContent=s.fileName,n.append(i,a,t),n}));
+</html>`,k=Object.assign({"../1d-compression.html":o,"../compaction.html":r,"../consolidation.html":d,"../critical-state.html":c,"../darcy-flow.html":p,"../elastic-footing.html":u,"../footing-settlement.html":v,"../index.html":m,"../mohrs-circle.html":h,"../newmarks-chart.html":g,"../ruler.html":b,"../sieve-analysis.html":f,"../stress-profile.html":y,"../system-dynamics.html":w}),x=document.querySelector("#tool-grid"),l=(s,e)=>{const n=s.match(e);return n?n[1].replace(/\s+/g," ").trim():""},V=s=>s.replace(/[-_]+/g," ").replace(/\b\w/g,e=>e.toUpperCase()),C=Object.entries(k).map(([s,e])=>{const n=s.split("/").pop();if(!n||n==="index.html")return null;const i=l(e,/<h1[^>]*>([\s\S]*?)<\/h1>/i)||l(e,/<title>([\s\S]*?)<\/title>/i)||V(n.replace(/\.html$/,""));return{fileName:n,href:`./${n}`,title:i.replace(/<[^>]+>/g,"")}}).filter(Boolean).sort((s,e)=>s.title.localeCompare(e.title));x.replaceChildren(...C.map((s,e)=>{const n=document.createElement("a");n.className="tool-card",n.href=s.href;const i=document.createElement("span");i.className="tool-card-index",i.textContent=`Tool ${String(e+1).padStart(2,"0")}`;const a=document.createElement("h3");a.textContent=s.title;const t=document.createElement("p");return t.textContent=s.fileName,n.append(i,a,t),n}));
