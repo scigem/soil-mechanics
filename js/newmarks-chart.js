@@ -9,8 +9,8 @@ const OUTER_RADIUS = 330;
 const DEFAULTS = {
     pressure: 150,
     depth: 5,
-    rings: 10,
-    sectors: 20,
+    rings: 20,
+    sectors: 50,
     friction: 0,
 };
 
