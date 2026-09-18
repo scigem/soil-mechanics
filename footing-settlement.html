@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Footing Settlement</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script type="module" crossorigin src="/soil-mechanics/assets/footing-settlement-Cjks15-u.js"></script>
+  <link rel="modulepreload" crossorigin href="/soil-mechanics/assets/main-CHv88UQI.js">
+  <link rel="modulepreload" crossorigin href="/soil-mechanics/assets/plotly-Blke_pAn.js">
+  <link rel="stylesheet" crossorigin href="/soil-mechanics/assets/main-1i5AokFJ.css">
+  <link rel="stylesheet" crossorigin href="/soil-mechanics/assets/footing-settlement-BkaDwNl2.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Footing Settlement</h1>
+            <p>How far a footing load spreads is set by the friction angle, not by an elastic modulus.</p>
+        </header>
+
+        <div class="main-layout">
+            <div class="column">
+                <section id="input-section">
+                    <h2>Footing</h2>
+
+                    <div class="input-group compact">
+                        <label for="width">Width <i>B</i></label>
+                        <div class="slider-container">
+                            <input type="range" id="width" min="0.5" max="8" value="2" step="0.1">
+                            <span class="slider-value" id="widthValue">2.0</span>
+                            <span class="unit">m</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group compact">
+                        <label for="length">Length <i>L</i></label>
+                        <div class="slider-container">
+                            <input type="range" id="length" min="0.5" max="20" value="2" step="0.1">
+                            <span class="slider-value" id="lengthValue">2.0</span>
+                            <span class="unit">m</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group compact">
+                        <label for="pressure">Pressure <i>q</i></label>
+                        <div class="slider-container">
+                            <input type="range" id="pressure" min="25" max="400" value="100" step="5">
+                            <span class="slider-value" id="pressureValue">100</span>
+                            <span class="unit">kPa</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group compact">
+                        <label for="founding">Depth <i>D</i><sub>f</sub></label>
+                        <div class="slider-container">
+                            <input type="range" id="founding" min="0" max="4" value="1" step="0.1">
+                            <span class="slider-value" id="foundingValue">1.0</span>
+                            <span class="unit">m</span>
+                        </div>
+                    </div>
+
+                    <h2>Soil</h2>
+
+                    <div class="input-group">
+                        <label for="friction">Friction angle &phi;
+                            <span class="hint">&rarr; concentration factor</span></label>
+                        <div class="slider-container">
+                            <input type="range" id="friction" min="15" max="45" value="32" step="0.5">
+                            <span class="slider-value" id="frictionValue">32.0</span>
+                            <span class="unit">&deg;</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group compact">
+                        <label for="unitWeight">&gamma;<sub>bulk</sub></label>
+                        <div class="slider-container">
+                            <input type="range" id="unitWeight" min="14" max="22" value="18" step="0.5">
+                            <span class="slider-value" id="unitWeightValue">18.0</span>
+                            <span class="unit">kN/m³</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group compact">
+                        <label for="waterTable">Water table</label>
+                        <div class="slider-container">
+                            <input type="range" id="waterTable" min="0" max="30" value="30" step="0.5">
+                            <span class="slider-value" id="waterTableValue">none</span>
+                            <span class="unit">m</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group compact">
+                        <label for="thickness">Layer <i>H</i></label>
+                        <div class="slider-container">
+                            <input type="range" id="thickness" min="2" max="40" value="16" step="0.5">
+                            <span class="slider-value" id="thicknessValue">16.0</span>
+                            <span class="unit">m</span>
+                        </div>
+                    </div>
+
+                    <h2>Compression law</h2>
+
+                    <div class="input-group">
+                        <label for="law">How stress becomes strain</label>
+                        <select id="law">
+                            <option value="janbu" selected>Janbu power law (stress dependent)</option>
+                            <option value="constant">Constant m&#8340; (linear)</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group compact" id="mv-group" hidden>
+                        <label for="mv">m&#8340;</label>
+                        <div class="slider-container">
+                            <input type="range" id="mv" min="0.02" max="0.5" value="0.1" step="0.005">
+                            <span class="slider-value" id="mvValue">0.100</span>
+                            <span class="unit">m²/MN</span>
+                        </div>
+                    </div>
+
+                    <div id="janbu-group">
+                        <div class="input-group compact">
+                            <label for="modulus" title="Janbu modulus number">m</label>
+                            <div class="slider-container">
+                                <input type="range" id="modulus" min="20" max="1200" value="300" step="10">
+                                <span class="slider-value" id="modulusValue">300</span>
+                                <span class="unit">&ndash;</span>
+                            </div>
+                        </div>
+                        <div class="input-group compact">
+                            <label for="stressExponent" title="Janbu stress exponent">a</label>
+                            <div class="slider-container">
+                                <input type="range" id="stressExponent" min="0" max="1" value="0.5" step="0.01">
+                                <span class="slider-value" id="stressExponentValue">0.50</span>
+                                <span class="unit">&ndash;</span>
+                            </div>
+                        </div>
+                        <p class="hint-block">
+                            <i>E</i><sub>oed</sub> = <i>m p</i><sub>a</sub>(&sigma;&prime;/<i>p</i><sub>a</sub>)<sup><i>a</i></sup>.
+                            <i>a</i> = 1/3 is Hertzian contact, <i>a</i> &asymp; 0.5 is what sands measure,
+                            <i>a</i> = 1 is the C<sub>c</sub> log law.
+                        </p>
+                    </div>
+
+                    <div class="preset-row">
+                        <button id="hertz-button" type="button" class="secondary">Hertz <i>a</i>=1/3</button>
+                        <button id="clay-button" type="button" class="secondary">Clay <i>a</i>=1</button>
+                        <button id="reset-button" type="button" class="secondary">Reset</button>
+                    </div>
+                </section>
+            </div>
+
+            <div class="column">
+                <section id="results-section">
+                    <div class="results-grid">
+                        <div class="result-item">
+                            <span class="label">Concentration factor <i>n</i></span>
+                            <span id="exponentOut">5.2</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="label">Settlement, Boussinesq</span>
+                            <span id="elasticOut">0.0 mm</span>
+                        </div>
+                        <div class="result-item emphasis">
+                            <span class="label">Settlement, fan</span>
+                            <span id="fanOut">0.0 mm</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="label">Ratio</span>
+                            <span id="ratioOut">1.00</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="label">Differential, centre to edge</span>
+                            <span id="differentialOut">0.0 mm</span>
+                        </div>
+                    </div>
+                    <p class="result-note" id="summaryNote"></p>
+                </section>
+
+                <section id="visualization-section">
+                    <div id="bulbPlot" class="graph"></div>
+                    <div id="profilePlot" class="graph"></div>
+                </section>
+
+                <section id="explainer-section">
+                    <div class="info-panel">
+                        <p><strong>Why no <i>E</i> and no <i>&nu;</i>?</strong> Boussinesq's vertical stress
+                            contains no elastic constant, and that is not a coincidence: &sigma;<sub><i>z</i></sub>
+                            under a surface load is fixed by statics and by the geometry of load spreading. Reading the
+                            classical radial solution as a fan of force chains carrying
+                            cos&thinsp;&theta; reproduces &sigma;<sub><i>zz</i></sub> and
+                            &sigma;<sub><i>rz</i></sub> exactly for <em>every</em> Poisson ratio. The only components
+                            that need elasticity are the ones a settlement calculation never uses.</p>
+                        <p><strong>Where &phi; comes in.</strong> That ray fan has <i>q</i>/<i>p</i> = 1/3, so it is
+                            admissible whenever sin&thinsp;&phi; &ge; 1/3, i.e. &phi; &ge; 19.5&deg;. Boussinesq is the
+                            unaligned-fabric limit. Align the force chains with the load and the friction cone binds:
+                            the fan narrows, and fitting Fröhlich's
+                            &sigma;<sub><i>z</i></sub> = (<i>nP</i>/2&pi;<i>R</i>²)cos<sup><i>n</i></sup>&theta;
+                            returns a concentration factor that depends on &phi; alone. <i>n</i> = 3 at the
+                            crossover, rising to about 7 at &phi; = 40&deg;. The <i>n</i> = 4&ndash;6 that practice
+                            recommends corresponds to &phi; = 25.7&deg; to 35.4&deg;.</p>
+                        <p><strong>What this means for the answer.</strong> Focusing the load does not change the
+                            total force on any horizontal plane &mdash; it moves it inward. So the centre settles
+                            <em>more</em> than Boussinesq predicts, the neighbour settles <em>less</em>, and the bowl
+                            dishes harder. Boussinesq is not the conservative choice in either direction.</p>
+                        <p><strong>What is approximated.</strong> Each vertical is compressed one-dimensionally with
+                            no shear coupling to its neighbours, which is the standard sublayer summation. This is a
+                            perfectly flexible footing; a rigid one settles uniformly and redistributes its contact
+                            pressure instead. The two bracket the real case.</p>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
