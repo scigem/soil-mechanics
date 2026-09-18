@@ -10,6 +10,7 @@ Production build:
  - `npm run preview`
 
 Available tools:
+- [Index page](https://scigem.github.io/soil-mechanics/)
 - [Soil compaction](https://scigem.github.io/soil-mechanics/compaction.html)
 - [Darcy flow](https://scigem.github.io/soil-mechanics/darcy-flow.html)
 - [Mohr's circle and failure criteria](https://scigem.github.io/soil-mechanics/mohrs-circle.html)
