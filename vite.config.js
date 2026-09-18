@@ -22,6 +22,7 @@ module.exports = defineConfig(({ command }) => ({
                 'critical-state': path.resolve(__dirname, 'critical-state.html'),
                 'elastic-footing': path.resolve(__dirname, 'elastic-footing.html'),
                 'newmarks-chart': path.resolve(__dirname, 'newmarks-chart.html'),
+                'footing-settlement': path.resolve(__dirname, 'footing-settlement.html'),
                 'system-dynamics': path.resolve(__dirname, 'system-dynamics.html'),
                 'stress-profile': path.resolve(__dirname, 'stress-profile.html'),
             },
