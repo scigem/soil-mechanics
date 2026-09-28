@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Shear Box and Taylor's Balance</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script type="module" crossorigin src="/soil-mechanics/assets/shear-box-FxJNEhPq.js"></script>
+  <link rel="modulepreload" crossorigin href="/soil-mechanics/assets/modulepreload-polyfill-B5Qt9EMX.js">
+  <link rel="stylesheet" crossorigin href="/soil-mechanics/assets/shear-box-DgWbTVPv.css">
+  <link rel="stylesheet" crossorigin href="/soil-mechanics/assets/main-1i5AokFJ.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>The Shear Box and Taylor's Balance</h1>
+            <p class="subtitle">Push the top half of the box sideways under a fixed normal load. The work you do goes
+                into sliding against friction and into lifting the load as the sample rises:
+                τ/σ′ = tan φ′<sub>cs</sub> + d<em>y</em>/d<em>x</em>. A dense sample has to climb; a loose one
+                sinks. Both end at the critical state.</p>
+        </header>
+
+        <div class="main-layout">
+            <section id="input-section">
+                <h2>Sample</h2>
+                <div class="input-group">
+                    <label for="ID">Relative density <em>I</em><sub>D</sub></label>
+                    <div class="slider-container">
+                        <input type="range" id="ID" min="0" max="1" step="0.01" value="0.8">
+                        <span class="slider-value" id="ID-value"></span>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="sigma">Normal stress σ′ (kPa)</label>
+                    <div class="slider-container">
+                        <input type="range" id="sigma" min="10" max="800" step="5" value="100">
+                        <span class="slider-value" id="sigma-value"></span>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="phics">Critical-state angle φ′<sub>cs</sub> (°)</label>
+                    <div class="slider-container">
+                        <input type="range" id="phics" min="25" max="40" step="0.5" value="33">
+                        <span class="slider-value" id="phics-value"></span>
+                    </div>
+                </div>
+
+                <h2>Shear it</h2>
+                <div class="input-group">
+                    <label for="x">Shear displacement <em>x</em> (mm)</label>
+                    <div class="slider-container">
+                        <input type="range" id="x" min="0" max="10" step="0.05" value="2">
+                        <span class="slider-value" id="x-value"></span>
+                    </div>
+                </div>
+                <button id="play">Play the test</button>
+                <p class="note">Peak dilatancy follows Bolton's (1986) relative dilatancy index,
+                    <em>I</em><sub>R</sub> = <em>I</em><sub>D</sub>(10 − ln <em>p</em>′) − 1, with
+                    φ′<sub>peak</sub> − φ′<sub>cs</sub> ≈ 5<em>I</em><sub>R</sub> degrees in plane strain. The
+                    shape of the curves is schematic.</p>
+            </section>
+
+            <section id="visualization-section">
+                <div class="panels">
+                    <figure>
+                        <canvas id="box-canvas"></canvas>
+                        <figcaption>The box. The rise is exaggerated five times.</figcaption>
+                    </figure>
+                    <figure>
+                        <canvas id="curve-canvas"></canvas>
+                        <figcaption>Strength and rise. The shaded strip is d<em>y</em>/d<em>x</em>: the work of
+                            lifting the load.</figcaption>
+                    </figure>
+                </div>
+                <div id="readout"></div>
+            </section>
+        </div>
+    </div>
+
+</body>
+
+</html>

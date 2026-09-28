@@ -135,6 +135,89 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const o=`<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bearing Capacity: a Quarter Turn</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Bearing Capacity: a Quarter Turn</h1>
+            <p class="subtitle">Under a strip footing the tilt of the stress points down; beside it, under the
+                surcharge, it lies flat. Between them it turns through a right angle, and turning a tilt that is at
+                the cap multiplies the squeeze by e<sup>2 tan φ′ Δβ</sup>. Slide the turn along the fan to follow
+                it.</p>
+        </header>
+
+        <div class="main-layout">
+            <section id="input-section">
+                <h2>Soil</h2>
+                <div class="input-group">
+                    <label for="phi">Friction angle φ′ (°)</label>
+                    <div class="slider-container">
+                        <input type="range" id="phi" min="0" max="45" step="0.5" value="30">
+                        <span class="slider-value" id="phi-value"></span>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="c">Cohesion <em>c′</em>, or <em>s</em><sub>u</sub> at φ′ = 0 (kPa)</label>
+                    <div class="slider-container">
+                        <input type="range" id="c" min="0" max="80" step="1" value="0">
+                        <span class="slider-value" id="c-value"></span>
+                    </div>
+                </div>
+
+                <h2>Footing</h2>
+                <div class="input-group">
+                    <label for="sv0">Surcharge beside the footing σ<sub>v0</sub>′ (kPa)</label>
+                    <div class="slider-container">
+                        <input type="range" id="sv0" min="0" max="100" step="1" value="18">
+                        <span class="slider-value" id="sv0-value"></span>
+                    </div>
+                </div>
+
+                <h2>Follow the turn</h2>
+                <div class="input-group">
+                    <label for="psi">How far round the fan, from the passive side (°)</label>
+                    <div class="slider-container">
+                        <input type="range" id="psi" min="0" max="90" step="1" value="45">
+                        <span class="slider-value" id="psi-value"></span>
+                    </div>
+                </div>
+                <button id="play">Play the turn</button>
+                <p class="note">The soil's own weight is left out, as in Prandtl's solution: it adds the ½γB<em>N</em><sub>γ</sub>
+                    term, which has no closed form.</p>
+            </section>
+
+            <section id="visualization-section">
+                <div class="panels">
+                    <figure class="wide">
+                        <canvas id="mech-canvas"></canvas>
+                        <figcaption>The mechanism, to scale. Ticks show the direction of the tilt.</figcaption>
+                    </figure>
+                    <figure class="wide">
+                        <canvas id="ladder-canvas"></canvas>
+                        <figcaption>The squeeze <em>p</em>′ along the way, from the surcharge to the footing (log
+                            scale)</figcaption>
+                    </figure>
+                </div>
+                <div id="readout"></div>
+            </section>
+        </div>
+    </div>
+
+    <script type="module" src="./js/bearing-capacity.js"><\/script>
+</body>
+
+</html>
+`,d=`<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Compaction Simulator</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -279,7 +362,7 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const o=`<!DOCTYPE html>
     <script type="module" src="./js/compaction.js"><\/script>
 </body>
 
-</html>`,d=`<!DOCTYPE html>
+</html>`,c=`<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -424,7 +507,7 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const o=`<!DOCTYPE html>
     <script type="module" src="./js/consolidation.js"><\/script>
 </body>
 
-</html>`,c=`<!DOCTYPE html>
+</html>`,p=`<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -499,7 +582,7 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const o=`<!DOCTYPE html>
     <script type="module" src="./js/critical-state.js"><\/script>
 </body>
 
-</html>`,p=`<!DOCTYPE html>
+</html>`,u=`<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -595,7 +678,7 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const o=`<!DOCTYPE html>
     <script type="module" src="./js/darcy-flow.js"><\/script>
 </body>
 
-</html>`,u=`<!DOCTYPE html>
+</html>`,v=`<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -692,7 +775,7 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const o=`<!DOCTYPE html>
 </body>
 
 </html>
-`,v=`<!DOCTYPE html>
+`,m=`<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -819,7 +902,7 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const o=`<!DOCTYPE html>
     <script type="module" src="./js/elastic-footing.js"><\/script>
 </body>
 
-</html>`,m=`<!DOCTYPE html>
+</html>`,h=`<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -1036,7 +1119,7 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const o=`<!DOCTYPE html>
 </body>
 
 </html>
-`,h=`<!DOCTYPE html>
+`,g=`<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -1068,7 +1151,102 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const o=`<!DOCTYPE html>
     <script type="module" src="./js/index.js"><\/script>
 </body>
 
-</html>`,g=`<!DOCTYPE html>
+</html>`,b=`<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Infinite Slope and Water</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>The Infinite Slope and Water</h1>
+            <p class="subtitle">On a plane parallel to a long slope the shear is fixed by the weight, τ = γ<em>z</em>
+                sin α cos α. Friction can resist tan φ′ times the effective normal stress. Raise the water table and
+                the water takes part of the squeeze: the grains are pressed together less, and friction resists
+                less.</p>
+        </header>
+
+        <div class="main-layout">
+            <section id="input-section">
+                <h2>Slope</h2>
+                <div class="input-group">
+                    <label for="alpha">Slope angle α (°)</label>
+                    <div class="slider-container">
+                        <input type="range" id="alpha" min="5" max="45" step="0.5" value="25">
+                        <span class="slider-value" id="alpha-value"></span>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="z">Depth of the slip plane <em>z</em> (m)</label>
+                    <div class="slider-container">
+                        <input type="range" id="z" min="0.5" max="8" step="0.1" value="3">
+                        <span class="slider-value" id="z-value"></span>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="m">Water table height, as a fraction <em>m</em> of <em>z</em> above the slip plane</label>
+                    <div class="slider-container">
+                        <input type="range" id="m" min="0" max="1" step="0.01" value="0">
+                        <span class="slider-value" id="m-value"></span>
+                    </div>
+                </div>
+
+                <h2>Soil</h2>
+                <div class="input-group">
+                    <label for="phi">Friction angle φ′ (°)</label>
+                    <div class="slider-container">
+                        <input type="range" id="phi" min="20" max="45" step="0.5" value="33">
+                        <span class="slider-value" id="phi-value"></span>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="c">Cohesion <em>c′</em> (kPa)</label>
+                    <div class="slider-container">
+                        <input type="range" id="c" min="0" max="20" step="0.5" value="0">
+                        <span class="slider-value" id="c-value"></span>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="gamma">Unit weight γ (kN/m³), taken the same above and below the water table</label>
+                    <div class="slider-container">
+                        <input type="range" id="gamma" min="16" max="22" step="0.5" value="20">
+                        <span class="slider-value" id="gamma-value"></span>
+                    </div>
+                </div>
+
+                <h2>Rain</h2>
+                <button id="rain">Let it rain</button>
+            </section>
+
+            <section id="visualization-section">
+                <div class="panels">
+                    <figure class="wide">
+                        <canvas id="slope-canvas"></canvas>
+                        <figcaption>A slice of the slope. Water flows parallel to the surface, so the equipotentials
+                            are perpendicular to it.</figcaption>
+                    </figure>
+                    <figure class="wide">
+                        <canvas id="fs-canvas"></canvas>
+                        <figcaption>Factor of safety against slope angle</figcaption>
+                    </figure>
+                </div>
+                <div id="readout"></div>
+            </section>
+        </div>
+    </div>
+
+    <script type="module" src="./js/infinite-slope.js"><\/script>
+</body>
+
+</html>
+`,f=`<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -1168,7 +1346,7 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const o=`<!DOCTYPE html>
 </body>
 
 </html>
-`,b=`<!DOCTYPE html>
+`,y=`<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -1278,7 +1456,7 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const o=`<!DOCTYPE html>
     <script type="module" src="./js/newmarks-chart.js"><\/script>
 </body>
 
-</html>`,f=`<!DOCTYPE html>
+</html>`,w=`<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -1328,7 +1506,90 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const o=`<!DOCTYPE html>
     <script type="module" src="./js/ruler.js"><\/script>
 </body>
 
-</html>`,y=`<!DOCTYPE html>
+</html>`,x=`<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Shear Box and Taylor's Balance</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>The Shear Box and Taylor's Balance</h1>
+            <p class="subtitle">Push the top half of the box sideways under a fixed normal load. The work you do goes
+                into sliding against friction and into lifting the load as the sample rises:
+                τ/σ′ = tan φ′<sub>cs</sub> + d<em>y</em>/d<em>x</em>. A dense sample has to climb; a loose one
+                sinks. Both end at the critical state.</p>
+        </header>
+
+        <div class="main-layout">
+            <section id="input-section">
+                <h2>Sample</h2>
+                <div class="input-group">
+                    <label for="ID">Relative density <em>I</em><sub>D</sub></label>
+                    <div class="slider-container">
+                        <input type="range" id="ID" min="0" max="1" step="0.01" value="0.8">
+                        <span class="slider-value" id="ID-value"></span>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="sigma">Normal stress σ′ (kPa)</label>
+                    <div class="slider-container">
+                        <input type="range" id="sigma" min="10" max="800" step="5" value="100">
+                        <span class="slider-value" id="sigma-value"></span>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="phics">Critical-state angle φ′<sub>cs</sub> (°)</label>
+                    <div class="slider-container">
+                        <input type="range" id="phics" min="25" max="40" step="0.5" value="33">
+                        <span class="slider-value" id="phics-value"></span>
+                    </div>
+                </div>
+
+                <h2>Shear it</h2>
+                <div class="input-group">
+                    <label for="x">Shear displacement <em>x</em> (mm)</label>
+                    <div class="slider-container">
+                        <input type="range" id="x" min="0" max="10" step="0.05" value="2">
+                        <span class="slider-value" id="x-value"></span>
+                    </div>
+                </div>
+                <button id="play">Play the test</button>
+                <p class="note">Peak dilatancy follows Bolton's (1986) relative dilatancy index,
+                    <em>I</em><sub>R</sub> = <em>I</em><sub>D</sub>(10 − ln <em>p</em>′) − 1, with
+                    φ′<sub>peak</sub> − φ′<sub>cs</sub> ≈ 5<em>I</em><sub>R</sub> degrees in plane strain. The
+                    shape of the curves is schematic.</p>
+            </section>
+
+            <section id="visualization-section">
+                <div class="panels">
+                    <figure>
+                        <canvas id="box-canvas"></canvas>
+                        <figcaption>The box. The rise is exaggerated five times.</figcaption>
+                    </figure>
+                    <figure>
+                        <canvas id="curve-canvas"></canvas>
+                        <figcaption>Strength and rise. The shaded strip is d<em>y</em>/d<em>x</em>: the work of
+                            lifting the load.</figcaption>
+                    </figure>
+                </div>
+                <div id="readout"></div>
+            </section>
+        </div>
+    </div>
+
+    <script type="module" src="./js/shear-box.js"><\/script>
+</body>
+
+</html>
+`,k=`<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -1398,7 +1659,7 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const o=`<!DOCTYPE html>
     <script type="module" src="./js/sieve-analysis.js"><\/script>
 </body>
 
-</html>`,w=`<!DOCTYPE html>
+</html>`,V=`<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -1584,7 +1845,7 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const o=`<!DOCTYPE html>
 </body>
 
 </html>
-`,k=`<!DOCTYPE html>
+`,C=`<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -1658,4 +1919,4 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const o=`<!DOCTYPE html>
     <script type="module" src="./js/system-dynamics.js"><\/script>
 </body>
 
-</html>`,x=Object.assign({"../1d-compression.html":o,"../compaction.html":r,"../consolidation.html":d,"../critical-state.html":c,"../darcy-flow.html":p,"../earth-pressures.html":u,"../elastic-footing.html":v,"../footing-settlement.html":m,"../index.html":h,"../mohrs-circle.html":g,"../newmarks-chart.html":b,"../ruler.html":f,"../sieve-analysis.html":y,"../stress-profile.html":w,"../system-dynamics.html":k}),V=document.querySelector("#tool-grid"),l=(s,e)=>{const n=s.match(e);return n?n[1].replace(/\s+/g," ").trim():""},C=s=>s.replace(/[-_]+/g," ").replace(/\b\w/g,e=>e.toUpperCase()),P=Object.entries(x).map(([s,e])=>{const n=s.split("/").pop();if(!n||n==="index.html")return null;const i=l(e,/<h1[^>]*>([\s\S]*?)<\/h1>/i)||l(e,/<title>([\s\S]*?)<\/title>/i)||C(n.replace(/\.html$/,""));return{fileName:n,href:`./${n}`,title:i.replace(/<[^>]+>/g,"")}}).filter(Boolean).sort((s,e)=>s.title.localeCompare(e.title));V.replaceChildren(...P.map((s,e)=>{const n=document.createElement("a");n.className="tool-card",n.href=s.href;const i=document.createElement("span");i.className="tool-card-index",i.textContent=`Tool ${String(e+1).padStart(2,"0")}`;const a=document.createElement("h3");a.textContent=s.title;const t=document.createElement("p");return t.textContent=s.fileName,n.append(i,a,t),n}));
+</html>`,T=Object.assign({"../1d-compression.html":o,"../bearing-capacity.html":r,"../compaction.html":d,"../consolidation.html":c,"../critical-state.html":p,"../darcy-flow.html":u,"../earth-pressures.html":v,"../elastic-footing.html":m,"../footing-settlement.html":h,"../index.html":g,"../infinite-slope.html":b,"../mohrs-circle.html":f,"../newmarks-chart.html":y,"../ruler.html":w,"../shear-box.html":x,"../sieve-analysis.html":k,"../stress-profile.html":V,"../system-dynamics.html":C}),_=document.querySelector("#tool-grid"),l=(s,e)=>{const n=s.match(e);return n?n[1].replace(/\s+/g," ").trim():""},P=s=>s.replace(/[-_]+/g," ").replace(/\b\w/g,e=>e.toUpperCase()),S=Object.entries(T).map(([s,e])=>{const n=s.split("/").pop();if(!n||n==="index.html")return null;const i=l(e,/<h1[^>]*>([\s\S]*?)<\/h1>/i)||l(e,/<title>([\s\S]*?)<\/title>/i)||P(n.replace(/\.html$/,""));return{fileName:n,href:`./${n}`,title:i.replace(/<[^>]+>/g,"")}}).filter(Boolean).sort((s,e)=>s.title.localeCompare(e.title));_.replaceChildren(...S.map((s,e)=>{const n=document.createElement("a");n.className="tool-card",n.href=s.href;const i=document.createElement("span");i.className="tool-card-index",i.textContent=`Tool ${String(e+1).padStart(2,"0")}`;const a=document.createElement("h3");a.textContent=s.title;const t=document.createElement("p");return t.textContent=s.fileName,n.append(i,a,t),n}));
