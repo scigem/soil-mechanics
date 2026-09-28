@@ -378,7 +378,7 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const o=`<!DOCTYPE html>
     <div class="container">
         <header>
             <h1>1D Consolidation Explorer</h1>
-            <p>See how excess pore pressure dissipates with time and depth, and how top and bottom drainage change the response.</p>
+            <p>When a wide load goes on a saturated clay, the water takes it all. As the water drains away it hands the load over to the grains, and the ground settles as it does. See how fast that handover happens, and what drainage, drains and overconsolidation do to it.</p>
         </header>
 
         <div class="main-layout">
@@ -435,6 +435,25 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const o=`<!DOCTYPE html>
                         </label>
                     </div>
 
+                    <div class="input-group">
+                        <label for="loading">Loading:</label>
+                        <select id="loading">
+                            <option value="nc">Past σ′<sub>pc</sub>: normally consolidated</option>
+                            <option value="oc">Below σ′<sub>pc</sub>: reloading, C<sub>c</sub>/C<sub>r</sub> = 6</option>
+                        </select>
+                    </div>
+                    <label class="checkbox-item" for="drains">
+                        <input type="checkbox" id="drains">
+                        <span>Vertical drains</span>
+                    </label>
+                    <div class="input-group">
+                        <label for="drain-spacing">Drain spacing (m):</label>
+                        <div class="slider-container">
+                            <input type="range" id="drain-spacing" min="0.5" max="5" value="2" step="0.1">
+                            <span class="slider-value" id="drainSpacingValue">2.0</span>
+                            <span class="unit">m</span>
+                        </div>
+                    </div>
                     <h2>Time View</h2>
 
                     <div class="input-group">
@@ -485,6 +504,14 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const o=`<!DOCTYPE html>
                             <span class="label">Mid-depth excess pore pressure</span>
                             <span id="midDepthPressure">0.0 kPa</span>
                         </div>
+                        <div class="result-item">
+                            <span class="label">Time to 90%</span>
+                            <span id="t90">—</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="label">c<sub>v</sub> and m<sub>v</sub> in use</span>
+                            <span id="inUse">—</span>
+                        </div>
                     </div>
                 </section>
             </div>
@@ -496,7 +523,9 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const o=`<!DOCTYPE html>
                         <div id="profilePlot" class="graph"></div>
                     </div>
                     <div class="info-panel">
-                        <p><strong>Interpretation:</strong> The settlement curve shows the time-dependent response. The profile shows how excess pore pressure varies with depth at the selected time.</p>
+                        <p><strong>Interpretation:</strong> The settlement curve shows the handover in time. The profile shows it through the layer: at each depth the brown width is the grains' share of the added load and the blue width is the water's. The grains take over first next to the drains.</p>
+                        <p><strong>Drains</strong> shorten the drainage path to about half their spacing, so the time falls with its square. The radial flow to a drain is approximated here by one-dimensional flow over that distance, combined with vertical drainage by Carrillo's rule, 1 − U = (1 − U<sub>v</sub>)(1 − U<sub>r</sub>): a scaling estimate, not a design calculation.</p>
+                        <p><strong>Reloading</strong> below the preconsolidation stress uses C<sub>r</sub> instead of C<sub>c</sub>: m<sub>v</sub> is six times smaller and, with the same permeability, c<sub>v</sub> is six times larger. The settlement is smaller and faster.</p>
                         <p><strong>Drainage:</strong> Drained boundaries force u = 0. Undrained boundaries trap water and slow dissipation.</p>
                     </div>
                 </section>
@@ -1919,4 +1948,4 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const o=`<!DOCTYPE html>
     <script type="module" src="./js/system-dynamics.js"><\/script>
 </body>
 
-</html>`,T=Object.assign({"../1d-compression.html":o,"../bearing-capacity.html":r,"../compaction.html":d,"../consolidation.html":c,"../critical-state.html":p,"../darcy-flow.html":u,"../earth-pressures.html":v,"../elastic-footing.html":m,"../footing-settlement.html":h,"../index.html":g,"../infinite-slope.html":b,"../mohrs-circle.html":f,"../newmarks-chart.html":y,"../ruler.html":w,"../shear-box.html":x,"../sieve-analysis.html":k,"../stress-profile.html":V,"../system-dynamics.html":C}),_=document.querySelector("#tool-grid"),l=(s,e)=>{const n=s.match(e);return n?n[1].replace(/\s+/g," ").trim():""},P=s=>s.replace(/[-_]+/g," ").replace(/\b\w/g,e=>e.toUpperCase()),S=Object.entries(T).map(([s,e])=>{const n=s.split("/").pop();if(!n||n==="index.html")return null;const i=l(e,/<h1[^>]*>([\s\S]*?)<\/h1>/i)||l(e,/<title>([\s\S]*?)<\/title>/i)||P(n.replace(/\.html$/,""));return{fileName:n,href:`./${n}`,title:i.replace(/<[^>]+>/g,"")}}).filter(Boolean).sort((s,e)=>s.title.localeCompare(e.title));_.replaceChildren(...S.map((s,e)=>{const n=document.createElement("a");n.className="tool-card",n.href=s.href;const i=document.createElement("span");i.className="tool-card-index",i.textContent=`Tool ${String(e+1).padStart(2,"0")}`;const a=document.createElement("h3");a.textContent=s.title;const t=document.createElement("p");return t.textContent=s.fileName,n.append(i,a,t),n}));
+</html>`,T=Object.assign({"../1d-compression.html":o,"../bearing-capacity.html":r,"../compaction.html":d,"../consolidation.html":c,"../critical-state.html":p,"../darcy-flow.html":u,"../earth-pressures.html":v,"../elastic-footing.html":m,"../footing-settlement.html":h,"../index.html":g,"../infinite-slope.html":b,"../mohrs-circle.html":f,"../newmarks-chart.html":y,"../ruler.html":w,"../shear-box.html":x,"../sieve-analysis.html":k,"../stress-profile.html":V,"../system-dynamics.html":C}),_=document.querySelector("#tool-grid"),l=(s,e)=>{const n=s.match(e);return n?n[1].replace(/\s+/g," ").trim():""},P=s=>s.replace(/[-_]+/g," ").replace(/\b\w/g,e=>e.toUpperCase()),S=Object.entries(T).map(([s,e])=>{const n=s.split("/").pop();if(!n||n==="index.html")return null;const a=l(e,/<h1[^>]*>([\s\S]*?)<\/h1>/i)||l(e,/<title>([\s\S]*?)<\/title>/i)||P(n.replace(/\.html$/,""));return{fileName:n,href:`./${n}`,title:a.replace(/<[^>]+>/g,"")}}).filter(Boolean).sort((s,e)=>s.title.localeCompare(e.title));_.replaceChildren(...S.map((s,e)=>{const n=document.createElement("a");n.className="tool-card",n.href=s.href;const a=document.createElement("span");a.className="tool-card-index",a.textContent=`Tool ${String(e+1).padStart(2,"0")}`;const i=document.createElement("h3");i.textContent=s.title;const t=document.createElement("p");return t.textContent=s.fileName,n.append(a,i,t),n}));

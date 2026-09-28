@@ -8,10 +8,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <script type="module" crossorigin src="/soil-mechanics/assets/consolidation-DiAq_8Cv.js"></script>
+  <script type="module" crossorigin src="/soil-mechanics/assets/consolidation-fNJuSA1I.js"></script>
   <link rel="modulepreload" crossorigin href="/soil-mechanics/assets/modulepreload-polyfill-B5Qt9EMX.js">
   <link rel="modulepreload" crossorigin href="/soil-mechanics/assets/plotly-Blke_pAn.js">
-  <link rel="stylesheet" crossorigin href="/soil-mechanics/assets/consolidation-BimxzfXl.css">
+  <link rel="stylesheet" crossorigin href="/soil-mechanics/assets/consolidation-DmCWjAbs.css">
   <link rel="stylesheet" crossorigin href="/soil-mechanics/assets/main-1i5AokFJ.css">
 </head>
 
@@ -19,7 +19,7 @@
     <div class="container">
         <header>
             <h1>1D Consolidation Explorer</h1>
-            <p>See how excess pore pressure dissipates with time and depth, and how top and bottom drainage change the response.</p>
+            <p>When a wide load goes on a saturated clay, the water takes it all. As the water drains away it hands the load over to the grains, and the ground settles as it does. See how fast that handover happens, and what drainage, drains and overconsolidation do to it.</p>
         </header>
 
         <div class="main-layout">
@@ -76,6 +76,25 @@
                         </label>
                     </div>
 
+                    <div class="input-group">
+                        <label for="loading">Loading:</label>
+                        <select id="loading">
+                            <option value="nc">Past σ′<sub>pc</sub>: normally consolidated</option>
+                            <option value="oc">Below σ′<sub>pc</sub>: reloading, C<sub>c</sub>/C<sub>r</sub> = 6</option>
+                        </select>
+                    </div>
+                    <label class="checkbox-item" for="drains">
+                        <input type="checkbox" id="drains">
+                        <span>Vertical drains</span>
+                    </label>
+                    <div class="input-group">
+                        <label for="drain-spacing">Drain spacing (m):</label>
+                        <div class="slider-container">
+                            <input type="range" id="drain-spacing" min="0.5" max="5" value="2" step="0.1">
+                            <span class="slider-value" id="drainSpacingValue">2.0</span>
+                            <span class="unit">m</span>
+                        </div>
+                    </div>
                     <h2>Time View</h2>
 
                     <div class="input-group">
@@ -126,6 +145,14 @@
                             <span class="label">Mid-depth excess pore pressure</span>
                             <span id="midDepthPressure">0.0 kPa</span>
                         </div>
+                        <div class="result-item">
+                            <span class="label">Time to 90%</span>
+                            <span id="t90">—</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="label">c<sub>v</sub> and m<sub>v</sub> in use</span>
+                            <span id="inUse">—</span>
+                        </div>
                     </div>
                 </section>
             </div>
@@ -137,7 +164,9 @@
                         <div id="profilePlot" class="graph"></div>
                     </div>
                     <div class="info-panel">
-                        <p><strong>Interpretation:</strong> The settlement curve shows the time-dependent response. The profile shows how excess pore pressure varies with depth at the selected time.</p>
+                        <p><strong>Interpretation:</strong> The settlement curve shows the handover in time. The profile shows it through the layer: at each depth the brown width is the grains' share of the added load and the blue width is the water's. The grains take over first next to the drains.</p>
+                        <p><strong>Drains</strong> shorten the drainage path to about half their spacing, so the time falls with its square. The radial flow to a drain is approximated here by one-dimensional flow over that distance, combined with vertical drainage by Carrillo's rule, 1 − U = (1 − U<sub>v</sub>)(1 − U<sub>r</sub>): a scaling estimate, not a design calculation.</p>
+                        <p><strong>Reloading</strong> below the preconsolidation stress uses C<sub>r</sub> instead of C<sub>c</sub>: m<sub>v</sub> is six times smaller and, with the same permeability, c<sub>v</sub> is six times larger. The settlement is smaller and faster.</p>
                         <p><strong>Drainage:</strong> Drained boundaries force u = 0. Undrained boundaries trap water and slow dissipation.</p>
                     </div>
                 </section>
