@@ -46,7 +46,7 @@ toolGrid.replaceChildren(...pages.map((page, index) => {
 
     const pageNumber = document.createElement('span');
     pageNumber.className = 'tool-card-index';
-    pageNumber.textContent = `Tool ${String(index + 1).padStart(2, '0')}`;
+    // pageNumber.textContent = `Tool ${String(index + 1).padStart(2, '0')}`;
 
     const title = document.createElement('h3');
     title.textContent = page.title;
@@ -54,6 +54,6 @@ toolGrid.replaceChildren(...pages.map((page, index) => {
     const destination = document.createElement('p');
     destination.textContent = page.fileName;
 
-    card.append(pageNumber, title, destination);
+    card.append(pageNumber, title);//, destination);
     return card;
 }));

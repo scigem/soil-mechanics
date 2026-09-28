@@ -405,7 +405,13 @@ header .title-row {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.6rem;
+}
+
+/* The page's ? sits in the top-right corner, out of the title's way. */
+.about-toggle {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.25rem;
 }
 
 header .title-row h1 {
@@ -478,6 +484,24 @@ dialog.about .close {
     color: var(--text-primary);
     box-shadow: none;
     font-size: 1.2rem;
+}
+
+/* A variable's ? sits at the right-hand end of its label. */
+label > .tip,
+.item > span > .tip,
+h2 > .tip,
+h3 > .tip,
+th > .tip {
+    float: right;
+    margin-left: 0.5rem;
+    margin-top: 0.15rem;
+}
+
+/* ...except in compact rows, where the label is a narrow column of its own. */
+.compact label > .tip {
+    float: none;
+    margin-left: 0.3rem;
+    margin-top: 0;
 }
 
 .tip {

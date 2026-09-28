@@ -6,8 +6,8 @@ body {
     padding: 0;
     min-height: 100vh;
     background: linear-gradient(180deg,
-        var(--surface-muted) 0%,
-        color-mix(in srgb, var(--primary-color) 7%, var(--page-bg)) 100%);
+            var(--surface-muted) 0%,
+            color-mix(in srgb, var(--primary-color) 7%, var(--page-bg)) 100%);
     color: var(--text-primary);
 }
 
@@ -32,7 +32,7 @@ body {
 
 .hero h1 {
     margin: 0;
-    text-align: left;
+    text-align: center;
     color: var(--text-primary);
     font-size: clamp(2.5rem, 5vw, 4.5rem);
     line-height: 0.95;
@@ -85,16 +85,17 @@ body {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
-    min-height: 180px;
+    min-height: 100px;
     padding: 1.25rem;
     border: 1px solid color-mix(in srgb, var(--primary-color) 12%, transparent);
     border-radius: calc(var(--border-radius) * 2.25);
     background: linear-gradient(180deg,
-        var(--surface-color) 0%,
-        color-mix(in srgb, var(--primary-color) 5%, var(--surface-color)) 100%);
+            var(--surface-color) 0%,
+            color-mix(in srgb, var(--primary-color) 5%, var(--surface-color)) 100%);
     text-decoration: none;
     color: inherit;
     transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    text-align: center;
 }
 
 .tool-card:hover,
