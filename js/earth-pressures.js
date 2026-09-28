@@ -32,6 +32,7 @@ const inputs = Object.fromEntries(ids.map((id) => [id, document.getElementById(i
 const outputs = Object.fromEntries(ids.map((id) => [id, document.getElementById(`${id}-value`)]));
 const readout = document.getElementById('readout');
 const dialCanvas = document.getElementById('dial-canvas');
+const discCanvas = document.getElementById('disc-canvas');
 const wallCanvas = document.getElementById('wall-canvas');
 const mohrCanvas = document.getElementById('mohr-canvas');
 
@@ -133,16 +134,113 @@ function stateColour(s) {
 // ---------------------------------------------------------------- the dial
 
 let dialMap = null;
-
+let discMap = null;
 function drawDial(st, s) {
     const { ctx, w, h } = prepare(dialCanvas);
+    const left = 56;
+    const right = 18;
+    const top = 16;
+    const bottom = 40;
+    const X = (C) => left + ((C + 1) / 2) * (w - left - right);
+    const logK = (K) => Math.log10(K);
+    const kMin = 0.1;
+    const kMax = 10;
+    const Y = (K) => top + ((logK(kMax) - logK(K)) / (logK(kMax) - logK(kMin))) * (h - top - bottom);
+    dialMap = { toC: (x) => ((x - left) / (w - left - right)) * 2 - 1 };
+
+    // beyond the stops
+    ctx.fillStyle = COLORS.beyond;
+    ctx.fillRect(X(-1), top, X(-st.sin) - X(-1), h - top - bottom);
+    ctx.fillRect(X(st.sin), top, X(1) - X(st.sin), h - top - bottom);
+    label(ctx, 'beyond the stop', (X(-1) + X(-st.sin)) / 2, top + 12, COLORS.muted);
+    label(ctx, 'beyond the stop', (X(1) + X(st.sin)) / 2, top + 12, COLORS.muted);
+
+    // grid
+    ctx.lineWidth = 1;
+    for (const K of [0.1, 0.2, 0.5, 1, 2, 5, 10]) {
+        ctx.strokeStyle = COLORS.grid;
+        ctx.beginPath();
+        ctx.moveTo(X(-1), Y(K));
+        ctx.lineTo(X(1), Y(K));
+        ctx.stroke();
+        label(ctx, `${K}`, left - 8, Y(K), COLORS.muted, 'right');
+    }
+    ctx.strokeStyle = COLORS.muted;
+    ctx.beginPath();
+    ctx.moveTo(X(-1), h - bottom);
+    ctx.lineTo(X(1), h - bottom);
+    ctx.moveTo(left, top);
+    ctx.lineTo(left, h - bottom);
+    ctx.stroke();
+    for (const C of [-1, -0.5, 0, 0.5, 1]) label(ctx, `${C}`, X(C), h - bottom + 14, COLORS.muted);
+    label(ctx, 'vertical tilt C', (X(-1) + X(1)) / 2, h - 8, COLORS.ink);
+    ctx.save();
+    ctx.translate(14, (top + h - bottom) / 2);
+    ctx.rotate(-Math.PI / 2);
+    label(ctx, 'K = σh′/σv′', 0, 0, COLORS.ink);
+    ctx.restore();
+
+    // the curve: dotted everywhere, solid between the stops
+    const curve = (a, b) => {
+        ctx.beginPath();
+        for (let i = 0; i <= 200; i++) {
+            const C = a + ((b - a) * i) / 200;
+            const K = Kof(C);
+            if (K < kMin || K > kMax) continue;
+            if (i === 0 || Kof(a + ((b - a) * (i - 1)) / 200) > kMax) ctx.moveTo(X(C), Y(K));
+            else ctx.lineTo(X(C), Y(K));
+        }
+        ctx.stroke();
+    };
+    ctx.setLineDash([2, 4]);
+    ctx.strokeStyle = COLORS.faint;
+    ctx.lineWidth = 1.5;
+    curve(-0.99, 0.99);
+    ctx.setLineDash([]);
+    ctx.strokeStyle = COLORS.dial;
+    ctx.lineWidth = 3;
+    curve(-st.sin, st.sin);
+
+    // the trip from rest to here
+    if (Math.abs(st.C - st.C0) > 0.01) {
+        const yTrip = h - bottom - 12;
+        arrow(ctx, X(st.C0), yTrip, X(st.C), yTrip, stateColour(s), 2, 8);
+    }
+
+    // named points
+    const named = [
+        [-st.sin, st.Kp, `passive ${st.Kp.toFixed(2)}`, COLORS.passive, 'left'],
+        [0, 1, 'water 1', COLORS.water, 'left'],
+        [st.C0, st.K0, `at rest ${st.K0.toFixed(2)}`, COLORS.rest, 'left'],
+        [st.sin, st.Ka, `active ${st.Ka.toFixed(2)}`, COLORS.active, 'right'],
+    ];
+    for (const [C, K, text, colour, align] of named) {
+        dot(ctx, X(C), Y(K), 5, colour);
+        label(ctx, text, X(C) + (align === 'left' ? 9 : -9), Y(K) - 11, colour, align);
+    }
+
+    // where the dial is now
+    ctx.strokeStyle = stateColour(s);
+    ctx.lineWidth = 1;
+    ctx.setLineDash([3, 3]);
+    ctx.beginPath();
+    ctx.moveTo(X(st.C), Y(st.K));
+    ctx.lineTo(X(st.C), h - bottom);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    dot(ctx, X(st.C), Y(st.K), 8, stateColour(s));
+}
+
+
+function drawDisc(st, s) {
+    const { ctx, w, h } = prepare(discCanvas);
     // the disc of all stress states, (C, S), with the unit circle as its frame
     const R = Math.min(0.42 * w, 0.40 * h);
     const cx = w / 2;
     const cy = 0.44 * h;
     const X = (C) => cx + C * R;
     const Y = (S) => cy - S * R;
-    dialMap = { toC: (x) => (x - cx) / R };
+    discMap = { toC: (x) => (x - cx) / R };
 
     // beyond friction's cap, and the unit circle q/p = 1
     ctx.fillStyle = COLORS.beyond;
@@ -325,7 +423,8 @@ function drawMohr(st, s) {
     const sh = st.K * sv;
     const p = (sv + sh) / 2;
     const q = Math.abs(sv - sh) / 2;
-    const sMax = Math.max(sv, st.Kp * sv) * 1.08;
+    // scaled to the stress now, so the circle fills the panel at every state
+    const sMax = Math.max(sv, st.K * sv) * 1.15;
     const scale = Math.min((w - 2 * pad) / sMax, (h - 2 * pad) / (0.55 * sMax));
     const X = (x) => pad + x * scale;
     const y0 = h / 2 + 0.05 * h;
@@ -403,6 +502,7 @@ function update(changed) {
     const st = read();
     const s = state(st);
     drawDial(st, s);
+    drawDisc(st, s);
     drawWall(st, s);
     drawMohr(st, s);
     drawReadout(st, s);
@@ -425,22 +525,24 @@ document.querySelectorAll('[data-preset]').forEach((button) =>
     })
 );
 
-// Dragging along the dial moves C.
-let dragging = false;
-function fromPointer(event) {
-    if (!dialMap) return;
-    const rect = dialCanvas.getBoundingClientRect();
-    const C = dialMap.toC(event.clientX - rect.left);
-    inputs.C.value = Math.max(-1, Math.min(1, C)).toFixed(3);
-    update('C');
+// Dragging along the dial, or along the disc's C axis, moves C.
+for (const [canvas, map] of [[dialCanvas, () => dialMap], [discCanvas, () => discMap]]) {
+    let dragging = false;
+    const fromPointer = (event) => {
+        if (!map()) return;
+        const rect = canvas.getBoundingClientRect();
+        const C = map().toC(event.clientX - rect.left);
+        inputs.C.value = Math.max(-1, Math.min(1, C)).toFixed(3);
+        update('C');
+    };
+    canvas.addEventListener('pointerdown', (e) => {
+        dragging = true;
+        canvas.setPointerCapture(e.pointerId);
+        fromPointer(e);
+    });
+    canvas.addEventListener('pointermove', (e) => dragging && fromPointer(e));
+    canvas.addEventListener('pointerup', () => (dragging = false));
 }
-dialCanvas.addEventListener('pointerdown', (e) => {
-    dragging = true;
-    dialCanvas.setPointerCapture(e.pointerId);
-    fromPointer(e);
-});
-dialCanvas.addEventListener('pointermove', (e) => dragging && fromPointer(e));
-dialCanvas.addEventListener('pointerup', () => (dragging = false));
 
 if (window.ResizeObserver) new ResizeObserver(() => update()).observe(document.querySelector('.panels'));
 update();
