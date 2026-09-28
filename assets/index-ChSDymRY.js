@@ -1572,7 +1572,7 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const o=`<!DOCTYPE html>
                 <div class="panels">
                     <figure>
                         <canvas id="box-canvas"></canvas>
-                        <figcaption>The box. The shear zone (shaded) is where the grains spread apart; the rise is exaggerated three times.</figcaption>
+                        <figcaption>The box. The darker band is the shear zone: it leans as the top half moves, and thickens as the sample dilates (orange) or thins as it contracts (blue). The rise is exaggerated three times.</figcaption>
                     </figure>
                     <figure>
                         <canvas id="curve-canvas"></canvas>
