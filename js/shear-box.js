@@ -59,47 +59,11 @@ function model(s) {
     return { IR, tanCs, phiPeak, dydx, rise, ratio, xs, R, Y, G };
 }
 
-// ---------------------------------------------------------------- a settled packing
-
-function pack(x0, y0, x1, y1, rMean, seed) {
-    let state = seed;
-    const rand = () => ((state = (state * 16807) % 2147483647) / 2147483647);
-    const area = (x1 - x0) * (y1 - y0);
-    const n = Math.round((0.78 * area) / (Math.PI * rMean * rMean * 1.01));
-    const r = Array.from({ length: n }, () => rMean * (1 + 0.18 * (2 * rand() - 1)));
-    const p = Array.from({ length: n }, () => [x0 + rand() * (x1 - x0), y0 + rand() * (y1 - y0)]);
-    for (let sweep = 0; sweep < 1600; sweep++) {
-        if (sweep < 1000) for (const q of p) q[1] -= 0.02 * rMean;
-        for (let i = 0; i < n; i++) {
-            for (let j = i + 1; j < n; j++) {
-                const dx = p[i][0] - p[j][0];
-                const dy = p[i][1] - p[j][1];
-                const d = Math.hypot(dx, dy) || 1e-9;
-                const o = r[i] + r[j] - d;
-                if (o > 0) {
-                    const f = (0.5 * o) / d;
-                    p[i][0] += f * dx; p[i][1] += f * dy;
-                    p[j][0] -= f * dx; p[j][1] -= f * dy;
-                }
-            }
-        }
-        for (let i = 0; i < n; i++) {
-            p[i][0] = Math.min(x1 - r[i], Math.max(x0 + r[i], p[i][0]));
-            p[i][1] = Math.min(y1 - r[i], Math.max(y0 + r[i], p[i][1]));
-        }
-    }
-    return p.map((q, i) => [q[0], q[1], r[i]]);
-}
-
-// One sample filling both halves, in units of the box width. The halves meet
-// at y = 0.4; shearing concentrates in a band a couple of grains thick there.
-const SAMPLE = pack(0, 0, 1, 0.8, 0.042, 11);
+// The sample fills both halves of the box, which meet at y = 0.4 (in units of
+// the box width). Shearing concentrates in a zone at that plane, which leans
+// with the displacement and thickens as the sample dilates.
 const MID = 0.4;
-const BAND = 0.06; // half-thickness of the shear zone
-
-// How much of the top half's motion a grain at height y shares: nothing well
-// below the band, all of it well above, and a smooth ramp across the band.
-const share = (y) => 0.5 * (1 + Math.tanh((y - MID) / BAND));
+const BAND = 0.05; // half-thickness of the shear zone before shearing
 
 // ---------------------------------------------------------------- helpers
 
@@ -156,25 +120,34 @@ function drawBox(s, m) {
     const k = at(m, s.x);
     const shift = (s.x / XMAX) * 0.3;              // 10 mm drawn as 0.3 box widths
     const lift = 3 * (m.Y[k] / 60);                 // box 60 mm wide, rise exaggerated three times
-    const gap = 0.0;
 
-    // The sample. Grains move sideways with the top half in proportion to how
-    // far up the shear zone they sit, and the zone thickens as the sample
-    // dilates: grains in it spread apart, and everything above rides up.
-    const drawGrain = (x, y, r) => {
+    // The sample, as one shaded region: the bottom half fixed, the top half
+    // carried sideways and up, and the shear zone between them.
+    const zoneTop = MID + BAND + lift;
+    const zoneBottom = MID - BAND;
+    const top = 0.8 + lift;
+    const P = (x, y) => [X(x), Y(y)];
+    const fill = (pts, colour) => {
         ctx.beginPath();
-        ctx.arc(X(x), Y(y), r * width, 0, 2 * Math.PI);
-        ctx.fillStyle = COLORS.grain;
-        ctx.globalAlpha = 0.85;
+        pts.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)));
+        ctx.closePath();
+        ctx.fillStyle = colour;
         ctx.fill();
-        ctx.globalAlpha = 1;
-        ctx.strokeStyle = COLORS.grainEdge;
-        ctx.lineWidth = 0.5;
-        ctx.stroke();
     };
-    for (const [x, y, r] of SAMPLE) {
-        const f = share(y);
-        drawGrain(x + shift * f, y + lift * f, r);
+    fill([P(0, 0), P(1, 0), P(1, zoneBottom), P(0, zoneBottom)], '#d9b48f');
+    fill([P(0, zoneBottom), P(1, zoneBottom), P(1 + shift, zoneTop), P(shift, zoneTop)],
+        m.G[k] >= 0 ? '#e7a36a' : '#9fb9d6');
+    fill([P(shift, zoneTop), P(1 + shift, zoneTop), P(1 + shift, top), P(shift, top)], '#d9b48f');
+    // a few lines through the sample, so the shearing shows
+    ctx.strokeStyle = 'rgba(107,53,18,0.35)';
+    ctx.lineWidth = 1;
+    for (let u = 0.1; u < 1; u += 0.15) {
+        ctx.beginPath();
+        ctx.moveTo(...P(u, 0));
+        ctx.lineTo(...P(u, zoneBottom));
+        ctx.lineTo(...P(u + shift, zoneTop));
+        ctx.lineTo(...P(u + shift, top));
+        ctx.stroke();
     }
 
     // the two halves of the box: the bottom one fixed, the top one pushed
@@ -187,22 +160,18 @@ function drawBox(s, m) {
     ctx.lineTo(X(1), Y(0));
     ctx.lineTo(X(1), Y(MID));
     ctx.stroke();
-    const topBase = MID + gap + lift;
     ctx.beginPath();
-    ctx.moveTo(X(shift), Y(topBase));
-    ctx.lineTo(X(shift), Y(0.8 + lift + gap));
-    ctx.moveTo(X(shift + 1), Y(topBase));
-    ctx.lineTo(X(shift + 1), Y(0.8 + lift + gap));
+    ctx.moveTo(X(shift), Y(MID + lift));
+    ctx.lineTo(X(shift), Y(top));
+    ctx.moveTo(X(shift + 1), Y(MID + lift));
+    ctx.lineTo(X(shift + 1), Y(top));
     ctx.stroke();
     // the loading plate on top of the sample
     ctx.fillStyle = '#9e9e9e';
-    ctx.fillRect(X(shift), Y(0.8 + lift + gap) - 6, width, 6);
-    // the shear zone
-    ctx.fillStyle = 'rgba(239,108,0,0.08)';
-    ctx.fillRect(X(0), Y(MID + 2 * BAND + lift), width + shift * width, (4 * BAND + lift) * width);
+    ctx.fillRect(X(shift), Y(top) - 6, width, 6);
 
     // loads
-    const topY = Y(0.8 + lift + gap) - 6;
+    const topY = Y(0.8 + lift) - 6;
     const midX = X(shift + 0.5);
     arrow(ctx, midX, topY - 0.22 * width, midX, topY - 4, COLORS.ink, 2.5, 10);
     label(ctx, `N  (σ′ = ${s.sigma} kPa)`, midX + 8, topY - 0.16 * width, COLORS.ink, 'left');
