@@ -1,4 +1,4 @@
-import"./main-Xfqt2xr9.js";const o=`<!DOCTYPE html>
+import"./main-CKabMwJn.js";const o=`<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -1302,16 +1302,10 @@ import"./main-Xfqt2xr9.js";const o=`<!DOCTYPE html>
 <body>
     <main class="home-shell">
         <section class="hero">
-            <p class="eyebrow">Soil mechanics</p>
             <h1>Interactive teaching tools</h1>
-            <p class="hero-copy">Browse every visualisation in this project from one generated homepage. New HTML tools are picked up automatically.</p>
         </section>
 
         <section aria-labelledby="tool-list-heading" class="tool-library">
-            <div class="section-heading">
-                <h2 id="tool-list-heading">Available pages</h2>
-                <p>Built from discovered HTML entries and page titles.</p>
-            </div>
             <div class="tool-grid" id="tool-grid"></div>
         </section>
     </main>
@@ -2346,4 +2340,4 @@ import"./main-Xfqt2xr9.js";const o=`<!DOCTYPE html>
     <script type="module" src="./js/system-dynamics.js"><\/script>
 </body>
 
-</html>`,S=Object.assign({"../1d-compression.html":o,"../bearing-capacity.html":r,"../compaction.html":d,"../consolidation.html":c,"../critical-state.html":h,"../darcy-flow.html":p,"../earth-pressures.html":u,"../elastic-footing.html":m,"../footing-settlement.html":v,"../index.html":g,"../infinite-slope.html":f,"../mohrs-circle.html":b,"../newmarks-chart.html":w,"../proctor.html":y,"../ruler.html":T,"../shear-box.html":k,"../sieve-analysis.html":x,"../stress-profile.html":V,"../system-dynamics.html":C}),D=document.querySelector("#tool-grid"),l=(n,t)=>{const e=n.match(t);return e?e[1].replace(/\s+/g," ").trim():""},z=n=>n.replace(/[-_]+/g," ").replace(/\b\w/g,t=>t.toUpperCase()),P=Object.entries(S).map(([n,t])=>{const e=n.split("/").pop();if(!e||e==="index.html")return null;const s=l(t,/<h1[^>]*>([\s\S]*?)<\/h1>/i)||l(t,/<title>([\s\S]*?)<\/title>/i)||z(e.replace(/\.html$/,""));return{fileName:e,href:`./${e}`,title:s.replace(/<[^>]+>/g,"")}}).filter(Boolean).sort((n,t)=>n.title.localeCompare(t.title));D.replaceChildren(...P.map((n,t)=>{const e=document.createElement("a");e.className="tool-card",e.href=n.href;const s=document.createElement("span");s.className="tool-card-index",s.textContent=`Tool ${String(t+1).padStart(2,"0")}`;const i=document.createElement("h3");i.textContent=n.title;const a=document.createElement("p");return a.textContent=n.fileName,e.append(s,i,a),e}));
+</html>`,S=Object.assign({"../1d-compression.html":o,"../bearing-capacity.html":r,"../compaction.html":d,"../consolidation.html":c,"../critical-state.html":h,"../darcy-flow.html":p,"../earth-pressures.html":u,"../elastic-footing.html":m,"../footing-settlement.html":v,"../index.html":g,"../infinite-slope.html":f,"../mohrs-circle.html":b,"../newmarks-chart.html":w,"../proctor.html":y,"../ruler.html":T,"../shear-box.html":k,"../sieve-analysis.html":x,"../stress-profile.html":V,"../system-dynamics.html":C}),D=document.querySelector("#tool-grid"),a=(n,t)=>{const e=n.match(t);return e?e[1].replace(/\s+/g," ").trim():""},z=n=>n.replace(/[-_]+/g," ").replace(/\b\w/g,t=>t.toUpperCase()),P=Object.entries(S).map(([n,t])=>{const e=n.split("/").pop();if(!e||e==="index.html")return null;const s=a(t,/<h1[^>]*>([\s\S]*?)<\/h1>/i)||a(t,/<title>([\s\S]*?)<\/title>/i)||z(e.replace(/\.html$/,""));return{fileName:e,href:`./${e}`,title:s.replace(/<[^>]+>/g,"")}}).filter(Boolean).sort((n,t)=>n.title.localeCompare(t.title));D.replaceChildren(...P.map((n,t)=>{const e=document.createElement("a");e.className="tool-card",e.href=n.href;const s=document.createElement("span");s.className="tool-card-index";const i=document.createElement("h3");i.textContent=n.title;const l=document.createElement("p");return l.textContent=n.fileName,e.append(s,i),e}));
