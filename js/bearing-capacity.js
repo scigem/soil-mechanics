@@ -307,8 +307,13 @@ function drawLadder(st) {
     ctx.font = font(12);
     const yTag = h - bottom - 10;
     const tags = st.phi >= 0.25
-        ? [['q_ult / p′ = 1 + sin φ′', COLORS.active], [`across the fan: × e^{π tan φ′} = ${st.turn.toFixed(2)}`, COLORS.fan],
-           ['p′ / σv0′ = 1/(1 − sin φ′)', COLORS.passive]]
+        ? (st.c > 0
+            // with cohesion the ratios hold for the shifted squeeze, p′ + c′ cot φ′
+            ? [['(q_ult + c′cot φ′) / (p′ + c′cot φ′) = 1 + sin φ′', COLORS.active],
+               [`across the fan: × e^{π tan φ′} = ${st.turn.toFixed(2)}`, COLORS.fan],
+               ['(p′ + c′cot φ′) / (σv0′ + c′cot φ′) = 1/(1 − sin φ′)', COLORS.passive]]
+            : [['q_ult / p′ = 1 + sin φ′', COLORS.active], [`across the fan: × e^{π tan φ′} = ${st.turn.toFixed(2)}`, COLORS.fan],
+               ['p′ / σv0′ = 1/(1 − sin φ′)', COLORS.passive]])
         : [['q_ult − p = s_u', COLORS.active], ['across the fan: + π s_u', COLORS.fan], ['p − σv0 = s_u', COLORS.passive]];
     label(ctx, tags[0][0], X(xs.active - 0.05) + 4, yTag, tags[0][1], 'left');
     label(ctx, tags[1][0], X(0.5 * (xs.fan0 + xs.fan1)), yTag, tags[1][1]);

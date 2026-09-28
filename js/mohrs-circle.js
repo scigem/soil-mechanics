@@ -392,6 +392,9 @@ function drawElement(ctx, st, x, y, size, state) {
 
 // ---------------------------------------------------------------- readout
 
+// A plane at θ is the same plane at θ ± 180°: report it inside the slider's range.
+const wrap = (angle) => ((((angle + 90) % 180) + 180) % 180) - 90;
+
 function fmt(x, d = 1) {
     return Number.isFinite(x) ? x.toFixed(d) : '∞';
 }
@@ -400,7 +403,7 @@ function drawReadout(st, state) {
     const K = st.sigmaH / st.sigmaV;
     const mobilised = st.q / (st.p + st.shift);
     const phiMob = mobilised <= 1 ? deg(Math.asin(mobilised)) : NaN;
-    const fs = st.tilt > 0 ? st.capTilt / st.tilt : Infinity;
+    const reserve = st.tilt > 0 ? st.capTilt / st.tilt : Infinity;
     const messages = {
         safe: `Inside the cap. The soil is using ${fmt(phiMob)}° of its ${fmt(st.phi)}° of friction.`,
         cap: `At the cap: the soil is on the point of sliding, on the two planes where the circle touches the lines.`,
@@ -416,7 +419,7 @@ function drawReadout(st, state) {
         ["q/p′", fmt(st.tilt, 3), 'The size of the tilt: the radius of the circle over its centre.'],
         ['cap on q/p′', fmt(st.capTilt, 3), 'The largest tilt friction allows: sin φ′, raised by cohesion to sin φ′ (p′ + c′ cot φ′)/p′.'],
         ["φ′ mobilised", Number.isFinite(phiMob) ? `${fmt(phiMob)}°` : '—', 'The friction angle the soil is using to carry this stress. It reaches φ′ at the cap.'],
-        ['FS = cap / tilt', fmt(fs, 2), 'How far the tilt is from the cap: the cap on q/p′ over the tilt. At the cap it is 1.'],
+        ['cap / tilt', fmt(reserve, 2), 'How far the tilt is from the cap: the cap on q/p′ over the tilt. At the cap it is 1. This is not the factor of safety of a slope or a wall, which divides tan φ′ by the tan φ′ mobilised.'],
         ["σₙ′ on θ plane", fmt(st.planeSigma), 'The effective normal stress on the plane inclined at θ, in kPa.'],
         ['τ on θ plane', fmt(st.planeTau), 'The shear stress on the plane inclined at θ, in kPa.'],
     ];
@@ -427,7 +430,7 @@ function drawReadout(st, state) {
         const a = 45 + st.phi / 2;
         readout.querySelector('.status').innerHTML +=
             ` They are at 45° + φ′/2 = ${fmt(a)}° either side of the plane σ₁′ acts on:` +
-            ` θ = ${fmt(st.beta - a)}° and ${fmt(st.beta + a)}°. Set θ to one of them.`;
+            ` θ = ${fmt(wrap(st.beta - a))}° and ${fmt(wrap(st.beta + a))}°. Set θ to one of them.`;
     }
 }
 

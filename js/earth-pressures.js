@@ -60,10 +60,11 @@ function enforceStops(changed) {
         if (changed === 'C') note = 'Friction stops the dial here: the soil is shoved up and back (passive).';
     }
     if (st.K0 < st.Ka) {
-        inputs.K0.value = st.Ka.toFixed(2);
+        // round inwards, so the clamped K0 sits at or inside the stop
+        inputs.K0.value = (Math.ceil(st.Ka * 100) / 100).toFixed(2);
         note = 'No deposit can rest below K_a: it would already have slid.';
     } else if (st.K0 > st.Kp) {
-        inputs.K0.value = st.Kp.toFixed(2);
+        inputs.K0.value = (Math.floor(st.Kp * 100) / 100).toFixed(2);
         note = 'No deposit can rest above K_p.';
     }
 }
@@ -389,7 +390,7 @@ function drawReadout(st, s) {
         ["σh′ at base", `${(st.K * sv).toFixed(1)} kPa`, 'The horizontal effective stress on the wall at its base, KγH.'],
         ['thrust P = ½Kγ H²', `${P.toFixed(1)} kN/m`, 'The total horizontal force on the wall per metre run: the area of the pressure diagram.'],
         ['from rest to active', `ΔC = ${toActive.toFixed(3)}`, 'How far the tilt has to move from rest to reach the active stop.'],
-        ['from rest to passive', `ΔC = ${toPassive.toFixed(3)} (${(toPassive / toActive).toFixed(1)}× further)`, 'How far the tilt has to move from rest to reach the passive stop, and how many times further that is than to the active stop.'],
+        ['from rest to passive', `ΔC = ${toPassive.toFixed(3)}` + (toActive > 1e-3 ? ` (${(toPassive / toActive).toFixed(1)}× further)` : ''), 'How far the tilt has to move from rest to reach the passive stop, and how many times further that is than to the active stop.'],
     ];
     readout.innerHTML =
         `<div class="status ${s === 'between' ? 'safe' : 'cap'}">${note || messages[s]}</div>` +

@@ -52,8 +52,11 @@ function suction(S, soil) {
 }
 
 function suctionStress(S, soil) {
-    const s = Math.min(1, Math.max(0, S));
-    if (soil.kind === 'bridges') return soil.sigma_b * (1 - Math.exp(-s / soil.S_b)) * (1 - s);
+    if (soil.kind === 'bridges') {
+        const s = Math.min(1, Math.max(0, S));
+        return soil.sigma_b * (1 - Math.exp(-s / soil.S_b)) * (1 - s);
+    }
+    const s = Math.min(1, Math.max(1e-6, S));   // a bone-dry clay is all suction, not none
     return s * suction(s, soil);
 }
 
@@ -79,7 +82,7 @@ function compact(w, E, soil) {
 
 function optimum(E, soil) {
     let best = { w: 0, gd: 0, S: 0 };
-    for (let k = 1; k <= 900; k++) {
+    for (let k = 0; k <= 900; k++) {
         const w = (k / 900) * 0.45;
         const r = compact(w, E, soil);
         if (r.gd > best.gd) best = { w, gd: r.gd, S: r.S };
@@ -416,6 +419,9 @@ function drawGrains(s) {
 
 // ---------------------------------------------------------------- readout
 
+// Suction in a bone-dry clay is effectively unlimited: say so rather than print it.
+const kpa = (x) => (x >= 1e5 ? 'over 100 000' : x < 10 ? x.toFixed(1) : `${Math.round(x)}`);
+
 function drawReadout(s) {
     const { r, opt, soil } = s;
     const items = [
@@ -424,7 +430,7 @@ function drawReadout(s) {
         ['e', r.e.toFixed(3), 'Void ratio: volume of voids over volume of solid.'],
         ['S', `${Math.round(100 * r.S)}%`, 'Degree of saturation: the fraction of the voids filled with water, S = mc Gs / e.'],
         ['A', `${(100 * r.A).toFixed(1)}%`, 'Air content: the volume of air as a fraction of the whole volume.'],
-        ['suction squeeze', `${r.sigma < 10 ? r.sigma.toFixed(1) : Math.round(r.sigma)} kPa`, 'The extra squeeze that the water bridges put on every contact before the blow (Bishop: χs). It pushes the contacts together without pushing them sideways, so it resists sliding.'],
+        ['suction squeeze', `${kpa(r.sigma)} kPa`, 'The extra squeeze that the water bridges put on every contact before the blow (Bishop: χs). It pushes the contacts together without pushing them sideways, so it resists sliding.'],
         ['mc,opt', soil.kind === 'bridges' ? 'none' : `${(100 * opt.w).toFixed(1)}%`, 'Optimum moisture content at this energy: where the dry unit weight peaks. A clean sand has none: it compacts best dry or wet.'],
         ['γdry,max', `${opt.gd.toFixed(2)} kN/m³`, 'Maximum dry unit weight at this energy.'],
     ];
@@ -437,7 +443,7 @@ function drawReadout(s) {
         status = `Wet of the optimum: the air is trapped (A ≈ ${(100 * r.A).toFixed(1)}%), and the water, which cannot leave in a blow, takes it.`;
         cls = 'beyond';
     } else {
-        status = `Dry of the optimum: suction adds ${Math.round(r.sigma)} kPa to every contact, against a blow of ${Math.round(s.E)} kPa. Add water to weaken it.`;
+        status = `Dry of the optimum: suction adds ${kpa(r.sigma)} kPa to every contact, against a blow of ${Math.round(s.E)} kPa. Add water to weaken it.`;
         cls = 'cap';
     }
     readout.innerHTML = items.map(([a, b, t]) => `<div class="item"><span>${a}${tip(t)}</span><strong>${b}</strong></div>`).join('')

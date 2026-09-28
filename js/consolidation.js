@@ -8,10 +8,10 @@ const FONT_FAMILY = getComputedStyle(document.documentElement).getPropertyValue(
 const DEFAULTS = {
     stressIncrement: 100,
     layerThickness: 6,
-    cv: 0.1,
+    cv: 1.0,
     mv: 0.0004,
-    tMax: 365,
-    profileTime: 30,
+    tMax: 20,
+    profileTime: 2,
     drainageTop: true,
     drainageBottom: true,
     loading: 'nc',
@@ -142,10 +142,10 @@ function averageDegreeOfConsolidation(time, thickness, cv, mode) {
 function updateSliderValues(state) {
     document.getElementById('stressIncrementValue').textContent = state.stressIncrement.toFixed(0);
     document.getElementById('layerThicknessValue').textContent = state.layerThickness.toFixed(1);
-    document.getElementById('cvValue').textContent = state.cv.toFixed(2);
+    document.getElementById('cvValue').textContent = state.cv.toFixed(1);
     document.getElementById('mvValue').textContent = state.mv.toFixed(4);
     document.getElementById('tMaxValue').textContent = state.tMax.toFixed(0);
-    document.getElementById('profileTimeValue').textContent = state.profileTime.toFixed(0);
+    document.getElementById('profileTimeValue').textContent = state.profileTime.toFixed(1);
     document.getElementById('drainSpacingValue').textContent = state.drainSpacing.toFixed(1);
     drainSpacingInput.disabled = !state.drains;
 }
@@ -192,11 +192,12 @@ function timeTo(target, state) {
     return hi;
 }
 
-function formatDays(days) {
-    if (days === null) return 'never';
-    if (days < 60) return `${days.toFixed(1)} days`;
-    if (days < 730) return `${(days / 30.44).toFixed(1)} months`;
-    return `${(days / 365.25).toFixed(1)} years`;
+// Times are in years throughout, as c_v is in m²/year.
+function formatYears(years) {
+    if (years === null) return 'never';
+    if (years < 1 / 6) return `${(years * 365.25).toFixed(0)} days`;
+    if (years < 2) return `${(years * 12).toFixed(1)} months`;
+    return `${years.toFixed(1)} years`;
 }
 
 function syncProfileTimeBounds() {
@@ -257,8 +258,8 @@ function updateOutputs(state, profileDepths, profilePressures, currentDegree, cu
     document.getElementById('finalSettlement').textContent = `${finalSettlement.toFixed(2)} mm`;
     document.getElementById('midDepthPressure').textContent = `${profilePressures[midDepthIndex].toFixed(1)} kPa`;
     document.getElementById('t90').textContent = state.drainageMode === 'none' && !state.drains
-        ? 'never' : formatDays(timeTo(0.9, state));
-    document.getElementById('inUse').textContent = `${state.cvUse.toFixed(2)} m²/day, ${state.mvUse.toExponential(1)} m²/kN`;
+        ? 'never' : formatYears(timeTo(0.9, state));
+    document.getElementById('inUse').textContent = `${state.cvUse.toFixed(1)} m²/year, ${state.mvUse.toExponential(1)} m²/kN`;
 }
 
 function updatePlots() {
@@ -342,7 +343,7 @@ function updatePlots() {
             font: { size: 16 },
         },
         xaxis: {
-            title: 'Time (days)',
+            title: 'Time (years)',
         },
         yaxis: {
             title: 'Settlement (mm)',
@@ -398,7 +399,7 @@ function updatePlots() {
 
     const profileLayout = {
         title: {
-            text: `Load share at t = ${state.profileTime.toFixed(0)} days`,
+            text: `Load share at t = ${state.profileTime.toFixed(1)} years`,
             font: { size: 16 },
         },
         xaxis: {
