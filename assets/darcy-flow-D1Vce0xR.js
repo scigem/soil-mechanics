@@ -1,4 +1,4 @@
-import"./main-CHv88UQI.js";const h={conductivityExponent:-4,headLoss:2,length:4,area:.2},T=document.getElementById("headProfile"),Y=["conductivity","headLoss","length","area"];Y.forEach(n=>{document.getElementById(n).addEventListener("input",$)});document.getElementById("reset-button").addEventListener("click",()=>{document.getElementById("conductivity").value=h.conductivityExponent,document.getElementById("headLoss").value=h.headLoss,document.getElementById("length").value=h.length,document.getElementById("area").value=h.area,$()});function g(n){const t=Math.floor(Math.log10(n));return`${(n/10**t).toFixed(1)} × 10<sup>${t}</sup>`}function F(n,t,o){return(n-t)/(o-t)}function $(){const n=parseFloat(document.getElementById("conductivity").value),t=parseFloat(document.getElementById("headLoss").value),o=parseFloat(document.getElementById("length").value),d=parseFloat(document.getElementById("area").value),k=10**n,m=t/o,w=k*m,I=w*d;document.getElementById("conductivityValue").innerHTML=g(k),document.getElementById("headLossValue").textContent=t.toFixed(1),document.getElementById("lengthValue").textContent=o.toFixed(1),document.getElementById("areaValue").textContent=d.toFixed(2),document.getElementById("gradientValue").textContent=m.toFixed(3),document.getElementById("fluxValue").innerHTML=`${g(w)} m/s`,document.getElementById("dischargeValue").innerHTML=`${g(I)} m³/s`;const L=F(o,.1,10),C=F(d,.01,1),s=250+L*150,c=42+C*34,E=c+20,a=132,r=a+s,H=284-E/2,M=284-c/2,l=284+c/2,b=32,p=a-b/2,x=r-b/2,y=Math.max(.8,Math.min(2.2,t*.45+.6)),u=y+t,B=170/Math.max(u,1),v=245,e=v-u*B,i=v-y*B,S=(e+i)/2,f=(a+r)/2,W=[`${a},${e}`,`${a+s*.32},${e+(i-e)*.3}`,`${a+s*.68},${e+(i-e)*.68}`,`${r},${i}`].join(" ");document.getElementById("gradientEquationText").textContent=`i = ${t.toFixed(1)} / ${o.toFixed(1)} = ${m.toFixed(3)}`,T.innerHTML=`
+import"./modulepreload-polyfill-B5Qt9EMX.js";/* empty css             */const h={conductivityExponent:-4,headLoss:2,length:4,area:.2},T=document.getElementById("headProfile"),Y=["conductivity","headLoss","length","area"];Y.forEach(n=>{document.getElementById(n).addEventListener("input",$)});document.getElementById("reset-button").addEventListener("click",()=>{document.getElementById("conductivity").value=h.conductivityExponent,document.getElementById("headLoss").value=h.headLoss,document.getElementById("length").value=h.length,document.getElementById("area").value=h.area,$()});function g(n){const t=Math.floor(Math.log10(n));return`${(n/10**t).toFixed(1)} × 10<sup>${t}</sup>`}function F(n,t,o){return(n-t)/(o-t)}function $(){const n=parseFloat(document.getElementById("conductivity").value),t=parseFloat(document.getElementById("headLoss").value),o=parseFloat(document.getElementById("length").value),d=parseFloat(document.getElementById("area").value),k=10**n,m=t/o,w=k*m,I=w*d;document.getElementById("conductivityValue").innerHTML=g(k),document.getElementById("headLossValue").textContent=t.toFixed(1),document.getElementById("lengthValue").textContent=o.toFixed(1),document.getElementById("areaValue").textContent=d.toFixed(2),document.getElementById("gradientValue").textContent=m.toFixed(3),document.getElementById("fluxValue").innerHTML=`${g(w)} m/s`,document.getElementById("dischargeValue").innerHTML=`${g(I)} m³/s`;const L=F(o,.1,10),C=F(d,.01,1),s=250+L*150,c=42+C*34,E=c+20,a=132,l=a+s,H=284-E/2,M=284-c/2,r=284+c/2,b=32,p=a-b/2,x=l-b/2,y=Math.max(.8,Math.min(2.2,t*.45+.6)),u=y+t,B=170/Math.max(u,1),v=245,e=v-u*B,i=v-y*B,S=(e+i)/2,f=(a+l)/2,W=[`${a},${e}`,`${a+s*.32},${e+(i-e)*.3}`,`${a+s*.68},${e+(i-e)*.68}`,`${l},${i}`].join(" ");document.getElementById("gradientEquationText").textContent=`i = ${t.toFixed(1)} / ${o.toFixed(1)} = ${m.toFixed(3)}`,T.innerHTML=`
         <svg viewBox="0 0 680 420" role="img" aria-labelledby="darcySchematicTitle darcySchematicDesc">
             <title id="darcySchematicTitle">Darcy flow through a soil-filled horizontal specimen</title>
             <desc id="darcySchematicDesc">A horizontal soil specimen connects two standpipes. The water surface stands higher on the left than on the right, showing head loss and driving seepage through the soil.</desc>
@@ -37,14 +37,14 @@ import"./main-CHv88UQI.js";const h={conductivityExponent:-4,headLoss:2,length:4,
             </g>
 
             <g class="standpipe-layer">
-                <rect x="${p}" y="64" width="32" height="${l-64}" rx="12" fill="url(#pipeWall)" opacity="0.95"></rect>
-                <rect x="${x}" y="102" width="32" height="${l-102}" rx="12" fill="url(#pipeWall)" opacity="0.95"></rect>
+                <rect x="${p}" y="64" width="32" height="${r-64}" rx="12" fill="url(#pipeWall)" opacity="0.95"></rect>
+                <rect x="${x}" y="102" width="32" height="${r-102}" rx="12" fill="url(#pipeWall)" opacity="0.95"></rect>
 
-                <rect x="${p+6}" y="${e}" width="20" height="${l-e}" rx="8" fill="url(#waterFill)" opacity="0.82"></rect>
-                <rect x="${x+6}" y="${i}" width="20" height="${l-i}" rx="8" fill="url(#waterFill)" opacity="0.82"></rect>
+                <rect x="${p+6}" y="${e}" width="20" height="${r-e}" rx="8" fill="url(#waterFill)" opacity="0.82"></rect>
+                <rect x="${x+6}" y="${i}" width="20" height="${r-i}" rx="8" fill="url(#waterFill)" opacity="0.82"></rect>
 
                 <line x1="${p+2}" y1="${e}" x2="${a+14}" y2="${e}" stroke="#0f5bd8" stroke-width="4"></line>
-                <line x1="${r-14}" y1="${i}" x2="${x+30}" y2="${i}" stroke="#0f5bd8" stroke-width="4"></line>
+                <line x1="${l-14}" y1="${i}" x2="${x+30}" y2="${i}" stroke="#0f5bd8" stroke-width="4"></line>
             </g>
 
             <g class="specimen-layer">
@@ -67,13 +67,13 @@ import"./main-CHv88UQI.js";const h={conductivityExponent:-4,headLoss:2,length:4,
             </g>
 
             <g class="length-layer">
-                <line x1="${a+14}" y1="${l+26}" x2="${r-14}" y2="${l+26}" stroke="#1f2937" stroke-width="2" marker-start="url(#dimensionCap)" marker-end="url(#dimensionCap)"></line>
-                <text x="${f-70}" y="${l+44}" class="dimension-label">Specimen length L = ${o.toFixed(1)} m</text>
+                <line x1="${a+14}" y1="${r+26}" x2="${l-14}" y2="${r+26}" stroke="#1f2937" stroke-width="2" marker-start="url(#dimensionCap)" marker-end="url(#dimensionCap)"></line>
+                <text x="${f-70}" y="${r+44}" class="dimension-label">Specimen length L = ${o.toFixed(1)} m</text>
             </g>
 
             <g class="caption-layer">
                 <text x="88" y="48" class="caption-label">Upstream standpipe</text>
-                <text x="${r-46}" y="86" class="caption-label">Downstream standpipe</text>
+                <text x="${l-46}" y="86" class="caption-label">Downstream standpipe</text>
                 <text x="${f-88}" y="394" class="caption-label">Soil specimen area A = ${d.toFixed(2)} m²</text>
                 <text x="${f-58}" y="288" class="caption-strong">Soil-filled pipe</text>
             </g>
