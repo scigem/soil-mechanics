@@ -192,3 +192,16 @@
         min-height: 280px;
     }
 }
+
+.input-group select {
+    padding: 0.45rem;
+    border: 2px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 0.85rem;
+    background: var(--surface-color);
+    color: var(--text-primary);
+}
+
+.input-group input[type="range"]:disabled {
+    opacity: 0.4;
+}
