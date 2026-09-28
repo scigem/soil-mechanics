@@ -22,7 +22,7 @@
     font-size: 0.8rem;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    color: var(--text-secondary);
+    color: var(--section-label-color);
     margin: 0.75rem 0 0.5rem;
 }
 
@@ -37,8 +37,8 @@
 }
 
 .input-group label {
-    font-weight: 500;
-    font-size: 0.85rem;
+    font-weight: var(--font-weight-medium);
+    font-size: var(--font-size-small);
     color: var(--text-primary);
     margin-bottom: 0.3rem;
 }
@@ -47,51 +47,6 @@
     display: flex;
     align-items: center;
     gap: 0.75rem;
-}
-
-.slider-container input[type="range"] {
-    flex: 1;
-    height: 6px;
-    border-radius: 3px;
-    background: var(--border-color);
-    outline: none;
-    appearance: none;
-    -webkit-appearance: none;
-}
-
-.slider-container input[type="range"]::-webkit-slider-thumb {
-    appearance: none;
-    -webkit-appearance: none;
-    height: 20px;
-    width: 20px;
-    border-radius: 50%;
-    background: var(--primary-color);
-    cursor: pointer;
-    border: 2px solid white;
-    box-shadow: var(--shadow-sm);
-}
-
-.slider-container input[type="range"]::-moz-range-thumb {
-    height: 20px;
-    width: 20px;
-    border-radius: 50%;
-    background: var(--primary-color);
-    cursor: pointer;
-    border: 2px solid white;
-    box-shadow: var(--shadow-sm);
-}
-
-.slider-value {
-    font-weight: 600;
-    color: var(--text-primary);
-    min-width: 4.5rem;
-    text-align: center;
-    background: var(--background-color);
-    padding: 0.2rem 0.4rem;
-    border-radius: 4px;
-    border: 1px solid var(--border-color);
-    font-size: 0.85rem;
-    font-variant-numeric: tabular-nums;
 }
 
 .presets {
@@ -170,18 +125,18 @@
 }
 
 #readout .status.safe {
-    background: #e8f5e9;
-    color: #1b5e20;
+    background: var(--safe-bg);
+    color: var(--safe-fg);
 }
 
 #readout .status.cap {
-    background: #fff3e0;
-    color: #e65100;
+    background: var(--warn-bg);
+    color: var(--warn-fg);
 }
 
 #readout .status.beyond {
-    background: #ffebee;
-    color: #b71c1c;
+    background: var(--fail-bg);
+    color: var(--fail-fg);
 }
 
 @media (max-width: 1024px) {

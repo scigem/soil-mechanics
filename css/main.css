@@ -6,22 +6,77 @@
 }
 
 :root {
-    --primary-color: #646ef6;
-    --primary-hover: #3b47ef;
-    --secondary-color: #757575;
-    --accent-color: #ff9800;
-    --background-color: #fafafa;
-    --surface-color: #ffffff;
-    --text-primary: #212121;
-    --text-secondary: #757575;
+    /* ================================================================ THEME
+       Everything that sets the look of the tools lives here. Change a value
+       and every page follows. Nothing else should hard-code a colour, a font
+       or a control size: page stylesheets and scripts use these names. */
+
+    /* type */
+    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    --font-canvas: 'Inter', sans-serif;      /* labels drawn on canvases */
+    --font-size-base: 1rem;
+    --font-size-small: 0.85rem;
+    --font-size-tiny: 0.75rem;
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-bold: 600;
+    --line-height: 1.5;
+
+    /* page and surfaces */
+    --page-bg: #ffffff;
+    --surface-color: #ffffff;               /* panels and cards */
+    --surface-muted: #fafafa;               /* insets: value boxes, secondary buttons */
     --border-color: #e0e0e0;
     --border-radius: 8px;
+    --border-radius-small: 4px;
     --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+    /* text */
+    --text-primary: #212121;
+    --text-secondary: #757575;
+    --title-color: #646ef6;
+    --title-size: 2rem;
+    --section-label-color: #757575;         /* the small caps headings in the controls */
+
+    /* accent */
+    --primary-color: #646ef6;
+    --primary-hover: #3b47ef;
+    --accent-color: #ff9800;
+    --focus-ring: 0 0 0 3px rgba(100, 110, 246, 0.35);
+
+    /* buttons */
+    --button-bg: var(--primary-color);
+    --button-fg: #ffffff;
+    --button-hover-bg: var(--primary-hover);
+    --button-radius: var(--border-radius);
+    --button-secondary-bg: var(--surface-muted);
+    --button-secondary-fg: var(--text-secondary);
+
+    /* sliders */
+    --slider-track: #e0e0e0;
+    --slider-track-height: 6px;
+    --slider-thumb: var(--primary-color);
+    --slider-thumb-border: #ffffff;
+    --slider-thumb-size: 20px;
+
+    /* inputs and value boxes */
+    --input-bg: var(--surface-color);
+    --input-border: var(--border-color);
+    --value-bg: var(--surface-muted);
+
+    /* tooltips and the about panel */
+    --tooltip-bg: #212121;
+    --tooltip-fg: #ffffff;
+    --backdrop: rgba(33, 33, 33, 0.35);
+
+    /* older names, kept so existing page styles still resolve */
+    --secondary-color: var(--text-secondary);
+    --background-color: var(--surface-muted);
     --transition: all 0.2s ease-in-out;
 
-    /* Shared palette for the schematics and plots. Canvas and Plotly code
+/* Shared palette for the schematics and plots. Canvas and Plotly code
        reads these through js/ui.js (colors), so every tool draws soil, water
        and stress the same way. They match the figures in the course notes. */
     --soil: #a8551f;
@@ -54,11 +109,12 @@
 }
 
 body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-    font-weight: 400;
-    line-height: 1.5;
+    font-family: var(--font-body);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--line-height);
     color: var(--text-primary);
-    background: #ffffff;
+    background: var(--page-bg);
     min-height: 100vh;
     padding: 0.5rem;
 }
@@ -80,14 +136,10 @@ body {
 
 h1 {
     font-weight: 700;
-    font-size: 2rem;
+    font-size: var(--title-size);
     text-align: center;
     margin-bottom: 0.25rem;
-    /* background: linear-gradient(135deg, var(--primary-color), var(--accent-color)); */
-    background: var(--primary-color);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--title-color);
 }
 
 h2 {
@@ -116,12 +168,12 @@ section {
 
 /* Modern Button Styles */
 button {
-    background: var(--primary-color);
-    color: white;
+    background: var(--button-bg);
+    color: var(--button-fg);
     border: none;
     padding: 0.75rem 1.5rem;
-    border-radius: var(--border-radius);
-    font-weight: 500;
+    border-radius: var(--button-radius);
+    font-weight: var(--font-weight-medium);
     font-size: 0.95rem;
     cursor: pointer;
     transition: var(--transition);
@@ -131,7 +183,7 @@ button {
 }
 
 button:hover {
-    background: var(--primary-hover);
+    background: var(--button-hover-bg);
     transform: translateY(-1px);
     box-shadow: var(--shadow-md);
 }
@@ -154,9 +206,6 @@ button:active {
         padding: 0.5rem;
     }
 
-    h1 {
-        font-size: 2rem;
-    }
 
     header {
         margin-bottom: 2rem;
@@ -188,7 +237,7 @@ button:active {
     left: 0;
     transform: translateY(-50%);
     height: 2px;
-    background-color: black;
+    background-color: var(--text-primary);
 }
 
 .double-arrow::before,
@@ -205,17 +254,17 @@ button:active {
 .double-arrow::before {
     left: -10px;
     border-width: 5px 10px 5px 0;
-    border-color: transparent black transparent transparent;
+    border-color: transparent var(--text-primary) transparent transparent;
 }
 
 .double-arrow::after {
     right: -10px;
     border-width: 5px 0 5px 10px;
-    border-color: transparent transparent transparent black;
+    border-color: transparent transparent transparent var(--text-primary);
 }
 
 .label {
-    font-family: 'Montserrat', sans-serif;
+    font-family: var(--font-body);
     font-size: 14px;
 }
 
@@ -240,14 +289,100 @@ button:active {
     left: 50%;
     /* Center horizontally within the arrow */
     transform: translate(-50%, -50%);
-    font-family: 'Montserrat', sans-serif;
+    font-family: var(--font-body);
     font-size: 12px;
-    background-color: white;
+    background-color: var(--surface-color);
     padding: 2px 5px;
-    border: 1px solid black;
+    border: 1px solid var(--text-primary);
     border-radius: 3px;
     pointer-events: none;
     /* Prevent the label from interfering with mouse events */
+}
+
+/* ---------------------------------------------------------------- controls
+   One style for sliders, selects, checkboxes and value boxes on every page. */
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+}
+
+input[type="range"] {
+    flex: 1;
+    width: 100%;
+    height: var(--slider-track-height);
+    border-radius: calc(var(--slider-track-height) / 2);
+    background: var(--slider-track);
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    appearance: none;
+    -webkit-appearance: none;
+    width: var(--slider-thumb-size);
+    height: var(--slider-thumb-size);
+    border-radius: 50%;
+    background: var(--slider-thumb);
+    border: 2px solid var(--slider-thumb-border);
+    box-shadow: var(--shadow-sm);
+    cursor: pointer;
+}
+
+input[type="range"]::-moz-range-thumb {
+    width: var(--slider-thumb-size);
+    height: var(--slider-thumb-size);
+    border-radius: 50%;
+    background: var(--slider-thumb);
+    border: 2px solid var(--slider-thumb-border);
+    box-shadow: var(--shadow-sm);
+    cursor: pointer;
+}
+
+input[type="range"]:disabled {
+    opacity: 0.4;
+    cursor: default;
+}
+
+select,
+input[type="number"],
+input[type="text"] {
+    padding: 0.45rem;
+    border: 2px solid var(--input-border);
+    border-radius: 6px;
+    font: inherit;
+    font-size: var(--font-size-small);
+    background: var(--input-bg);
+    color: var(--text-primary);
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+    width: 1rem;
+    height: 1rem;
+    accent-color: var(--primary-color);
+}
+
+.slider-value {
+    font-weight: var(--font-weight-bold);
+    color: var(--text-primary);
+    min-width: 4.5rem;
+    text-align: center;
+    background: var(--value-bg);
+    padding: 0.2rem 0.4rem;
+    border-radius: var(--border-radius-small);
+    border: 1px solid var(--border-color);
+    font-size: var(--font-size-small);
+    font-variant-numeric: tabular-nums;
+}
+
+.unit {
+    color: var(--text-secondary);
+    font-size: var(--font-size-small);
 }
 
 /* ---------------------------------------------------------------- shared UI
@@ -298,7 +433,7 @@ dialog.about {
 }
 
 dialog.about::backdrop {
-    background: rgba(33, 33, 33, 0.35);
+    background: var(--backdrop);
 }
 
 dialog.about h2 {
@@ -331,7 +466,7 @@ dialog.about .close {
     height: 2rem;
     padding: 0;
     border-radius: 50%;
-    background: var(--background-color);
+    background: var(--button-secondary-bg);
     color: var(--text-primary);
     box-shadow: none;
     font-size: 1.2rem;
@@ -346,7 +481,7 @@ dialog.about .close {
     margin-left: 0.3rem;
     padding: 0;
     border-radius: 50%;
-    background: var(--background-color);
+    background: var(--surface-muted);
     color: var(--text-secondary);
     border: 1px solid var(--border-color);
     box-shadow: none;
@@ -363,7 +498,7 @@ dialog.about .close {
 .tip[aria-expanded="true"] {
     background: var(--primary-color);
     border-color: var(--primary-color);
-    color: white;
+    color: var(--button-fg);
     transform: none;
     box-shadow: none;
 }
@@ -374,8 +509,8 @@ dialog.about .close {
     max-width: 18rem;
     padding: 0.5rem 0.7rem;
     border-radius: 6px;
-    background: var(--ink);
-    color: white;
+    background: var(--tooltip-bg);
+    color: var(--tooltip-fg);
     font-size: 0.8rem;
     font-weight: 400;
     line-height: 1.4;
@@ -394,8 +529,8 @@ button.reset {
     margin-top: 0.9rem;
     padding: 0.45rem 0.75rem;
     font-size: 0.8rem;
-    background: var(--background-color);
-    color: var(--text-secondary);
+    background: var(--button-secondary-bg);
+    color: var(--button-secondary-fg);
     border: 1px solid var(--border-color);
     box-shadow: none;
 }

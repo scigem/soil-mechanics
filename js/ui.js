@@ -11,7 +11,8 @@ import '../css/main.css';
 //  - a Reset button under the controls in #input-section, which puts every
 //    input back to its starting value and fires 'tool-reset' on document;
 //  - colors: the shared palette from the CSS variables in main.css, for
-//    canvas and Plotly drawing, and alpha(color, a) to make it translucent.
+//    canvas and Plotly drawing, alpha(color, a) to make it translucent, and
+//    font(size, weight) for canvas text in the theme's typeface.
 
 const FALLBACK = {
     soil: '#a8551f', soilEdge: '#6b3512', soilLight: '#d9b48f',
@@ -21,6 +22,10 @@ const FALLBACK = {
     totalStress: '#212121', porePressure: '#29a3e3', effectiveStress: '#d95f02',
     friction: '#646ef6', dilate: '#ef6c00', contract: '#0b6ea8', structure: '#9e9e9e',
     primary: '#646ef6',
+    textPrimary: '#212121', textSecondary: '#757575', surfaceColor: '#ffffff',
+    surfaceMuted: '#fafafa', borderColor: '#e0e0e0',
+    safeBg: '#e8f5e9', safeFg: '#1b5e20', warnBg: '#fff3e0', warnFg: '#e65100',
+    failBg: '#ffebee', failFg: '#b71c1c',
 };
 
 const kebab = (name) => name.replace(/([a-z])([A-Z0-9])/g, '$1-$2').toLowerCase();
@@ -36,6 +41,14 @@ function readColors() {
 }
 
 export const colors = readColors();
+
+const canvasFamily = getComputedStyle(document.documentElement).getPropertyValue('--font-canvas').trim()
+    || "'Inter', sans-serif";
+
+/** A canvas font in the theme's typeface: ctx.font = font(13) or font(12, 600). */
+export function font(size, weight = 400) {
+    return `${weight} ${size}px ${canvasFamily}`;
+}
 
 /** A colour from the palette with transparency: alpha(colors.water, 0.5). */
 export function alpha(color, a) {

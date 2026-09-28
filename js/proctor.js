@@ -1,4 +1,4 @@
-import { alpha, colors, tip } from './ui.js';
+import { alpha, colors, font, tip } from './ui.js';
 import '../css/proctor.css';
 
 // The Proctor test, read through the picture of the course notes
@@ -201,7 +201,7 @@ function prepare(canvas) {
     const ctx = canvas.getContext('2d');
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, rect.width, rect.height);
-    ctx.font = "12px 'Inter', sans-serif";
+    ctx.font = font(12);
     ctx.lineJoin = 'round';
     ctx.lineCap = 'round';
     return { ctx, w: rect.width, h: rect.height };
