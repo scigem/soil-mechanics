@@ -194,7 +194,7 @@ import"./main-Xfqt2xr9.js";const o=`<!DOCTYPE html>
             <section id="input-section">
                 <h2>Soil</h2>
                 <div class="input-group">
-                    <label for="phi" data-tip="The effective friction angle of the soil. At φ′ = 0 the soil is undrained clay with strength s_u.">Friction angle φ′</label>
+                    <label for="phi" data-tip="The effective friction angle of the soil. Set it to 0 for undrained clay, which is read in total stress with φ_u = 0 and strength s_u.">Friction angle φ′</label>
                     <div class="slider-container">
                         <input type="range" id="phi" min="0" max="45" step="0.5" value="30">
                         <span class="slider-value" id="phi-value"></span>
@@ -271,13 +271,13 @@ import"./main-Xfqt2xr9.js";const o=`<!DOCTYPE html>
                 each and the page works out the phase relations: the masses, the moisture content, the void ratio,
                 porosity and saturation, and the densities and unit weights, taking ρ<sub>w</sub> = 1 g/cm³ and
                 G<sub>s</sub> = 2.7. The dry unit weight and moisture content then place the soil on a compaction
-                chart, where no soil can lie above the zero air voids line.</p>
+                chart, where no soil can lie above the no-air-voids line.</p>
             <h3>What you are seeing</h3>
             <ul>
                 <li><strong>The volume column.</strong> The volumes of solid (brown), water (blue) and air (white),
                     stacked to scale; its height is the total volume <em>V</em>.</li>
                 <li><strong>The compaction chart.</strong> Dry unit weight against moisture content. The dashed blue
-                    line is the zero air voids line, γ<sub>dry</sub> = <em>g</em>ρ<sub>w</sub><em>G</em><sub>s</sub>/(1 +
+                    line is the no-air-voids line, γ<sub>dry</sub> = <em>g</em>ρ<sub>w</sub><em>G</em><sub>s</sub>/(1 +
                     <em>m</em><sub>c</sub><em>G</em><sub>s</sub>): the voids are full of water, <em>S</em> = 1. The
                     black dot is the current soil; remove the air and it moves onto the line.</li>
                 <li><strong>Derived quantities.</strong> Every phase relation for the current volumes; the ? by each
@@ -446,7 +446,7 @@ import"./main-Xfqt2xr9.js";const o=`<!DOCTYPE html>
                     the excess pore pressure <em>u</em>. The grains take over first next to the drains.</li>
             </ul>
             <h3>The model</h3>
-            <p><strong>Drainage:</strong> Drained boundaries force <em>u</em> = 0. Undrained boundaries trap water
+            <p><strong>Drainage:</strong> Drained boundaries force <em>u</em> = 0. Impermeable boundaries trap water
                 and slow dissipation.</p>
             <p><strong>Drains</strong> shorten the drainage path to about half their spacing, so the time falls with
                 its square. The radial flow to a drain is approximated here by one-dimensional flow over that
@@ -484,9 +484,9 @@ import"./main-Xfqt2xr9.js";const o=`<!DOCTYPE html>
                     <div class="input-group">
                         <label for="cv" data-tip="Coefficient of consolidation: how fast the excess pore pressure dissipates. The time to reach a given degree of consolidation scales with Hdr²/cv.">Consolidation coefficient c<sub>v</sub></label>
                         <div class="slider-container">
-                            <input type="range" id="cv" min="0.05" max="2" value="0.1" step="0.05">
-                            <span class="slider-value" id="cvValue">0.10</span>
-                            <span class="unit">m²/day</span>
+                            <input type="range" id="cv" min="0.2" max="10" value="1" step="0.1">
+                            <span class="slider-value" id="cvValue">1.0</span>
+                            <span class="unit">m²/year</span>
                         </div>
                     </div>
 
@@ -536,18 +536,18 @@ import"./main-Xfqt2xr9.js";const o=`<!DOCTYPE html>
                     <div class="input-group">
                         <label for="t-max" data-tip="The length of the time axis on the settlement plot.">Time shown</label>
                         <div class="slider-container">
-                            <input type="range" id="t-max" min="30" max="365" value="365" step="5">
-                            <span class="slider-value" id="tMaxValue">365</span>
-                            <span class="unit">days</span>
+                            <input type="range" id="t-max" min="1" max="50" value="20" step="1">
+                            <span class="slider-value" id="tMaxValue">20</span>
+                            <span class="unit">years</span>
                         </div>
                     </div>
 
                     <div class="input-group">
                         <label for="profile-time" data-tip="The time at which the load-share profile and the outputs are worked out, marked on the settlement plot.">Profile time</label>
                         <div class="slider-container">
-                            <input type="range" id="profile-time" min="0" max="365" value="30" step="1">
-                            <span class="slider-value" id="profileTimeValue">30</span>
-                            <span class="unit">days</span>
+                            <input type="range" id="profile-time" min="0" max="20" value="2" step="0.1">
+                            <span class="slider-value" id="profileTimeValue">2.0</span>
+                            <span class="unit">years</span>
                         </div>
                     </div>
 
@@ -816,7 +816,7 @@ import"./main-Xfqt2xr9.js";const o=`<!DOCTYPE html>
         </header>
 
         <section id="about">
-            <p>Behind a smooth wall with level ground, the tilt of the stress can only point up or down, so it is
+            <p>Behind a smooth wall with level ground, the tilt of the stress can only be vertical or horizontal, so it is
                 one number, <em>C</em>, and <em>K</em> = σ<sub>h</sub>′/σ<sub>v</sub>′ = (1 − <em>C</em>)/(1 +
                 <em>C</em>). Friction stops <em>C</em> at ± sin φ′: the active and passive states. Drag along the
                 dial, or move the wall.</p>
@@ -1344,7 +1344,7 @@ import"./main-Xfqt2xr9.js";const o=`<!DOCTYPE html>
             <h3>What you are seeing</h3>
             <ul>
                 <li><strong>A slice of the slope.</strong> The soil down to the slip plane (dashed brown), with a
-                    slice and its weight <em>W</em>. The water below the water table is shaded blue, with arrows
+                    slice and its weight <em>W</em>. The water between the water table and the slip plane is shaded blue, with arrows
                     showing the flow. Water flows parallel to the surface, so the equipotentials (dotted) are
                     perpendicular to it. The standpipe at the slip plane shows the pore pressure there as a head,
                     <em>u</em>/γ<sub>w</sub>.</li>

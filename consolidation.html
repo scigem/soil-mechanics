@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <script type="module" crossorigin src="/soil-mechanics/assets/consolidation-CyUfdT2-.js"></script>
+  <script type="module" crossorigin src="/soil-mechanics/assets/consolidation-DZas7MPK.js"></script>
   <link rel="modulepreload" crossorigin href="/soil-mechanics/assets/main-Xfqt2xr9.js">
   <link rel="modulepreload" crossorigin href="/soil-mechanics/assets/ui-tU1-thhr.js">
   <link rel="modulepreload" crossorigin href="/soil-mechanics/assets/plotly-Blke_pAn.js">
@@ -36,7 +36,7 @@
                     the excess pore pressure <em>u</em>. The grains take over first next to the drains.</li>
             </ul>
             <h3>The model</h3>
-            <p><strong>Drainage:</strong> Drained boundaries force <em>u</em> = 0. Undrained boundaries trap water
+            <p><strong>Drainage:</strong> Drained boundaries force <em>u</em> = 0. Impermeable boundaries trap water
                 and slow dissipation.</p>
             <p><strong>Drains</strong> shorten the drainage path to about half their spacing, so the time falls with
                 its square. The radial flow to a drain is approximated here by one-dimensional flow over that
@@ -74,9 +74,9 @@
                     <div class="input-group">
                         <label for="cv" data-tip="Coefficient of consolidation: how fast the excess pore pressure dissipates. The time to reach a given degree of consolidation scales with Hdr²/cv.">Consolidation coefficient c<sub>v</sub></label>
                         <div class="slider-container">
-                            <input type="range" id="cv" min="0.05" max="2" value="0.1" step="0.05">
-                            <span class="slider-value" id="cvValue">0.10</span>
-                            <span class="unit">m²/day</span>
+                            <input type="range" id="cv" min="0.2" max="10" value="1" step="0.1">
+                            <span class="slider-value" id="cvValue">1.0</span>
+                            <span class="unit">m²/year</span>
                         </div>
                     </div>
 
@@ -126,18 +126,18 @@
                     <div class="input-group">
                         <label for="t-max" data-tip="The length of the time axis on the settlement plot.">Time shown</label>
                         <div class="slider-container">
-                            <input type="range" id="t-max" min="30" max="365" value="365" step="5">
-                            <span class="slider-value" id="tMaxValue">365</span>
-                            <span class="unit">days</span>
+                            <input type="range" id="t-max" min="1" max="50" value="20" step="1">
+                            <span class="slider-value" id="tMaxValue">20</span>
+                            <span class="unit">years</span>
                         </div>
                     </div>
 
                     <div class="input-group">
                         <label for="profile-time" data-tip="The time at which the load-share profile and the outputs are worked out, marked on the settlement plot.">Profile time</label>
                         <div class="slider-container">
-                            <input type="range" id="profile-time" min="0" max="365" value="30" step="1">
-                            <span class="slider-value" id="profileTimeValue">30</span>
-                            <span class="unit">days</span>
+                            <input type="range" id="profile-time" min="0" max="20" value="2" step="0.1">
+                            <span class="slider-value" id="profileTimeValue">2.0</span>
+                            <span class="unit">years</span>
                         </div>
                     </div>
 
