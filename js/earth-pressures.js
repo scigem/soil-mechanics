@@ -136,98 +136,92 @@ let dialMap = null;
 
 function drawDial(st, s) {
     const { ctx, w, h } = prepare(dialCanvas);
-    const left = 56;
-    const right = 18;
-    const top = 16;
-    const bottom = 40;
-    const X = (C) => left + ((C + 1) / 2) * (w - left - right);
-    const logK = (K) => Math.log10(K);
-    const kMin = 0.1;
-    const kMax = 10;
-    const Y = (K) => top + ((logK(kMax) - logK(K)) / (logK(kMax) - logK(kMin))) * (h - top - bottom);
-    dialMap = { X, left, right, w };
+    // the disc of all stress states, (C, S), with the unit circle as its frame
+    const R = Math.min(0.42 * w, 0.40 * h);
+    const cx = w / 2;
+    const cy = 0.44 * h;
+    const X = (C) => cx + C * R;
+    const Y = (S) => cy - S * R;
+    dialMap = { toC: (x) => (x - cx) / R };
 
-    // beyond the stops
+    // beyond friction's cap, and the unit circle q/p = 1
     ctx.fillStyle = COLORS.beyond;
-    ctx.fillRect(X(-1), top, X(-st.sin) - X(-1), h - top - bottom);
-    ctx.fillRect(X(st.sin), top, X(1) - X(st.sin), h - top - bottom);
-    label(ctx, 'beyond the stop', (X(-1) + X(-st.sin)) / 2, top + 12, COLORS.muted);
-    label(ctx, 'beyond the stop', (X(1) + X(st.sin)) / 2, top + 12, COLORS.muted);
-
-    // grid
+    ctx.beginPath();
+    ctx.arc(cx, cy, R, 0, 2 * Math.PI);
+    ctx.arc(cx, cy, st.sin * R, 0, 2 * Math.PI, true);
+    ctx.fill();
+    ctx.strokeStyle = COLORS.faint;
     ctx.lineWidth = 1;
-    for (const K of [0.1, 0.2, 0.5, 1, 2, 5, 10]) {
-        ctx.strokeStyle = COLORS.grid;
-        ctx.beginPath();
-        ctx.moveTo(X(-1), Y(K));
-        ctx.lineTo(X(1), Y(K));
-        ctx.stroke();
-        label(ctx, `${K}`, left - 8, Y(K), COLORS.muted, 'right');
-    }
+    ctx.beginPath();
+    ctx.arc(cx, cy, R, 0, 2 * Math.PI);
+    ctx.stroke();
+    label(ctx, 'beyond the cap', cx, Y(0.5 * (1 + st.sin)), COLORS.muted);
+
+    // axes
     ctx.strokeStyle = COLORS.muted;
     ctx.beginPath();
-    ctx.moveTo(X(-1), h - bottom);
-    ctx.lineTo(X(1), h - bottom);
-    ctx.moveTo(left, top);
-    ctx.lineTo(left, h - bottom);
+    ctx.moveTo(X(-1.08), cy);
+    ctx.lineTo(X(1.08), cy);
+    ctx.moveTo(cx, Y(1.08));
+    ctx.lineTo(cx, Y(-1.08));
     ctx.stroke();
-    for (const C of [-1, -0.5, 0, 0.5, 1]) label(ctx, `${C}`, X(C), h - bottom + 14, COLORS.muted);
-    label(ctx, 'vertical tilt C', (X(-1) + X(1)) / 2, h - 8, COLORS.ink);
-    ctx.save();
-    ctx.translate(14, (top + h - bottom) / 2);
-    ctx.rotate(-Math.PI / 2);
-    label(ctx, 'K = σh′/σv′', 0, 0, COLORS.ink);
-    ctx.restore();
+    label(ctx, 'C', X(1.1), cy - 10, COLORS.ink, 'right');
+    label(ctx, 'S', cx + 8, Y(1.06), COLORS.ink, 'left');
 
-    // the curve: dotted everywhere, solid between the stops
-    const curve = (a, b) => {
-        ctx.beginPath();
-        for (let i = 0; i <= 200; i++) {
-            const C = a + ((b - a) * i) / 200;
-            const K = Kof(C);
-            if (K < kMin || K > kMax) continue;
-            if (i === 0 || Kof(a + ((b - a) * (i - 1)) / 200) > kMax) ctx.moveTo(X(C), Y(K));
-            else ctx.lineTo(X(C), Y(K));
-        }
-        ctx.stroke();
-    };
-    ctx.setLineDash([2, 4]);
-    ctx.strokeStyle = COLORS.faint;
-    ctx.lineWidth = 1.5;
-    curve(-0.99, 0.99);
-    ctx.setLineDash([]);
+    // friction's cap
     ctx.strokeStyle = COLORS.dial;
-    ctx.lineWidth = 3;
-    curve(-st.sin, st.sin);
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.arc(cx, cy, st.sin * R, 0, 2 * Math.PI);
+    ctx.stroke();
 
-    // the trip from rest to here
+    // the dial: the part of the C axis a smooth wall can reach
+    ctx.strokeStyle = COLORS.dial;
+    ctx.lineWidth = 5;
+    ctx.beginPath();
+    ctx.moveTo(X(-st.sin), cy);
+    ctx.lineTo(X(st.sin), cy);
+    ctx.stroke();
+
+    // K scale under the axis
+    ctx.font = font(11);
+    for (const K of [0.2, 1 / 3, 0.5, 1, 2, 3, 5]) {
+        const C = Cof(K);
+        ctx.strokeStyle = COLORS.muted;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(X(C), cy + 3);
+        ctx.lineTo(X(C), cy + 8);
+        ctx.stroke();
+        label(ctx, K === 1 / 3 ? '⅓' : `${K}`, X(C), cy + 16, COLORS.muted);
+    }
+    label(ctx, 'K', X(-0.9), cy + 16, COLORS.muted);
+
+    // the trip from rest to here, above the names
     if (Math.abs(st.C - st.C0) > 0.01) {
-        const yTrip = h - bottom - 12;
+        const yTrip = cy - 48;
         arrow(ctx, X(st.C0), yTrip, X(st.C), yTrip, stateColour(s), 2, 8);
     }
 
-    // named points
+    // named points: the stops on the first row above the axis, at rest on the
+    // second, and water below the K scale, so that none of them collide
+    ctx.font = font(12);
     const named = [
-        [-st.sin, st.Kp, `passive  K_p = ${st.Kp.toFixed(2)}`, COLORS.passive, 'right'],
-        [0, 1, 'water  K = 1', COLORS.water, 'left'],
-        [st.C0, st.K0, `at rest  K₀ = ${st.K0.toFixed(2)}`, COLORS.rest, 'left'],
-        [st.sin, st.Ka, `active  K_a = ${st.Ka.toFixed(2)}`, COLORS.active, 'left'],
+        [-st.sin, 'passive', COLORS.passive, cy - 16],
+        [st.sin, 'active', COLORS.active, cy - 16],
+        [st.C0, 'at rest', COLORS.rest, cy - 32],
+        [0, 'water', COLORS.water, cy + 32],
     ];
-    for (const [C, K, text, colour, align] of named) {
-        dot(ctx, X(C), Y(K), 5, colour);
-        label(ctx, text, X(C) + (align === 'left' ? 9 : -9), Y(K) - 11, colour, align);
+    for (const [C, text, colour, y] of named) {
+        dot(ctx, X(C), cy, 5, colour);
+        label(ctx, text, X(C), y, colour);
     }
+    ctx.font = font(13);
 
-    // where the dial is now
-    ctx.strokeStyle = stateColour(s);
-    ctx.lineWidth = 1;
-    ctx.setLineDash([3, 3]);
-    ctx.beginPath();
-    ctx.moveTo(X(st.C), Y(st.K));
-    ctx.lineTo(X(st.C), h - bottom);
-    ctx.stroke();
-    ctx.setLineDash([]);
-    dot(ctx, X(st.C), Y(st.K), 8, stateColour(s));
+    // the tilt now: an arrow from the centre
+    const colour = stateColour(s);
+    if (Math.abs(st.C) > 0.02) arrow(ctx, cx, cy, X(st.C), cy, colour, 3, 10);
+    dot(ctx, X(st.C), cy, 8, colour);
 }
 
 // ---------------------------------------------------------------- the wall
@@ -436,8 +430,7 @@ let dragging = false;
 function fromPointer(event) {
     if (!dialMap) return;
     const rect = dialCanvas.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const C = ((x - dialMap.left) / (dialMap.w - dialMap.left - dialMap.right)) * 2 - 1;
+    const C = dialMap.toC(event.clientX - rect.left);
     inputs.C.value = Math.max(-1, Math.min(1, C)).toFixed(3);
     update('C');
 }

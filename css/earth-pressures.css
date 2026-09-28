@@ -1,13 +1,16 @@
 /* The earth pressure dial. Shares its layout with the other panel tools. */
 @import './panel-tool.css';
 
-#dial-canvas {
-    aspect-ratio: 2.4 / 1;
-    cursor: ew-resize;
-    touch-action: none;
+#wall-canvas {
+    aspect-ratio: 2.6 / 1;
 }
 
-#wall-canvas,
+#dial-canvas,
 #mohr-canvas {
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 1.1 / 1;
+}
+
+#dial-canvas {
+    cursor: ew-resize;
+    touch-action: none;
 }
