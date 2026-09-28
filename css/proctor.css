@@ -1,0 +1,40 @@
+@import './panel-tool.css';
+
+#chart-canvas,
+#grain-canvas {
+    aspect-ratio: 1.1 / 1;
+}
+
+.input-group select {
+    padding: 0.45rem;
+    border: 2px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 0.85rem;
+    background: var(--surface-color);
+    color: var(--text-primary);
+}
+
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+    background: var(--background-color);
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.85rem;
+}
+
+.checkbox-item input {
+    width: 1rem;
+    height: 1rem;
+    accent-color: var(--primary-color);
+}
+
+.note {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    margin-top: 0.75rem;
+}
