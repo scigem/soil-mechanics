@@ -180,7 +180,7 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const o=`<!DOCTYPE html>
 
                 <h2>Follow the turn</h2>
                 <div class="input-group">
-                    <label for="psi">How far round the fan, from the passive side (°)</label>
+                    <label for="psi">How far round the fan, out from under the footing (°)</label>
                     <div class="slider-container">
                         <input type="range" id="psi" min="0" max="90" step="1" value="45">
                         <span class="slider-value" id="psi-value"></span>
@@ -199,7 +199,7 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const o=`<!DOCTYPE html>
                     </figure>
                     <figure class="wide">
                         <canvas id="ladder-canvas"></canvas>
-                        <figcaption>The squeeze <em>p</em>′ along the way, from the surcharge to the footing (log
+                        <figcaption>The squeeze <em>p</em>′ along the way, from the footing out to the surcharge (log
                             scale)</figcaption>
                     </figure>
                 </div>
@@ -1572,7 +1572,7 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const o=`<!DOCTYPE html>
                 <div class="panels">
                     <figure>
                         <canvas id="box-canvas"></canvas>
-                        <figcaption>The box. The rise is exaggerated five times.</figcaption>
+                        <figcaption>The box. The shear zone (shaded) is where the grains spread apart; the rise is exaggerated three times.</figcaption>
                     </figure>
                     <figure>
                         <canvas id="curve-canvas"></canvas>
