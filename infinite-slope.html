@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Infinite Slope and Water</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>The Infinite Slope and Water</h1>
+            <p class="subtitle">On a plane parallel to a long slope the shear is fixed by the weight, τ = γ<em>z</em>
+                sin α cos α. Friction can resist tan φ′ times the effective normal stress. Raise the water table and
+                the water takes part of the squeeze: the grains are pressed together less, and friction resists
+                less.</p>
+        </header>
+
+        <div class="main-layout">
+            <section id="input-section">
+                <h2>Slope</h2>
+                <div class="input-group">
+                    <label for="alpha">Slope angle α (°)</label>
+                    <div class="slider-container">
+                        <input type="range" id="alpha" min="5" max="45" step="0.5" value="25">
+                        <span class="slider-value" id="alpha-value"></span>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="z">Depth of the slip plane <em>z</em> (m)</label>
+                    <div class="slider-container">
+                        <input type="range" id="z" min="0.5" max="8" step="0.1" value="3">
+                        <span class="slider-value" id="z-value"></span>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="m">Water table height, as a fraction <em>m</em> of <em>z</em> above the slip plane</label>
+                    <div class="slider-container">
+                        <input type="range" id="m" min="0" max="1" step="0.01" value="0">
+                        <span class="slider-value" id="m-value"></span>
+                    </div>
+                </div>
+
+                <h2>Soil</h2>
+                <div class="input-group">
+                    <label for="phi">Friction angle φ′ (°)</label>
+                    <div class="slider-container">
+                        <input type="range" id="phi" min="20" max="45" step="0.5" value="33">
+                        <span class="slider-value" id="phi-value"></span>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="c">Cohesion <em>c′</em> (kPa)</label>
+                    <div class="slider-container">
+                        <input type="range" id="c" min="0" max="20" step="0.5" value="0">
+                        <span class="slider-value" id="c-value"></span>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="gamma">Unit weight γ (kN/m³), taken the same above and below the water table</label>
+                    <div class="slider-container">
+                        <input type="range" id="gamma" min="16" max="22" step="0.5" value="20">
+                        <span class="slider-value" id="gamma-value"></span>
+                    </div>
+                </div>
+
+                <h2>Rain</h2>
+                <button id="rain">Let it rain</button>
+            </section>
+
+            <section id="visualization-section">
+                <div class="panels">
+                    <figure class="wide">
+                        <canvas id="slope-canvas"></canvas>
+                        <figcaption>A slice of the slope. Water flows parallel to the surface, so the equipotentials
+                            are perpendicular to it.</figcaption>
+                    </figure>
+                    <figure class="wide">
+                        <canvas id="fs-canvas"></canvas>
+                        <figcaption>Factor of safety against slope angle</figcaption>
+                    </figure>
+                </div>
+                <div id="readout"></div>
+            </section>
+        </div>
+    </div>
+
+    <script type="module" src="./js/infinite-slope.js"></script>
+</body>
+
+</html>

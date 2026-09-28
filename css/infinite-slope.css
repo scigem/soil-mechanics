@@ -1,0 +1,15 @@
+@import './panel-tool.css';
+
+#slope-canvas {
+    aspect-ratio: 2.4 / 1;
+}
+
+#fs-canvas {
+    aspect-ratio: 2.8 / 1;
+}
+
+#rain {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.85rem;
+}
