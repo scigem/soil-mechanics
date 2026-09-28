@@ -1,4 +1,4 @@
-import '../css/main.css';
+import { alpha, colors, tip } from './ui.js';
 import '../css/proctor.css';
 
 // The Proctor test, read through the picture of the course notes
@@ -31,16 +31,16 @@ const SOILS = {
 };
 
 const COLORS = {
-    ink: '#212121',
-    muted: '#757575',
-    faint: '#bdbdbd',
-    grid: '#eeeeee',
-    grain: '#a8551f',
-    grainEdge: '#6b3512',
-    water: '#29a3e3',
-    waterDark: '#0b6ea8',
-    air: '#ffffff',
-    eff: '#d95f02',
+    ink: colors.ink,
+    muted: colors.muted,
+    faint: colors.faint,
+    grid: colors.grid,
+    grain: colors.soil,
+    grainEdge: colors.soilEdge,
+    water: colors.water,
+    waterDark: colors.waterDark,
+    air: colors.air,
+    eff: colors.effectiveStress,
 };
 
 // ---------------------------------------------------------------- the model
@@ -336,7 +336,7 @@ function drawGrains(s) {
     ctx.fillStyle = COLORS.air;
     ctx.fillRect(ox, oy, size, size);
     if (trapped || drained) {
-        ctx.fillStyle = 'rgba(41,163,227,0.55)';
+        ctx.fillStyle = alpha(colors.water, 0.55);
         ctx.fillRect(ox, oy, size, size);
         if (trapped) {
             const nb = Math.max(1, Math.min(PACKING.sites.length, Math.round(r.A * 110)));
@@ -354,7 +354,7 @@ function drawGrains(s) {
     } else if (r.S > 0.002) {
         // bridges at the contacts, growing with the saturation
         const f = Math.min(1.05, 0.3 + 0.8 * Math.sqrt(r.S));
-        ctx.fillStyle = 'rgba(41,163,227,0.8)';
+        ctx.fillStyle = alpha(colors.water, 0.8);
         for (const [a, b, d] of PACKING.contacts) {
             if (d > a.r + b.r + (0.05 + 0.4 * r.S) * PACKING.R) continue;
             const t = (a.r + 0.5 * (d - a.r - b.r)) / d;
@@ -419,14 +419,14 @@ function drawGrains(s) {
 function drawReadout(s) {
     const { r, opt, soil } = s;
     const items = [
-        ['γbulk', `${r.gb.toFixed(2)} kN/m³`],
-        ['γdry', `${r.gd.toFixed(2)} kN/m³`],
-        ['void ratio e', r.e.toFixed(3)],
-        ['saturation S', `${Math.round(100 * r.S)}%`],
-        ['air content A', `${(100 * r.A).toFixed(1)}%`],
-        ['suction squeeze', `${r.sigma < 10 ? r.sigma.toFixed(1) : Math.round(r.sigma)} kPa`],
-        ['optimum mc', soil.kind === 'bridges' ? 'none: dry or wet' : `${(100 * opt.w).toFixed(1)}%`],
-        ['max γdry', `${opt.gd.toFixed(2)} kN/m³`],
+        ['γbulk', `${r.gb.toFixed(2)} kN/m³`, 'Bulk unit weight: the weight of everything in the mould (solid and water) over its volume.'],
+        ['γdry', `${r.gd.toFixed(2)} kN/m³`, 'Dry unit weight: the weight of the solid alone over the volume, γbulk/(1 + mc). Higher means a denser network.'],
+        ['e', r.e.toFixed(3), 'Void ratio: volume of voids over volume of solid.'],
+        ['S', `${Math.round(100 * r.S)}%`, 'Degree of saturation: the fraction of the voids filled with water, S = mc Gs / e.'],
+        ['A', `${(100 * r.A).toFixed(1)}%`, 'Air content: the volume of air as a fraction of the whole volume.'],
+        ['suction squeeze', `${r.sigma < 10 ? r.sigma.toFixed(1) : Math.round(r.sigma)} kPa`, 'The extra squeeze that the water bridges put on every contact before the blow (Bishop: χs). It pushes the contacts together without pushing them sideways, so it resists sliding.'],
+        ['mc,opt', soil.kind === 'bridges' ? 'none' : `${(100 * opt.w).toFixed(1)}%`, 'Optimum moisture content at this energy: where the dry unit weight peaks. A clean sand has none: it compacts best dry or wet.'],
+        ['γdry,max', `${opt.gd.toFixed(2)} kN/m³`, 'Maximum dry unit weight at this energy.'],
     ];
     let status, cls;
     if (soil.kind === 'bridges') {
@@ -440,7 +440,7 @@ function drawReadout(s) {
         status = `Dry of the optimum: suction adds ${Math.round(r.sigma)} kPa to every contact, against a blow of ${Math.round(s.E)} kPa. Add water to weaken it.`;
         cls = 'cap';
     }
-    readout.innerHTML = items.map(([a, b]) => `<div class="item"><span>${a}</span><strong>${b}</strong></div>`).join('')
+    readout.innerHTML = items.map(([a, b, t]) => `<div class="item"><span>${a}${tip(t)}</span><strong>${b}</strong></div>`).join('')
         + `<div class="status ${cls}">${status}</div>`;
 }
 
@@ -477,6 +477,7 @@ document.getElementById('standard').addEventListener('click', () => { energy.val
 document.getElementById('modified').addEventListener('click', () => { energy.value = fromE(E_MODIFIED).toFixed(3); update(); });
 document.getElementById('compact').addEventListener('click', () => { addPoint(parseFloat(mcInput.value) / 100); update(); });
 document.getElementById('clear').addEventListener('click', () => { points = []; update(); });
+document.addEventListener('tool-reset', () => { points = []; update(); });
 
 let sweeping = null;
 document.getElementById('sweep').addEventListener('click', () => {

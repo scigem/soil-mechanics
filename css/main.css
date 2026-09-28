@@ -20,6 +20,37 @@
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
     --transition: all 0.2s ease-in-out;
+
+    /* Shared palette for the schematics and plots. Canvas and Plotly code
+       reads these through js/ui.js (colors), so every tool draws soil, water
+       and stress the same way. They match the figures in the course notes. */
+    --soil: #a8551f;
+    --soil-edge: #6b3512;
+    --soil-light: #d9b48f;
+    --soil-layer-1: #b5651d;
+    --soil-layer-2: #9c7a4e;
+    --soil-layer-3: #836048;
+    --water: #29a3e3;
+    --water-dark: #0b6ea8;
+    --water-light: rgba(41, 163, 227, 0.22);
+    --air: #ffffff;
+    --ink: #212121;
+    --muted: #757575;
+    --faint: #bdbdbd;
+    --grid: #eeeeee;
+    --total-stress: #212121;
+    --pore-pressure: #29a3e3;
+    --effective-stress: #d95f02;
+    --friction: #646ef6;
+    --dilate: #ef6c00;
+    --contract: #0b6ea8;
+    --structure: #9e9e9e;
+    --safe-bg: #e8f5e9;
+    --safe-fg: #1b5e20;
+    --warn-bg: #fff3e0;
+    --warn-fg: #e65100;
+    --fail-bg: #ffebee;
+    --fail-fg: #b71c1c;
 }
 
 body {
@@ -217,4 +248,171 @@ button:active {
     border-radius: 3px;
     pointer-events: none;
     /* Prevent the label from interfering with mouse events */
+}
+
+/* ---------------------------------------------------------------- shared UI
+   Set up by js/ui.js: a ? next to every variable, a ? in the header that
+   opens the background notes, and a reset button under the controls. */
+
+header {
+    position: relative;
+}
+
+header .title-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+}
+
+header .title-row h1 {
+    margin-bottom: 0;
+}
+
+.about-toggle {
+    flex: none;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    border-radius: 50%;
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+#about {
+    display: none;
+}
+
+dialog.about {
+    max-width: min(46rem, calc(100% - 2rem));
+    max-height: calc(100vh - 3rem);
+    margin: auto;
+    padding: 1.5rem 1.75rem 1.25rem;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: var(--shadow-lg);
+    color: var(--text-primary);
+    line-height: 1.55;
+    font-size: 0.92rem;
+}
+
+dialog.about::backdrop {
+    background: rgba(33, 33, 33, 0.35);
+}
+
+dialog.about h2 {
+    font-size: 1.1rem;
+    margin: 0 2rem 0.75rem 0;
+}
+
+dialog.about h3 {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-secondary);
+    margin: 1rem 0 0.35rem;
+}
+
+dialog.about p,
+dialog.about ul {
+    margin: 0 0 0.6rem;
+}
+
+dialog.about ul {
+    padding-left: 1.2rem;
+}
+
+dialog.about .close {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    border-radius: 50%;
+    background: var(--background-color);
+    color: var(--text-primary);
+    box-shadow: none;
+    font-size: 1.2rem;
+}
+
+.tip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.05rem;
+    height: 1.05rem;
+    margin-left: 0.3rem;
+    padding: 0;
+    border-radius: 50%;
+    background: var(--background-color);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+    box-shadow: none;
+    font-size: 0.68rem;
+    font-weight: 700;
+    font-style: normal;
+    line-height: 1;
+    vertical-align: middle;
+    cursor: help;
+}
+
+.tip:hover,
+.tip:focus-visible,
+.tip[aria-expanded="true"] {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+    transform: none;
+    box-shadow: none;
+}
+
+#tooltip {
+    position: fixed;
+    z-index: 1000;
+    max-width: 18rem;
+    padding: 0.5rem 0.7rem;
+    border-radius: 6px;
+    background: var(--ink);
+    color: white;
+    font-size: 0.8rem;
+    font-weight: 400;
+    line-height: 1.4;
+    box-shadow: var(--shadow-md);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.12s ease-in-out;
+}
+
+#tooltip.shown {
+    opacity: 1;
+}
+
+button.reset {
+    width: 100%;
+    margin-top: 0.9rem;
+    padding: 0.45rem 0.75rem;
+    font-size: 0.8rem;
+    background: var(--background-color);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+    box-shadow: none;
+}
+
+button.reset:hover {
+    background: var(--border-color);
+    color: var(--text-primary);
+    transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    button,
+    #tooltip {
+        transition: none;
+    }
+
+    button:hover {
+        transform: none;
+    }
 }
