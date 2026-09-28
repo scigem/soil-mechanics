@@ -1,4 +1,4 @@
-import '../css/main.css';
+import './ui.js';
 import '../css/newmarks-chart.css';
 import { concentrationFactor } from './fan.js';
 
@@ -21,7 +21,6 @@ const ringsInput = document.getElementById('rings');
 const sectorsInput = document.getElementById('sectors');
 const frictionInput = document.getElementById('friction');
 const clearDrawingButton = document.getElementById('clear-drawing');
-const resetButton = document.getElementById('reset-button');
 const chartHint = document.getElementById('chart-hint');
 
 const unitInfluenceOutput = document.getElementById('unit-influence');
@@ -512,6 +511,8 @@ function finishDrawing(event) {
     recomputeCoverage();
 }
 
+// The shared Reset puts back the chart controls; the depth sits in its own
+// section, so restore it here, along with the sketch.
 function resetDefaults() {
     pressureInput.value = DEFAULTS.pressure;
     depthInput.value = DEFAULTS.depth;
@@ -529,7 +530,7 @@ function resetDefaults() {
 });
 
 clearDrawingButton.addEventListener('click', clearDrawing);
-resetButton.addEventListener('click', resetDefaults);
+document.addEventListener('tool-reset', resetDefaults);
 
 svg.addEventListener('pointerdown', handlePointerDown);
 svg.addEventListener('pointermove', handlePointerMove);

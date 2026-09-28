@@ -1,4 +1,4 @@
-import '../css/main.css';
+import { alpha, colors, font, tip } from './ui.js';
 import '../css/shear-box.css';
 
 // The shear box, read through Taylor's energy balance.
@@ -12,15 +12,21 @@ import '../css/shear-box.css';
 // in displacement is schematic.
 
 const COLORS = {
-    ink: '#212121',
-    muted: '#757575',
-    faint: '#bdbdbd',
-    grid: '#eeeeee',
-    grain: '#a8551f',
-    grainEdge: '#6b3512',
-    friction: '#646ef6',
-    lift: '#ef6c00',
-    sink: '#0b6ea8',
+    ink: colors.ink,
+    muted: colors.muted,
+    faint: colors.faint,
+    grid: colors.grid,
+    grain: colors.soil,
+    grainEdge: colors.soilEdge,
+    sample: colors.soilLight,
+    friction: colors.friction,
+    lift: colors.dilate,
+    sink: colors.contract,
+    plate: colors.structure,
+    // the shear zone tinted towards dilation (orange) or contraction (blue);
+    // no palette token sits between the soil and those colours
+    zoneDilate: colors.zoneDilate,
+    zoneContract: colors.zoneContract,
 };
 
 const ids = ['ID', 'sigma', 'phics', 'x'];
@@ -75,7 +81,7 @@ function prepare(canvas) {
     const ctx = canvas.getContext('2d');
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, rect.width, rect.height);
-    ctx.font = "13px 'Inter', sans-serif";
+    ctx.font = font(13);
     ctx.lineJoin = 'round';
     ctx.lineCap = 'round';
     return { ctx, w: rect.width, h: rect.height };
@@ -134,12 +140,12 @@ function drawBox(s, m) {
         ctx.fillStyle = colour;
         ctx.fill();
     };
-    fill([P(0, 0), P(1, 0), P(1, zoneBottom), P(0, zoneBottom)], '#d9b48f');
+    fill([P(0, 0), P(1, 0), P(1, zoneBottom), P(0, zoneBottom)], COLORS.sample);
     fill([P(0, zoneBottom), P(1, zoneBottom), P(1 + shift, zoneTop), P(shift, zoneTop)],
-        m.G[k] >= 0 ? '#e7a36a' : '#9fb9d6');
-    fill([P(shift, zoneTop), P(1 + shift, zoneTop), P(1 + shift, top), P(shift, top)], '#d9b48f');
+        m.G[k] >= 0 ? COLORS.zoneDilate : COLORS.zoneContract);
+    fill([P(shift, zoneTop), P(1 + shift, zoneTop), P(1 + shift, top), P(shift, top)], COLORS.sample);
     // a few lines through the sample, so the shearing shows
-    ctx.strokeStyle = 'rgba(107,53,18,0.35)';
+    ctx.strokeStyle = alpha(COLORS.grainEdge, 0.35);
     ctx.lineWidth = 1;
     for (let u = 0.1; u < 1; u += 0.15) {
         ctx.beginPath();
@@ -167,7 +173,7 @@ function drawBox(s, m) {
     ctx.lineTo(X(shift + 1), Y(top));
     ctx.stroke();
     // the loading plate on top of the sample
-    ctx.fillStyle = '#9e9e9e';
+    ctx.fillStyle = COLORS.plate;
     ctx.fillRect(X(shift), Y(top) - 6, width, 6);
 
     // loads
@@ -211,7 +217,7 @@ function drawCurves(s, m) {
     m.xs.forEach((x, k) => (k ? ctx.lineTo(X(x), Yr(m.R[k])) : ctx.moveTo(X(x), Yr(m.R[k]))));
     for (let k = m.xs.length - 1; k >= 0; k--) ctx.lineTo(X(m.xs[k]), Yr(m.rise(m.xs[k]) * m.tanCs));
     ctx.closePath();
-    ctx.fillStyle = 'rgba(239,108,0,0.18)';
+    ctx.fillStyle = alpha(COLORS.lift, 0.18);
     ctx.fill();
 
     // friction alone
@@ -284,16 +290,16 @@ function drawReadout(s, m) {
     const friction = m.rise(s.x) * m.tanCs;
     const lifting = m.rise(s.x) * m.G[k];
     const items = [
-        ['τ/σ′ now', ratio.toFixed(3)],
-        ['= friction', friction.toFixed(3)],
-        ['+ lifting (dy/dx)', `${lifting >= 0 ? '+' : '−'}${Math.abs(lifting).toFixed(3)}`],
-        ['τ now', `${(ratio * s.sigma).toFixed(1)} kPa`],
-        ['φ′ mobilised', `${(Math.atan(ratio) * 180 / Math.PI).toFixed(1)}°`],
-        ['φ′ peak (Bolton)', `${m.phiPeak.toFixed(1)}°`],
-        ['I_R', m.IR.toFixed(2)],
-        ['rise y', `${m.Y[k].toFixed(3)} mm`],
+        ['τ/σ′ now', ratio.toFixed(3), 'The stress ratio at this displacement: the shear stress over the normal stress on the plane between the halves.'],
+        ['= friction', friction.toFixed(3), 'The part of τ/σ′ spent sliding against friction, tan φ′cs.'],
+        ['+ lifting (dy/dx)', `${lifting >= 0 ? '+' : '−'}${Math.abs(lifting).toFixed(3)}`, 'The part of τ/σ′ spent lifting the load, dy/dx. Negative when the sample sinks and the load does work on it.'],
+        ['τ now', `${(ratio * s.sigma).toFixed(1)} kPa`, 'The shear stress on the plane between the halves: τ/σ′ times σ′.'],
+        ['φ′ mobilised', `${(Math.atan(ratio) * 180 / Math.PI).toFixed(1)}°`, 'The friction angle the sample is using now, tan⁻¹(τ/σ′).'],
+        ['φ′ peak (Bolton)', `${m.phiPeak.toFixed(1)}°`, 'The peak friction angle from Bolton (1986): φ′cs + 5 I_R degrees in plane strain.'],
+        ['I_R', m.IR.toFixed(2), 'Bolton\'s relative dilatancy index, I_D(10 − ln p′) − 1, clipped to between 0 and 4. It measures how much the sample dilates at its peak.'],
+        ['rise y', `${m.Y[k].toFixed(3)} mm`, 'How far the top half has moved up: positive when the sample dilates, negative when it contracts.'],
     ];
-    readout.innerHTML = items.map(([a, b]) => `<div class="item"><span>${a}</span><strong>${b}</strong></div>`).join('');
+    readout.innerHTML = items.map(([a, b, t]) => `<div class="item"><span>${a}${tip(t)}</span><strong>${b}</strong></div>`).join('');
 }
 
 // ---------------------------------------------------------------- wiring
@@ -314,6 +320,11 @@ function update() {
 for (const id of ids) inputs[id].addEventListener('input', update);
 
 let playing = null;
+document.addEventListener('tool-reset', () => {
+    if (playing) cancelAnimationFrame(playing);
+    playing = null;
+    update();
+});
 document.getElementById('play').addEventListener('click', () => {
     if (playing) {
         cancelAnimationFrame(playing);

@@ -12,34 +12,50 @@
 
 <body>
     <div class="container">
-        <!-- <header>
+        <header>
             <h1>Critical State Line</h1>
-        </header> -->
+        </header>
+
+        <section id="about">
+            <p>The critical state line represents the ultimate shear strength of soil in both stress space (τ vs σ)
+                and void ratio space (e vs ln σ). On it, τ = <em>M</em>σ and <em>e</em> = Γ − λ ln σ. The normal
+                compression line, <em>e</em> = <em>N</em> − λ ln σ, has the same slope λ and is drawn at τ = 0.</p>
+            <h3>What you are seeing</h3>
+            <ul>
+                <li><strong>3D view.</strong> The critical state line (solid blue) in σ–τ–<em>e</em> space, and the
+                    normal compression line (dashed black) in the τ = 0 plane. The translucent surface joins the
+                    critical state line to the τ = 0 plane at the same void ratio. Drag to rotate.</li>
+                <li><strong>τ–σ view.</strong> The critical state line in stress space: a straight line through the
+                    origin of slope <em>M</em>.</li>
+                <li><strong>e–σ view.</strong> The critical state line (solid blue) and the normal compression line
+                    (dashed black) in void ratio space. On a logarithmic σ axis both are straight and parallel.</li>
+            </ul>
+        </section>
 
         <div class="main-layout">
             <section id="input-section">
                 <div class="column">
                     <h2>Critical State Parameters</h2>
                     <div class="input-group">
-                        <label for="M">Critical State Slope M:</label>
+                        <label for="M" data-tip="Slope of the critical state line in stress space: τ = Mσ at critical state.">Slope <em>M</em></label>
                         <input type="number" id="M" value="1.2" step="0.1" min="0.1" max="3.0">
                     </div>
                     <div class="input-group">
-                        <label for="Gamma">Critical State Intercept Γ:</label>
+                        <label for="Gamma" data-tip="Void ratio on the critical state line at σ = 1 kPa, where ln σ = 0.">Intercept Γ</label>
                         <input type="number" id="Gamma" value="2.0" step="0.1" min="1.0" max="5.0">
                     </div>
                     <div class="input-group">
-                        <label for="lambda">Compression Index λ:</label>
+                        <label for="lambda" data-tip="Slope of the critical state and normal compression lines in void ratio space: the fall in e per unit increase in ln σ.">Compression index λ</label>
                         <input type="number" id="lambda" value="0.15" step="0.01" min="0.01" max="0.5">
                     </div>
                     <div class="input-group">
-                        <label for="N">Normal Compression Line N:</label>
+                        <label for="N" data-tip="Void ratio on the normal compression line at σ = 1 kPa. Normally larger than Γ, so the normal compression line lies above the critical state line.">NCL intercept <em>N</em></label>
                         <input type="number" id="N" value="2.5" step="0.1" min="1.0" max="5.0">
                     </div>
 
                     <h3>View Controls</h3>
                     <div class="input-group">
-                        <label for="sigma-scale">σ Axis Scale:</label>
+                        <label for="sigma-scale" data-tip="Linear shows σ from 0 to 500 kPa; logarithmic from 1 to 1000 kPa, where the lines in void ratio space are straight.">σ axis scale</label>
                         <select id="sigma-scale">
                             <option value="linear">Linear</option>
                             <option value="log">Logarithmic</option>
@@ -49,23 +65,12 @@
                         <button id="view-tau-sigma">τ-σ View</button>
                         <button id="view-e-sigma">e-σ View</button>
                         <button id="view-3d">3D View</button>
-                        <button id="reset-button">Reset</button>
                     </div>
                 </div>
             </section>
 
             <section id="visualization-section">
                 <div id="plot-container"></div>
-                <div id="info-panel">
-                    <h3>Critical State Theory</h3>
-                    <p>The critical state line represents the ultimate shear strength of soil in both stress space (τ vs σ) and void ratio space (e vs ln σ).</p>
-                    <ul>
-                        <li><strong>M:</strong> Critical state slope in stress space</li>
-                        <li><strong>Γ:</strong> Critical state intercept in void ratio space</li>
-                        <li><strong>λ:</strong> Compression index</li>
-                        <li><strong>N:</strong> Normal compression line intercept</li>
-                    </ul>
-                </div>
             </section>
         </div>
     </div>

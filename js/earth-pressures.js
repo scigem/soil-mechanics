@@ -1,4 +1,4 @@
-import '../css/main.css';
+import { alpha, colors, font, tip } from './ui.js';
 import '../css/earth-pressures.css';
 
 // Behind a smooth vertical wall with level ground there is no shear on
@@ -10,18 +10,21 @@ import '../css/earth-pressures.css';
 // it, C0 = (1 - K0) / (1 + K0). Water has no tilt, and sits at C = 0, K = 1.
 
 const COLORS = {
-    ink: '#212121',
-    muted: '#757575',
-    faint: '#bdbdbd',
-    grid: '#eeeeee',
-    dial: '#646ef6',
-    beyond: 'rgba(0, 0, 0, 0.05)',
-    active: '#ef6c00',
-    passive: '#6a1b9a',
-    rest: '#2e7d32',
-    water: '#0b6ea8',
-    soil: '#e8d9c7',
-    wall: '#9e9e9e',
+    ink: colors.ink,
+    muted: colors.muted,
+    faint: colors.faint,
+    grid: colors.grid,
+    dial: colors.friction,
+    beyond: alpha(colors.ink, 0.05),
+    active: colors.stateActive,
+    // passive and at rest: a purple and a green kept apart from the active
+    // orange and the dial's blue; the palette has no colours for these states
+    passive: colors.statePassive,
+    rest: colors.stateRest,
+    water: colors.waterDark,
+    soil: alpha(colors.soilLight, 0.5),
+    wall: colors.structure,
+    halo: colors.surfaceColor,
 };
 
 const ids = ['C', 'H', 'phi', 'K0', 'gamma'];
@@ -82,7 +85,7 @@ function prepare(canvas) {
     const ctx = canvas.getContext('2d');
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, rect.width, rect.height);
-    ctx.font = "13px 'Inter', sans-serif";
+    ctx.font = font(13);
     ctx.lineJoin = 'round';
     ctx.lineCap = 'round';
     return { ctx, w: rect.width, h: rect.height };
@@ -101,7 +104,7 @@ function dot(ctx, x, y, r, fill) {
     ctx.fillStyle = fill;
     ctx.fill();
     ctx.lineWidth = 1.5;
-    ctx.strokeStyle = '#ffffff';
+    ctx.strokeStyle = COLORS.halo;
     ctx.stroke();
 }
 
@@ -253,7 +256,7 @@ function drawWall(st, s) {
         const ang = s === 'active' ? Math.PI / 4 + rad(st.phi) / 2 : Math.PI / 4 - rad(st.phi) / 2;
         const run = (st.H * scale) / Math.tan(ang);
         const colour = stateColour(s);
-        ctx.fillStyle = s === 'active' ? 'rgba(239,108,0,0.18)' : 'rgba(106,27,154,0.14)';
+        ctx.fillStyle = s === 'active' ? alpha(COLORS.active, 0.18) : alpha(COLORS.passive, 0.14);
         ctx.beginPath();
         ctx.moveTo(wallX, Yz(st.H));
         ctx.lineTo(Math.min(wallX + run, w), Yz(0) + Math.max(0, wallX + run - w) * Math.tan(ang));
@@ -276,7 +279,7 @@ function drawWall(st, s) {
     const pscale = (0.9 * (wallX - 20)) / pMax;
     const base = st.K * st.gamma * st.H;
     const colour = stateColour(s);
-    ctx.fillStyle = s === 'active' ? 'rgba(239,108,0,0.22)' : s === 'passive' ? 'rgba(106,27,154,0.18)' : 'rgba(33,33,33,0.10)';
+    ctx.fillStyle = s === 'active' ? alpha(COLORS.active, 0.22) : s === 'passive' ? alpha(COLORS.passive, 0.18) : alpha(COLORS.ink, 0.10);
     ctx.beginPath();
     ctx.moveTo(wallX - 10, Yz(0));
     ctx.lineTo(wallX - 10 - base * pscale, Yz(st.H));
@@ -379,25 +382,25 @@ function drawReadout(st, s) {
         between: 'Between the stops. The soil is not sliding, and where it sits is set by its history and the wall.',
     };
     const items = [
-        ['C', st.C.toFixed(3)],
-        ['K', st.K.toFixed(3)],
-        ['K_a  ·  K₀  ·  K_p', `${st.Ka.toFixed(2)}  ·  ${st.K0.toFixed(2)}  ·  ${st.Kp.toFixed(2)}`],
-        ["σv′ at base", `${sv.toFixed(1)} kPa`],
-        ["σh′ at base", `${(st.K * sv).toFixed(1)} kPa`],
-        ['thrust P = ½Kγ H²', `${P.toFixed(1)} kN/m`],
-        ['from rest to active', `ΔC = ${toActive.toFixed(3)}`],
-        ['from rest to passive', `ΔC = ${toPassive.toFixed(3)} (${(toPassive / toActive).toFixed(1)}× further)`],
+        ['C', st.C.toFixed(3), 'The vertical tilt of the stress: positive when σv′ is the larger, negative when σh′ is.'],
+        ['K', st.K.toFixed(3), 'The earth pressure coefficient, σh′/σv′ = (1 − C)/(1 + C).'],
+        ['K_a  ·  K₀  ·  K_p', `${st.Ka.toFixed(2)}  ·  ${st.K0.toFixed(2)}  ·  ${st.Kp.toFixed(2)}`, 'The active, at-rest and passive coefficients. K_a = (1 − sin φ′)/(1 + sin φ′) and K_p is its inverse.'],
+        ["σv′ at base", `${sv.toFixed(1)} kPa`, 'The vertical effective stress at the base of the wall, γH.'],
+        ["σh′ at base", `${(st.K * sv).toFixed(1)} kPa`, 'The horizontal effective stress on the wall at its base, KγH.'],
+        ['thrust P = ½Kγ H²', `${P.toFixed(1)} kN/m`, 'The total horizontal force on the wall per metre run: the area of the pressure diagram.'],
+        ['from rest to active', `ΔC = ${toActive.toFixed(3)}`, 'How far the tilt has to move from rest to reach the active stop.'],
+        ['from rest to passive', `ΔC = ${toPassive.toFixed(3)} (${(toPassive / toActive).toFixed(1)}× further)`, 'How far the tilt has to move from rest to reach the passive stop, and how many times further that is than to the active stop.'],
     ];
     readout.innerHTML =
         `<div class="status ${s === 'between' ? 'safe' : 'cap'}">${note || messages[s]}</div>` +
-        items.map(([k, v]) => `<div class="item"><span>${k}</span><strong>${v}</strong></div>`).join('');
+        items.map(([k, v, t]) => `<div class="item"><span>${k}${tip(t)}</span><strong>${v}</strong></div>`).join('');
 }
 
 // ---------------------------------------------------------------- wiring
 
 function update(changed) {
     enforceStops(changed);
-    const units = { C: '', H: ' m', phi: '°', K0: '', gamma: '' };
+    const units = { C: '', H: ' m', phi: '°', K0: '', gamma: ' kN/m³' };
     for (const id of ids) {
         const v = parseFloat(inputs[id].value);
         outputs[id].textContent = (id === 'C' ? v.toFixed(3) : id === 'K0' ? v.toFixed(2) : `${v}`) + units[id];
@@ -411,6 +414,7 @@ function update(changed) {
 }
 
 for (const id of ids) inputs[id].addEventListener('input', () => update(id));
+document.addEventListener('tool-reset', () => update());
 
 document.querySelectorAll('[data-preset]').forEach((button) =>
     button.addEventListener('click', () => {

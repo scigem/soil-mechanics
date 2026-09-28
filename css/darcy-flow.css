@@ -23,7 +23,7 @@
 }
 
 .input-group label {
-    font-weight: 500;
+    font-weight: var(--font-weight-medium);
     font-size: 0.95rem;
     color: var(--text-primary);
     margin-bottom: 0.5rem;
@@ -33,59 +33,18 @@
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    background: var(--background-color);
+    background: var(--surface-muted);
     padding: 0.75rem;
-    border-radius: 6px;
+    border-radius: var(--border-radius-small);
     border: 1px solid var(--border-color);
 }
 
-.slider-container input[type="range"] {
-    flex: 1;
-    height: 6px;
-    border-radius: 3px;
-    background: var(--border-color);
-    outline: none;
-    appearance: none;
-    -webkit-appearance: none;
-}
-
-.slider-container input[type="range"]::-webkit-slider-thumb {
-    appearance: none;
-    -webkit-appearance: none;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: var(--primary-color);
-    cursor: pointer;
-    box-shadow: var(--shadow-sm);
-}
-
-.slider-container input[type="range"]::-moz-range-thumb {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: var(--primary-color);
-    cursor: pointer;
-    border: none;
-    box-shadow: var(--shadow-sm);
-}
-
 .slider-value {
-    font-weight: 600;
-    color: var(--primary-color);
     min-width: 5rem;
-    text-align: center;
 }
 
 .unit {
-    font-size: 0.85rem;
-    color: var(--text-secondary);
     min-width: 2.5rem;
-}
-
-#reset-button {
-    width: 100%;
-    margin-top: 0.5rem;
 }
 
 .results-grid {
@@ -99,18 +58,18 @@
     align-items: center;
     gap: 1rem;
     padding: 0.75rem;
-    background: var(--background-color);
-    border-radius: 6px;
+    background: var(--surface-muted);
+    border-radius: var(--border-radius-small);
     border: 1px solid var(--border-color);
 }
 
 .result-item .label {
-    font-weight: 500;
+    font-weight: var(--font-weight-medium);
     color: var(--text-secondary);
 }
 
 .result-item span:last-child {
-    font-weight: 600;
+    font-weight: var(--font-weight-bold);
     color: var(--text-primary);
     text-align: right;
 }
@@ -119,25 +78,17 @@
     margin-top: 1rem;
     text-align: center;
     font-size: 1rem;
-    font-weight: 600;
+    font-weight: var(--font-weight-bold);
     color: var(--primary-color);
-}
-
-.visualization-header {
-    margin-bottom: 1rem;
-}
-
-.visualization-header p {
-    color: var(--text-secondary);
 }
 
 .schematic {
     min-height: 420px;
     border: 1px solid var(--border-color);
-    border-radius: 12px;
+    border-radius: var(--border-radius);
     overflow: hidden;
     box-shadow: var(--shadow-sm);
-    background: linear-gradient(180deg, #f8fbff 0%, #eef4ff 100%);
+    background: var(--surface-color);
 }
 
 .schematic svg {
@@ -147,8 +98,8 @@
 }
 
 .schematic text {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    fill: #1f2937;
+    font-family: var(--font-canvas);
+    fill: var(--ink);
 }
 
 .schematic .datum-label,
@@ -164,49 +115,28 @@
 .schematic .caption-strong {
     font-size: 15px;
     font-weight: 700;
-    fill: #5b3a1f;
+    fill: var(--soil-edge);
 }
 
 .schematic .datum-label,
 .schematic .caption-note {
-    fill: #64748b;
+    fill: var(--muted);
 }
 
-.schematic .head-line-label {
-    fill: #2563eb;
-    font-weight: 600;
-}
-
+.schematic .head-line-label,
 .schematic .flow-label {
-    fill: #0f766e;
-    font-weight: 600;
+    fill: var(--water-dark);
+    font-weight: var(--font-weight-bold);
 }
 
 .schematic .delta-label {
-    fill: #dc2626;
-    font-weight: 600;
-}
-
-.info-panel {
-    margin-top: 1rem;
-    padding: 1rem;
-    border-radius: 6px;
-    background: #f8f9ff;
-    border: 1px solid #e0e4ff;
-    color: var(--text-secondary);
-}
-
-.info-panel strong {
-    color: var(--text-primary);
+    fill: var(--primary-color);
+    font-weight: var(--font-weight-bold);
 }
 
 @media (max-width: 768px) {
     .slider-container {
         flex-wrap: wrap;
-    }
-
-    .slider-container input[type="range"] {
-        width: 100%;
     }
 
     .slider-value {

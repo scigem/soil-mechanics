@@ -1,3 +1,4 @@
+import '../css/main.css';
 import '../css/index.css';
 
 const pageSources = import.meta.glob('../*.html', {

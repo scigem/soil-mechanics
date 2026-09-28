@@ -1,4 +1,4 @@
-import '../css/main.css';
+import { colors } from './ui.js';
 import '../css/footing-settlement.css';
 import Plotly from 'plotly.js-dist';
 import { concentrationFactor } from './fan.js';
@@ -146,9 +146,13 @@ const DEFAULTS = {
     stressExponent: 0.5,
 };
 
-const BOUSSINESQ_COLOUR = '#646ef6';
-const FAN_COLOUR = '#ff9800';
-const SMEARED_COLOUR = '#9e9e9e';
+const theme = getComputedStyle(document.documentElement);
+const FONT_FAMILY = theme.getPropertyValue('--font-body').trim() || 'Inter, sans-serif';
+const BOUSSINESQ_COLOUR = colors.primary;
+// The fan is drawn in the palette's accent.
+const FAN_COLOUR = colors.accent;
+const SMEARED_COLOUR = colors.muted;
+const plotFont = { family: FONT_FAMILY, size: 12, color: colors.textPrimary };
 const plotConfig = { responsive: true, displayModeBar: false };
 
 const el = (id) => document.getElementById(id);
@@ -244,7 +248,7 @@ function drawBulbs(state, exponent, bulbs) {
             size: 0.1,
             coloring: 'lines',
             showlabels: true,
-            labelfont: { size: 9, color: '#424242' },
+            labelfont: { family: FONT_FAMILY, size: 9, color: colors.textPrimary },
         },
         line: { width: 1.8 },
         hovertemplate: 'x %{x:.2f} m, z %{y:.2f} m<br>Δσ<sub>z</sub>/q = %{z:.3f}<extra></extra>',
@@ -254,7 +258,7 @@ function drawBulbs(state, exponent, bulbs) {
         x: [-0.5 * state.width, 0.5 * state.width],
         y: [0, 0],
         mode: 'lines',
-        line: { color: '#212121', width: 7 },
+        line: { color: colors.ink, width: 7 },
         hoverinfo: 'skip',
         showlegend: false,
         xaxis: `x${suffix}`,
@@ -270,7 +274,8 @@ function drawBulbs(state, exponent, bulbs) {
 
     Plotly.react(el('bulbPlot'), data, {
         margin: { l: 62, r: 16, t: 48, b: 48 },
-        title: { text: 'Pressure bulb, contours of Δσ<sub>z</sub>/q', font: { size: 14 } },
+        font: plotFont,
+        title: { text: 'Pressure bulbs', font: { size: 14 } },
         xaxis: { domain: [0, 0.47], anchor: 'y', title: { text: 'Offset (m)' }, zeroline: false },
         yaxis: { anchor: 'x', autorange: 'reversed', title: { text: 'Depth below footing (m)' }, zeroline: false },
         xaxis2: { domain: [0.53, 1], anchor: 'y2', title: { text: 'Offset (m)' }, zeroline: false },
@@ -340,7 +345,7 @@ function drawProfiles(state, exponent) {
             x: [-0.5 * state.width, 0.5 * state.width],
             y: [0, 0],
             mode: 'lines',
-            line: { color: '#212121', width: 7 },
+            line: { color: colors.ink, width: 7 },
             hoverinfo: 'skip',
             showlegend: false,
             xaxis: 'x2',
@@ -350,6 +355,7 @@ function drawProfiles(state, exponent) {
 
     Plotly.react(el('profilePlot'), data, {
         margin: { l: 62, r: 20, t: 74, b: 48 },
+        font: plotFont,
         showlegend: true,
         legend: { orientation: 'h', x: 0, y: 1.3, font: { size: 11 } },
         xaxis: { domain: [0, 0.46], anchor: 'y', title: { text: 'Δσ<sub>z</sub> (kPa)' }, rangemode: 'tozero' },
@@ -357,8 +363,8 @@ function drawProfiles(state, exponent) {
         xaxis2: { domain: [0.58, 1], anchor: 'y2', title: { text: 'Offset from centre (m)' } },
         yaxis2: { anchor: 'x2', autorange: 'reversed', title: { text: 'Settlement (mm)' }, rangemode: 'tozero' },
         annotations: [
-            { text: 'Stress on the centre line', x: 0.2, y: 1.09, xref: 'paper', yref: 'paper', showarrow: false, font: { size: 12, color: '#757575' } },
-            { text: 'Settlement bowl, flexible footing', x: 0.82, y: 1.09, xref: 'paper', yref: 'paper', showarrow: false, font: { size: 12, color: '#757575' } },
+            { text: 'Stress on the centre line', x: 0.2, y: 1.09, xref: 'paper', yref: 'paper', showarrow: false, font: { size: 12, color: colors.textSecondary } },
+            { text: 'Settlement bowl', x: 0.82, y: 1.09, xref: 'paper', yref: 'paper', showarrow: false, font: { size: 12, color: colors.textSecondary } },
         ],
         paper_bgcolor: 'rgba(0,0,0,0)',
         plot_bgcolor: 'rgba(0,0,0,0)',
@@ -426,7 +432,6 @@ function applyPreset(values) {
 
 el('hertz-button').addEventListener('click', () => applyPreset({ law: 'janbu', stressExponent: 1 / 3 }));
 el('clay-button').addEventListener('click', () => applyPreset({ law: 'janbu', stressExponent: 1 }));
-el('reset-button').addEventListener('click', () => applyPreset({ ...DEFAULTS }));
 
 window.addEventListener('resize', () => {
     Plotly.Plots.resize(el('bulbPlot'));

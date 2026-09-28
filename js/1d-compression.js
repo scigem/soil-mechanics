@@ -1,6 +1,14 @@
-import '../css/main.css';
+import { alpha, colors } from './ui.js';
 import '../css/1d-compression.css';
 import Plotly from 'plotly.js-dist';
+
+const FONT_FAMILY = getComputedStyle(document.documentElement).getPropertyValue('--font-body').trim()
+    || 'Inter, sans-serif';
+// loading is compression, unloading and reloading is swelling
+const COLOUR_VIRGIN = colors.ink;
+const COLOUR_INITIAL = colors.structure;
+const COLOUR_LOAD = colors.contract;
+const COLOUR_UNLOAD = colors.dilate;
 
 const DEFAULTS = {
     initialStress: 50,
@@ -25,7 +33,6 @@ const finalStressInput = document.getElementById('final-stress');
 const lambdaInput = document.getElementById('lambda');
 const kappaInput = document.getElementById('kappa');
 const preconVoidRatioInput = document.getElementById('precon-void-ratio');
-const resetButton = document.getElementById('reset-button');
 const compressionPlot = document.getElementById('compressionPlot');
 
 function formatStress(value) {
@@ -202,7 +209,7 @@ function createPlot(state, results) {
             mode: 'lines',
             name: 'Virgin compression line',
             line: {
-                color: '#ff9800',
+                color: COLOUR_VIRGIN,
                 width: 2,
                 dash: 'dash',
             },
@@ -214,7 +221,7 @@ function createPlot(state, results) {
             mode: 'lines',
             name: 'Initial recompression line',
             line: {
-                color: '#9aa0b4',
+                color: COLOUR_INITIAL,
                 width: 2,
                 dash: 'dot',
             },
@@ -226,7 +233,7 @@ function createPlot(state, results) {
             mode: 'lines',
             name: 'Current unload-reload line',
             line: {
-                color: '#2aa876',
+                color: COLOUR_UNLOAD,
                 width: 2,
                 dash: 'dashdot',
             },
@@ -238,11 +245,11 @@ function createPlot(state, results) {
             mode: 'lines+markers',
             name: 'Loading path',
             line: {
-                color: '#646ef6',
+                color: COLOUR_LOAD,
                 width: 4,
             },
             marker: {
-                color: '#646ef6',
+                color: COLOUR_LOAD,
                 size: 8,
             },
         },
@@ -253,11 +260,11 @@ function createPlot(state, results) {
             mode: 'lines+markers',
             name: 'Unloading path',
             line: {
-                color: '#ff6b6b',
+                color: COLOUR_UNLOAD,
                 width: 4,
             },
             marker: {
-                color: '#ff6b6b',
+                color: COLOUR_UNLOAD,
                 size: 8,
             },
         },
@@ -270,7 +277,7 @@ function createPlot(state, results) {
             text: ['Initial', 'Peak', 'Final'],
             textposition: 'top center',
             marker: {
-                color: '#212121',
+                color: colors.ink,
                 size: 10,
             },
             showlegend: false,
@@ -295,7 +302,7 @@ function createPlot(state, results) {
             y0: yMin,
             y1: yMax,
             line: {
-                color: 'rgba(154, 160, 180, 0.7)',
+                color: alpha(COLOUR_INITIAL, 0.7),
                 width: 2,
                 dash: 'dot',
             },
@@ -308,7 +315,7 @@ function createPlot(state, results) {
             text: "Initial σ′pc",
             showarrow: false,
             yshift: 14,
-            font: { color: '#6b7280', size: 12 },
+            font: { color: colors.muted, size: 12 },
         },
     ];
 
@@ -320,7 +327,7 @@ function createPlot(state, results) {
             y0: yMin,
             y1: yMax,
             line: {
-                color: 'rgba(42, 168, 118, 0.85)',
+                color: alpha(COLOUR_UNLOAD, 0.85),
                 width: 2,
                 dash: 'dash',
             },
@@ -331,7 +338,7 @@ function createPlot(state, results) {
             text: "Current σ′pc",
             showarrow: false,
             yshift: 14,
-            font: { color: '#2aa876', size: 12 },
+            font: { color: COLOUR_UNLOAD, size: 12 },
         });
     }
 
@@ -358,9 +365,9 @@ function createPlot(state, results) {
             yanchor: 'bottom',
             font: { size: 11 },
         },
-        paper_bgcolor: 'white',
-        plot_bgcolor: '#fafafa',
-        font: { family: 'Inter, sans-serif' },
+        paper_bgcolor: colors.surfaceColor,
+        plot_bgcolor: colors.surfaceMuted,
+        font: { family: FONT_FAMILY, color: colors.textPrimary },
         shapes,
         annotations,
     };
@@ -376,7 +383,18 @@ function updatePlot() {
     createPlot(state, results);
 }
 
+// Reset: the shared Reset button fires 'tool-reset'. The stress sliders' bounds
+// follow each other, so put them back first, then the values.
+const INITIAL_BOUNDS = {
+    preconMin: preconStressInput.min,
+    peakMin: peakStressInput.min,
+    finalMax: finalStressInput.max,
+};
+
 function resetToDefaults() {
+    preconStressInput.min = INITIAL_BOUNDS.preconMin;
+    peakStressInput.min = INITIAL_BOUNDS.peakMin;
+    finalStressInput.max = INITIAL_BOUNDS.finalMax;
     initialStressInput.value = DEFAULTS.initialStress;
     preconStressInput.value = DEFAULTS.preconStress;
     peakStressInput.value = DEFAULTS.peakStress;
@@ -400,7 +418,7 @@ function resetToDefaults() {
     input.addEventListener('change', updatePlot);
 });
 
-resetButton.addEventListener('click', resetToDefaults);
+document.addEventListener('tool-reset', resetToDefaults);
 
 window.addEventListener('resize', () => {
     Plotly.Plots.resize(compressionPlot);

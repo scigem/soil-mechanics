@@ -1,4 +1,4 @@
-import '../css/main.css';
+import { alpha, colors } from './ui.js';
 import '../css/elastic-footing.css';
 import Plotly from 'plotly.js-dist';
 
@@ -9,17 +9,11 @@ document.getElementById("youngs").addEventListener('input', updateVisualization)
 document.getElementById("poisson").addEventListener('input', updateVisualization);
 document.getElementById("component").addEventListener('change', updateVisualization);
 document.getElementById("depth").addEventListener('input', updateVisualization);
-document.getElementById("reset-button").addEventListener('click', resetToDefaults);
 
-function resetToDefaults() {
-    document.getElementById("load").value = 100;
-    document.getElementById("width").value = 2;
-    document.getElementById("youngs").value = 20;
-    document.getElementById("poisson").value = 0.3;
-    document.getElementById("component").value = "vertical";
-    document.getElementById("depth").value = 10;
-    updateVisualization();
-}
+const FONT_FAMILY = getComputedStyle(document.documentElement).getPropertyValue('--font-body').trim()
+    || 'Inter, sans-serif';
+// The applied load is drawn in red, which has no plotting token of its own.
+const LOAD_COLOUR = colors.load;
 
 function updateSliderValues() {
     document.getElementById("loadValue").textContent = document.getElementById("load").value;
@@ -171,16 +165,19 @@ function updateVisualization() {
     const component = document.getElementById("component").value;
     
     // Set up colorscale based on component
-    let colorscale, title;
+    let colorscale, title, name;
     if (component === "vertical") {
         colorscale = 'RdBu';
-        title = 'Vertical Displacement u<sub>y</sub> (mm)';
+        name = 'Vertical displacement';
+        title = 'u<sub>y</sub> (mm)';
     } else if (component === "horizontal") {
         colorscale = 'RdYlBu';
-        title = 'Horizontal Displacement u<sub>x</sub> (mm)';
+        name = 'Horizontal displacement';
+        title = 'u<sub>x</sub> (mm)';
     } else {
         colorscale = 'Viridis';
-        title = 'Displacement Magnitude |u| (mm)';
+        name = 'Displacement magnitude';
+        title = '|u| (mm)';
     }
     
     // Create contour plot
@@ -192,7 +189,7 @@ function updateVisualization() {
         colorscale: colorscale,
         contours: {
             showlabels: true,
-            labelfont: { size: 10, color: 'white' }
+            labelfont: { family: FONT_FAMILY, size: 10, color: colors.surfaceColor }
         },
         colorbar: {
             title: title,
@@ -206,9 +203,9 @@ function updateVisualization() {
         x: [-B, B, B, -B, -B],
         y: [0, 0, -0.2, -0.2, 0],
         mode: 'lines',
-        line: { color: 'black', width: 4 },
+        line: { color: colors.ink, width: 4 },
         fill: 'toself',
-        fillcolor: 'rgba(0,0,0,0.3)',
+        fillcolor: alpha(colors.ink, 0.3),
         name: 'Strip Footing',
         showlegend: true,
         hoverinfo: 'name'
@@ -222,8 +219,8 @@ function updateVisualization() {
         marker: {
             symbol: 'arrow-down',
             size: 15,
-            color: 'red',
-            line: { color: 'darkred', width: 1 }
+            color: LOAD_COLOUR,
+            line: { color: LOAD_COLOUR, width: 1 }
         },
         name: 'Applied Load',
         showlegend: true,
@@ -238,9 +235,12 @@ function updateVisualization() {
     
     const layout = {
         title: {
-            text: `Elastic Strip Footing: ${title}`,
+            text: name,
             font: { size: 16 }
         },
+        font: { family: FONT_FAMILY, color: colors.textPrimary },
+        paper_bgcolor: colors.surfaceColor,
+        plot_bgcolor: colors.surfaceColor,
         xaxis: {
             title: 'Horizontal Distance (m)',
             scaleanchor: 'y',
@@ -256,7 +256,7 @@ function updateVisualization() {
         legend: {
             x: 1.02,
             y: 1,
-            bgcolor: 'rgba(255,255,255,0.8)'
+            bgcolor: alpha(colors.surfaceColor, 0.8)
         }
     };
     

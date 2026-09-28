@@ -1,23 +1,14 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
 body {
-    font-family: 'Montserrat', sans-serif;
     height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #f5f5f5;
+    background-color: var(--surface-muted);
 }
 
-h1 {
-    text-align: center;
+header {
     margin-bottom: 30px;
-    color: #333;
 }
 
 .container {
@@ -33,15 +24,15 @@ h1 {
 }
 
 .axis-label {
-    font-weight: bold;
+    font-weight: var(--font-weight-bold);
     margin-bottom: 5px;
 }
 
 .ruler {
     height: 40px;
-    background-color: #e0e0e0;
+    background-color: var(--border-color);
     position: relative;
-    border-radius: 5px;
+    border-radius: var(--border-radius-small);
 }
 
 .ruler::before {
@@ -49,7 +40,7 @@ h1 {
     position: absolute;
     height: 100%;
     width: 2px;
-    background-color: #333;
+    background-color: var(--ink);
 }
 
 .ruler::before {
@@ -61,7 +52,7 @@ h1 {
 }
 
 .mark {
-    background-color: #000;
+    background-color: var(--ink);
     width: 2px;
     position: absolute;
     top: 0;
@@ -90,7 +81,7 @@ h1 {
     left: 0;
     height: calc(100% - 62px);
     width: 2px;
-    background-color: red;
+    background-color: var(--primary-color);
     z-index: 10;
     pointer-events: none;
     display: none;
@@ -116,7 +107,7 @@ h1 {
     position: static;
     display: inline-block;
     margin: 0 20px;
-    font-weight: bold;
+    font-weight: var(--font-weight-bold);
     transform: none;
 }
 
@@ -124,7 +115,7 @@ h1 {
     display: inline-block;
     width: 100px;
     height: 2px;
-    background-color: #333;
+    background-color: var(--ink);
     position: relative;
     margin: 0 10px;
 }
@@ -143,11 +134,11 @@ h1 {
 .double-arrow::before {
     left: -5px;
     border-width: 5px 5px 5px 0;
-    border-color: transparent #333 transparent transparent;
+    border-color: transparent var(--ink) transparent transparent;
 }
 
 .double-arrow::after {
     right: -5px;
     border-width: 5px 0 5px 5px;
-    border-color: transparent transparent transparent #333;
+    border-color: transparent transparent transparent var(--ink);
 }

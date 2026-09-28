@@ -1,4 +1,4 @@
-import '../css/main.css';
+import { alpha, colors, font, tip } from './ui.js';
 import '../css/bearing-capacity.css';
 
 // Prandtl's strip footing, read as a quarter turn of the tilt of the stress.
@@ -13,15 +13,16 @@ import '../css/bearing-capacity.css';
 // The weight of the soil in the mechanism (the N_gamma term) is left out.
 
 const COLORS = {
-    ink: '#212121',
-    muted: '#757575',
-    faint: '#bdbdbd',
-    grid: '#eeeeee',
-    active: '#ef6c00',
-    passive: '#6a1b9a',
-    fan: '#646ef6',
-    soil: '#e8d9c7',
-    footing: '#9e9e9e',
+    ink: colors.ink,
+    muted: colors.muted,
+    faint: colors.faint,
+    grid: colors.grid,
+    active: colors.stateActive,
+    // the passive zone: a purple kept apart from the active orange and the
+    // fan's blue; the palette has no third zone colour
+    passive: colors.statePassive,
+    fan: colors.primary,
+    footing: colors.structure,
 };
 
 const ids = ['phi', 'c', 'sv0', 'psi'];
@@ -74,7 +75,7 @@ function prepare(canvas) {
     const ctx = canvas.getContext('2d');
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, rect.width, rect.height);
-    ctx.font = "13px 'Inter', sans-serif";
+    ctx.font = font(13);
     ctx.lineJoin = 'round';
     ctx.lineCap = 'round';
     return { ctx, w: rect.width, h: rect.height };
@@ -154,9 +155,9 @@ function drawMechanism(st) {
             const rr = g.r(psi);
             spiral.push([1 + rr * Math.cos(g.start + psi), rr * Math.sin(g.start + psi)]);
         }
-        poly(ctx, [[0, 0], [1, 0], g.apex].map(m), 'rgba(239,108,0,0.22)', COLORS.ink);
-        poly(ctx, [[1, 0], ...spiral].map(m), 'rgba(100,110,246,0.12)', COLORS.ink);
-        poly(ctx, [[1, 0], g.D, g.E].map(m), 'rgba(106,27,154,0.14)', COLORS.ink);
+        poly(ctx, [[0, 0], [1, 0], g.apex].map(m), alpha(COLORS.active, 0.22), COLORS.ink);
+        poly(ctx, [[1, 0], ...spiral].map(m), alpha(COLORS.fan, 0.12), COLORS.ink);
+        poly(ctx, [[1, 0], g.D, g.E].map(m), alpha(COLORS.passive, 0.14), COLORS.ink);
 
         // the highlighted ray: how far the tilt has turned
         const psiA = st.fromActive;
@@ -243,7 +244,7 @@ function drawLadder(st) {
     const Y = (p) => top + ((Math.log(hi) - Math.log(Math.max(p, lo))) / (Math.log(hi) - Math.log(lo))) * (h - top - bottom);
 
     // grid
-    ctx.font = "12px 'Inter', sans-serif";
+    ctx.font = font(12);
     for (let e = Math.floor(Math.log10(lo)); e <= Math.ceil(Math.log10(hi)); e++) {
         for (const k of [1, 2, 5]) {
             const v = k * Math.pow(10, e);
@@ -265,9 +266,9 @@ function drawLadder(st) {
         ctx.fillRect(X(a), top, X(b) - X(a), h - top - bottom);
         label(ctx, name, (X(a) + X(b)) / 2, h - bottom + 14, COLORS.muted);
     };
-    zone(xs.active - 0.05, xs.fan0, 'rgba(239,108,0,0.08)', 'active zone');
-    zone(xs.fan0, xs.fan1, 'rgba(100,110,246,0.08)', 'the fan: a quarter turn');
-    zone(xs.fan1, xs.passive + 0.05, 'rgba(106,27,154,0.07)', 'passive zone');
+    zone(xs.active - 0.05, xs.fan0, alpha(COLORS.active, 0.08), 'active zone');
+    zone(xs.fan0, xs.fan1, alpha(COLORS.fan, 0.08), 'the fan: a quarter turn');
+    zone(xs.fan1, xs.passive + 0.05, alpha(COLORS.passive, 0.07), 'passive zone');
 
     // the path of p'
     ctx.strokeStyle = COLORS.fan;
@@ -303,7 +304,7 @@ function drawLadder(st) {
     if (st.sv0 > 0) point(xs.surcharge - 0.04, st.sv0, COLORS.passive, `σv0′ ${st.sv0.toFixed(0)}`, 'right', 14);
 
     // the ratio across each zone, written along the bottom of the zone
-    ctx.font = "12px 'Inter', sans-serif";
+    ctx.font = font(12);
     const yTag = h - bottom - 10;
     const tags = st.phi >= 0.25
         ? [['q_ult / p′ = 1 + sin φ′', COLORS.active], [`across the fan: × e^{π tan φ′} = ${st.turn.toFixed(2)}`, COLORS.fan],
@@ -336,19 +337,19 @@ function drawLadder(st) {
 function drawReadout(st) {
     const items = st.phi < 0.25
         ? [
-            ['N_c', `2 + π = ${st.Nc.toFixed(2)}`],
-            ['q_ult = N_c s_u + σv0', `${st.qult.toFixed(1)} kPa`],
-            ['the two ends', '2 s_u'],
-            ['the quarter turn', 'π s_u'],
+            ['N_c', `2 + π = ${st.Nc.toFixed(2)}`, 'The bearing capacity factor for cohesion. At φ′ = 0 it is 2 + π: 2 from the two ends and π from the quarter turn.'],
+            ['q_ult = N_c s_u + σv0', `${st.qult.toFixed(1)} kPa`, 'The ultimate bearing pressure under the footing, without the weight of the soil.'],
+            ['the two ends', '2 s_u', 'What the active and passive zones add together at φ′ = 0: s_u each.'],
+            ['the quarter turn', 'π s_u', 'What turning the stress through 90° across the fan adds at φ′ = 0: 2 s_u per radian.'],
         ]
         : [
-            ['K_p (the two ends)', st.Kp.toFixed(2)],
-            ['e^{π tan φ′} (the turn)', st.turn.toFixed(2)],
-            ['N_q = K_p e^{π tan φ′}', st.Nq.toFixed(2)],
-            ['N_c = (N_q − 1) cot φ′', st.Nc.toFixed(2)],
-            ['q_ult = N_q σv0′ + N_c c′', `${(st.Nq * st.sv0 + st.Nc * st.c).toFixed(1)} kPa`],
+            ['K_p (the two ends)', st.Kp.toFixed(2), 'The passive earth pressure coefficient, (1 + sin φ′)/(1 − sin φ′): the gain from the two ends, where the tilt is at the cap.'],
+            ['e^{π tan φ′} (the turn)', st.turn.toFixed(2), 'The gain in squeeze from turning the tilt through a quarter turn at the cap, across the fan.'],
+            ['N_q = K_p e^{π tan φ′}', st.Nq.toFixed(2), 'The bearing capacity factor for the surcharge: the two ends times the turn.'],
+            ['N_c = (N_q − 1) cot φ′', st.Nc.toFixed(2), 'The bearing capacity factor for cohesion, which acts as a built-in pressure c′ cot φ′.'],
+            ['q_ult = N_q σv0′ + N_c c′', `${(st.Nq * st.sv0 + st.Nc * st.c).toFixed(1)} kPa`, 'The ultimate bearing pressure under the footing, without the weight of the soil (the ½γB N_γ term).'],
         ];
-    readout.innerHTML = items.map(([k, v]) => `<div class="item"><span>${k}</span><strong>${v}</strong></div>`).join('');
+    readout.innerHTML = items.map(([k, v, t]) => `<div class="item"><span>${k}${tip(t)}</span><strong>${v}</strong></div>`).join('');
 }
 
 // ---------------------------------------------------------------- wiring
@@ -365,6 +366,11 @@ function update() {
 for (const id of ids) inputs[id].addEventListener('input', update);
 
 let playing = null;
+document.addEventListener('tool-reset', () => {
+    if (playing) cancelAnimationFrame(playing);
+    playing = null;
+    update();
+});
 document.getElementById('play').addEventListener('click', () => {
     if (playing) {
         cancelAnimationFrame(playing);

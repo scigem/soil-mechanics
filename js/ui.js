@@ -21,6 +21,8 @@ const FALLBACK = {
     ink: '#212121', muted: '#757575', faint: '#bdbdbd', grid: '#eeeeee',
     totalStress: '#212121', porePressure: '#29a3e3', effectiveStress: '#d95f02',
     friction: '#646ef6', dilate: '#ef6c00', contract: '#0b6ea8', structure: '#9e9e9e',
+    accent: '#ff9800', stateActive: '#ef6c00', stateRest: '#2e7d32', statePassive: '#6a1b9a',
+    plane: '#2e7d32', zoneDilate: '#e7a36a', zoneContract: '#9fb9d6', load: '#b71c1c',
     primary: '#646ef6',
     textPrimary: '#212121', textSecondary: '#757575', surfaceColor: '#ffffff',
     surfaceMuted: '#fafafa', borderColor: '#e0e0e0',

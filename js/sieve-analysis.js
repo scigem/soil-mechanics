@@ -1,4 +1,4 @@
-import '../css/main.css';
+import { colors, tip } from './ui.js';
 import '../css/sieve-analysis.css';
 import Plotly from 'plotly.js-dist';
 
@@ -14,12 +14,16 @@ const SIEVE_STACK = [
     { id: 'pan', label: 'Pan', subtitle: 'Passing 0.075 mm', aperture: null, defaultMass: 5 },
 ];
 
+const FONT_FAMILY = getComputedStyle(document.documentElement).getPropertyValue('--font-body').trim();
+
 const inputContainer = document.getElementById('sieveInputs');
 
 inputContainer.innerHTML = SIEVE_STACK.map((sieve) => `
     <label class="sieve-row" for="${sieve.id}">
         <span class="sieve-label">
-            <strong>${sieve.label}</strong>
+            <strong>${sieve.label}${tip(sieve.aperture === null
+        ? 'Mass, in grams, that passed every sieve and collected in the pan.'
+        : `Mass, in grams, retained on the ${sieve.label} sieve.`)}</strong>
             <span>${sieve.subtitle}</span>
         </span>
         <input class="mass-input" id="${sieve.id}" type="number" min="0" step="1" value="${sieve.defaultMass}">
@@ -119,12 +123,14 @@ function updatePlot(gradingPoints, totalMass) {
         y: gradingPoints.map((point) => point.percentPassing),
         mode: 'lines+markers',
         type: 'scatter',
-        line: { color: '#646ef6', width: 3 },
-        marker: { size: 10, color: '#646ef6' },
+        line: { color: colors.primary, width: 3 },
+        marker: { size: 10, color: colors.primary },
         hovertemplate: 'Size: %{x:.3f} mm<br>Passing: %{y:.1f}%<extra></extra>',
     }], {
-        title: 'Particle Size Distribution',
+        title: 'Grading curve',
+        font: { family: FONT_FAMILY, color: colors.textPrimary },
         xaxis: {
+            gridcolor: colors.grid,
             title: 'Particle size (mm)',
             type: 'log',
             range: [Math.log10(0.06), Math.log10(6)],
@@ -132,6 +138,7 @@ function updatePlot(gradingPoints, totalMass) {
             ticktext: ['0.075', '0.15', '0.30', '0.425', '0.60', '1.18', '2.00', '4.75'],
         },
         yaxis: {
+            gridcolor: colors.grid,
             title: 'Percent passing (%)',
             range: [0, 100],
         },
@@ -144,7 +151,7 @@ function updatePlot(gradingPoints, totalMass) {
             x: 0.5,
             y: 0.5,
             showarrow: false,
-            font: { size: 16, color: '#757575' },
+            font: { size: 16, color: colors.textSecondary },
         }],
     }, {
         responsive: true,
@@ -157,6 +164,13 @@ function update() {
     updateResults(totalMass, gradingPoints);
     updatePlot(gradingPoints, totalMass);
 }
+
+document.addEventListener('tool-reset', () => {
+    SIEVE_STACK.forEach((sieve) => {
+        document.getElementById(sieve.id).value = sieve.defaultMass;
+    });
+    update();
+});
 
 update();
 window.addEventListener('resize', update);

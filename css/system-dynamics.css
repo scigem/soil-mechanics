@@ -4,8 +4,7 @@
     max-width: 100vw;
     margin: 0 auto;
     padding: 20px;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-    background-color: var(--background-color);
+    background-color: var(--surface-muted);
     min-height: 100vh;
 }
 
@@ -20,18 +19,8 @@ header {
 }
 
 header h1 {
-    color: var(--text-primary);
-    margin-bottom: 10px;
-    font-weight: 600;
-    background: var(--primary-color);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-header p {
-    color: var(--text-secondary);
-    font-size: 16px;
+    color: var(--title-color);
+    font-weight: var(--font-weight-bold);
 }
 
 .main-layout {
@@ -56,7 +45,7 @@ header p {
     color: var(--text-primary);
     margin-bottom: 20px;
     font-size: 20px;
-    font-weight: 600;
+    font-weight: var(--font-weight-bold);
 }
 
 #input-section h3 {
@@ -64,7 +53,7 @@ header p {
     margin-top: 25px;
     margin-bottom: 15px;
     font-size: 16px;
-    font-weight: 600;
+    font-weight: var(--font-weight-bold);
     border-top: 1px solid var(--border-color);
     padding-top: 20px;
 }
@@ -77,84 +66,32 @@ header p {
     display: block;
     color: var(--text-secondary);
     font-size: 14px;
-    font-weight: 500;
+    font-weight: var(--font-weight-medium);
     margin-bottom: 8px;
 }
 
 .input-group input[type="number"],
 .input-group select {
     width: 100%;
-    padding: 10px 12px;
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
-    font-size: 14px;
-    font-family: 'Inter', sans-serif;
-    background-color: var(--surface-color);
-    color: var(--text-primary);
-    transition: var(--transition);
-}
-
-.input-group input[type="number"]:focus,
-.input-group select:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(100, 110, 246, 0.1);
-}
-
-.input-group input[type="number"]:hover,
-.input-group select:hover {
-    border-color: var(--primary-hover);
-}
-
-.button-group {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 20px;
-}
-
-.button-group button {
-    width: 100%;
-    padding: 12px 20px;
-    background: var(--primary-color);
-    color: white;
-    border: none;
-    border-radius: var(--border-radius);
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: var(--transition);
-    box-shadow: var(--shadow-sm);
-}
-
-.button-group button:hover {
-    background: var(--primary-hover);
-    box-shadow: var(--shadow-md);
-    transform: translateY(-1px);
-}
-
-.button-group button:active {
-    transform: translateY(0);
-    box-shadow: var(--shadow-sm);
 }
 
 #equation-display {
     margin-top: 25px;
     padding: 15px;
-    background-color: #f5f7ff;
+    background-color: var(--surface-muted);
     border-radius: var(--border-radius);
-    border: 1px solid #d0d5ff;
+    border: 1px solid var(--border-color);
 }
 
 #equation-display h4 {
     color: var(--text-primary);
     font-size: 14px;
-    font-weight: 600;
+    font-weight: var(--font-weight-bold);
     margin-bottom: 10px;
 }
 
 #equation-display .equation {
-    font-family: 'Courier New', monospace;
+    font-family: var(--font-body);
     font-size: 14px;
     color: var(--text-primary);
     line-height: 1.6;
@@ -177,52 +114,10 @@ header p {
     margin-bottom: 20px;
 }
 
-#info-panel {
-    padding: 20px;
-    background-color: #f5f7ff;
-    border-radius: var(--border-radius);
-    border: 1px solid #d0d5ff;
-}
-
-#info-panel h3 {
-    color: var(--text-primary);
-    font-size: 18px;
-    font-weight: 600;
-    margin-bottom: 10px;
-}
-
-#info-panel p {
-    color: var(--text-secondary);
-    font-size: 14px;
-    margin-bottom: 15px;
-    line-height: 1.6;
-}
-
-#info-panel ul {
-    list-style: none;
-    padding: 0;
-}
-
-#info-panel ul li {
-    color: var(--text-secondary);
-    font-size: 14px;
-    margin-bottom: 8px;
-    padding-left: 20px;
-    position: relative;
-}
-
-#info-panel ul li:before {
-    content: "•";
-    color: var(--primary-color);
-    font-weight: bold;
-    position: absolute;
-    left: 0;
-}
-
 #solution-display {
     margin-top: 15px;
     padding: 15px;
-    background-color: white;
+    background-color: var(--surface-muted);
     border-radius: var(--border-radius);
     border: 1px solid var(--border-color);
 }
@@ -230,12 +125,12 @@ header p {
 #solution-display h4 {
     color: var(--text-primary);
     font-size: 14px;
-    font-weight: 600;
+    font-weight: var(--font-weight-bold);
     margin-bottom: 10px;
 }
 
 #solution-display .solution {
-    font-family: 'Courier New', monospace;
+    font-family: var(--font-body);
     font-size: 13px;
     color: var(--text-primary);
     line-height: 1.6;

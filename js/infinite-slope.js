@@ -1,4 +1,4 @@
-import '../css/main.css';
+import { alpha, colors, font, tip } from './ui.js';
 import '../css/infinite-slope.css';
 
 // The infinite slope with seepage parallel to its surface.
@@ -12,17 +12,18 @@ import '../css/infinite-slope.css';
 
 const GW = 9.81;
 const COLORS = {
-    ink: '#212121',
-    muted: '#757575',
-    faint: '#bdbdbd',
-    grid: '#eeeeee',
-    soil: '#e8d9c7',
-    soilEdge: '#a8551f',
-    water: 'rgba(41,163,227,0.22)',
-    waterLine: '#0b6ea8',
-    dry: '#646ef6',
-    now: '#ef6c00',
-    wet: '#0b6ea8',
+    ink: colors.ink,
+    muted: colors.muted,
+    faint: colors.faint,
+    grid: colors.grid,
+    soil: alpha(colors.soilLight, 0.5),
+    soilEdge: colors.soil,
+    water: colors.waterLight,
+    waterLine: colors.waterDark,
+    dry: colors.primary,
+    now: colors.dilate,
+    wet: colors.waterDark,
+    fail: colors.failFg,
 };
 
 const ids = ['alpha', 'z', 'm', 'phi', 'c', 'gamma'];
@@ -66,7 +67,7 @@ function prepare(canvas) {
     const ctx = canvas.getContext('2d');
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, rect.width, rect.height);
-    ctx.font = "13px 'Inter', sans-serif";
+    ctx.font = font(13);
     ctx.lineJoin = 'round';
     ctx.lineCap = 'round';
     return { ctx, w: rect.width, h: rect.height };
@@ -173,7 +174,7 @@ function drawSlope(s, st) {
     const x0 = 4.2;
     const x1 = 5.4;
     poly(ctx, [[x0, surf(x0)], [x1, surf(x1)], [x1, surf(x1) - zBase], [x0, surf(x0) - zBase]]
-        .map(([x, y]) => [X(x), Y(y)]), 'rgba(168,85,31,0.25)', COLORS.soilEdge, 1.2);
+        .map(([x, y]) => [X(x), Y(y)]), alpha(colors.soil, 0.25), COLORS.soilEdge, 1.2);
     const xc = 0.5 * (x0 + x1);
     const yc = surf(xc) - 0.5 * zBase;
     arrow(ctx, X(xc), Y(yc), X(xc), Y(yc) + 0.28 * zBase * scale + 14, COLORS.ink, 2, 9);
@@ -283,7 +284,7 @@ function drawFS(s, st) {
     const f = st.fs;
     ctx.beginPath();
     ctx.arc(X(s.alpha), Y(f), 6, 0, 2 * Math.PI);
-    ctx.fillStyle = f >= 1 ? COLORS.now : '#c62828';
+    ctx.fillStyle = f >= 1 ? COLORS.now : COLORS.fail;
     ctx.fill();
     const aCrit = steepest(s, s.m);
     ctx.setLineDash([3, 3]);
@@ -302,25 +303,25 @@ function drawFS(s, st) {
 function drawReadout(s, st) {
     const dry = stresses(s, s.alpha, 0).fs;
     const items = [
-        ['σ on the slip plane', `${st.sigma.toFixed(1)} kPa`],
-        ['u, the water’s share', `${st.u.toFixed(1)} kPa`],
-        ['σ′ = σ − u', `${st.eff.toFixed(1)} kPa`],
-        ['τ, fixed by the weight', `${st.tau.toFixed(1)} kPa`],
-        ['FS now', st.fs.toFixed(2)],
-        ['FS dry', dry.toFixed(2)],
-        ['steepest safe slope now', `${steepest(s, s.m).toFixed(1)}°`],
-        ['steepest, dry', `${steepest(s, 0).toFixed(1)}°`],
+        ['σ on the slip plane', `${st.sigma.toFixed(1)} kPa`, 'The total normal stress on the slip plane from the weight of the soil above it, γz cos²α.'],
+        ['u, the water’s share', `${st.u.toFixed(1)} kPa`, 'The pore pressure on the slip plane, γw m z cos²α: the part of the squeeze carried by the water.'],
+        ['σ′ = σ − u', `${st.eff.toFixed(1)} kPa`, 'The effective normal stress: the part of the squeeze that presses the grains together.'],
+        ['τ, fixed by the weight', `${st.tau.toFixed(1)} kPa`, 'The shear stress the weight puts on the slip plane, γz sin α cos α. The water does not change it.'],
+        ['FS now', st.fs.toFixed(2), 'Factor of safety: the shear strength friction and cohesion can resist, c′ + σ′ tan φ′, over the shear stress τ. Below 1 the slope fails.'],
+        ['FS dry', dry.toFixed(2), 'The factor of safety of the same slope with no water, m = 0.'],
+        ['steepest safe slope now', `${steepest(s, s.m).toFixed(1)}°`, 'The largest slope angle with FS ≥ 1 at the current water table.'],
+        ['steepest, dry', `${steepest(s, 0).toFixed(1)}°`, 'The largest slope angle with FS ≥ 1 with no water.'],
     ];
     const status = st.fs >= 1
         ? `<div class="status safe">The slope stands. The grains are pressed together by ${st.eff.toFixed(1)} kPa, and friction can resist ${(st.eff * Math.tan(rad(s.phi)) + s.c).toFixed(1)} kPa of the ${st.tau.toFixed(1)} kPa the weight asks for.</div>`
         : `<div class="status beyond">The slope fails. The weight asks for ${st.tau.toFixed(1)} kPa of shear, but with the water carrying ${st.u.toFixed(1)} kPa of the squeeze, friction can only resist ${(st.eff * Math.tan(rad(s.phi)) + s.c).toFixed(1)} kPa.</div>`;
-    readout.innerHTML = status + items.map(([k, v]) => `<div class="item"><span>${k}</span><strong>${v}</strong></div>`).join('');
+    readout.innerHTML = status + items.map(([k, v, t]) => `<div class="item"><span>${k}${tip(t)}</span><strong>${v}</strong></div>`).join('');
 }
 
 // ---------------------------------------------------------------- wiring
 
 function update() {
-    const units = { alpha: '°', z: ' m', m: '', phi: '°', c: ' kPa', gamma: '' };
+    const units = { alpha: '°', z: ' m', m: '', phi: '°', c: ' kPa', gamma: ' kN/m³' };
     for (const id of ids) {
         const v = parseFloat(inputs[id].value);
         outputs[id].textContent = (id === 'm' ? v.toFixed(2) : `${v}`) + units[id];
@@ -335,6 +336,11 @@ function update() {
 for (const id of ids) inputs[id].addEventListener('input', update);
 
 let raining = null;
+document.addEventListener('tool-reset', () => {
+    if (raining) cancelAnimationFrame(raining);
+    raining = null;
+    update();
+});
 document.getElementById('rain').addEventListener('click', () => {
     if (raining) {
         cancelAnimationFrame(raining);

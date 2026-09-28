@@ -1,6 +1,10 @@
-import '../css/main.css';
+import { alpha, colors } from './ui.js';
 import '../css/compaction.css';
 import Plotly from 'plotly.js-dist';
+
+const FONT_FAMILY = getComputedStyle(document.documentElement).getPropertyValue('--font-body').trim()
+    || 'Inter, sans-serif';
+const PLOT_FONT = { family: FONT_FAMILY, color: colors.textPrimary };
 
 const rho_w = 1; // assuming water density is 1 for simplicity
 const G_s = 2.7; // typical value for specific gravity of soil solids
@@ -41,7 +45,7 @@ function update() {
     let m = m_s + m_w;
     let e = V_v / V_s;
     let S = V_w / V_v;
-    let A = V_a / V_v;
+    let A = V_a / V;
     let rho_d = m_s / V;
     let rho_b = (m_s + m_w) / V;
     let rho_sat = (G_s + e) * rho_w / (1 + e);
@@ -87,7 +91,7 @@ function update() {
             mode: 'lines',
             type: 'scatter',
             name: 'No Air Voids Line',
-            line: { dash: 'dash', color: 'red', width: 4 }
+            line: { dash: 'dash', color: colors.water, width: 4 }
         },
         {
             x: [m_c], // current moisture content
@@ -97,10 +101,13 @@ function update() {
             name: 'Current State',
             text: [`γ<sub>dry</sub> = ${gamma_d.toFixed(2)}`],
             hoverinfo: 'text',
-            marker: { size: 15, color: 'black' }
+            marker: { size: 15, color: colors.ink }
         },
     ], {
-        title: 'Dry Unit Weight vs. Moisture Content',
+        title: 'Compaction chart',
+        font: PLOT_FONT,
+        paper_bgcolor: colors.surfaceColor,
+        plot_bgcolor: colors.surfaceColor,
         xaxis: { title: 'Moisture Content, m<sub>c</sub> (-)', range: [0, max_mc], linewidth: 4 }, // xmin set to 0 with Unicode
         yaxis: { title: 'Dry Unit Weight, γ<sub>dry</sub> (kN/m³)', linewidth: 4, range: [0, gamma_d_max] },
         autosize: true,
@@ -109,7 +116,7 @@ function update() {
             x: 1,
             xanchor: 'right',
             y: 1,
-            bgcolor: 'rgba(255, 255, 255, 0.5)',
+            bgcolor: alpha(colors.surfaceColor, 0.5),
         }
     });
 
@@ -119,24 +126,27 @@ function update() {
         y: [V_s],
         name: 'Soil',
         type: 'bar',
-        marker: { color: 'brown' }
+        marker: { color: colors.soil }
     },
     {
         x: ['Volume Distribution'],
         y: [V_w],
         name: 'Water',
         type: 'bar',
-        marker: { color: 'blue' }
+        marker: { color: colors.water }
     },
     {
         x: ['Volume Distribution'],
         y: [V_a],
         name: 'Air',
         type: 'bar',
-        marker: { color: 'lightgrey' }
+        marker: { color: colors.air, line: { color: colors.faint, width: 1 } }
     }
     ], {
-        title: 'Volume Distribution (Soil, Water, Air)',
+        title: 'Volumes',
+        font: PLOT_FONT,
+        paper_bgcolor: colors.surfaceColor,
+        plot_bgcolor: colors.surfaceColor,
         barmode: 'stack',
         xaxis: { title: 'Components' },
         yaxis: { title: 'Volume (cm<sup>3</sup>)', range: [0, V] },
@@ -145,7 +155,7 @@ function update() {
             x: 1,
             xanchor: 'right',
             y: 1,
-            bgcolor: 'rgba(255, 255, 255, 0.5)',
+            bgcolor: alpha(colors.surfaceColor, 0.5),
         }
     });
 }

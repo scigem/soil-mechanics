@@ -1,6 +1,11 @@
-import '../css/main.css';
+import { alpha, colors } from './ui.js';
 import '../css/critical-state.css';
 import Plotly from 'plotly.js-dist';
+
+const FONT_FAMILY = getComputedStyle(document.documentElement).getPropertyValue('--font-body').trim()
+    || 'Inter, sans-serif';
+const CSL_COLOR = colors.friction;
+const NCL_COLOR = colors.ink;
 
 // Get HTML elements
 const MInput = document.getElementById('M');
@@ -11,7 +16,6 @@ const sigmaScaleSelect = document.getElementById('sigma-scale');
 const viewTauSigmaBtn = document.getElementById('view-tau-sigma');
 const viewESigmaBtn = document.getElementById('view-e-sigma');
 const view3DBtn = document.getElementById('view-3d');
-const resetButton = document.getElementById('reset-button');
 const plotContainer = document.getElementById('plot-container');
 
 // Default values
@@ -31,15 +35,10 @@ sigmaScaleSelect.addEventListener('change', updatePlot);
 viewTauSigmaBtn.addEventListener('click', () => setView('tau-sigma'));
 viewESigmaBtn.addEventListener('click', () => setView('e-sigma'));
 view3DBtn.addEventListener('click', () => setView('3d'));
-resetButton.addEventListener('click', resetValues);
+document.addEventListener('tool-reset', resetValues);
 
-// Function to reset to default values
+// Reset: the shared Reset button restores the inputs; this also returns to the 3D view
 function resetValues() {
-    MInput.value = 1.2;
-    GammaInput.value = 2.0;
-    lambdaInput.value = 0.15;
-    NInput.value = 2.5;
-    sigmaScaleSelect.value = 'linear';
     currentView = '3d';
     updatePlot();
 }
@@ -111,7 +110,7 @@ function create3DPlot(data) {
         mode: 'lines',
         name: 'Critical State Line',
         line: {
-            color: '#646ef6',
+            color: CSL_COLOR,
             width: 6
         }
     };
@@ -124,7 +123,7 @@ function create3DPlot(data) {
         mode: 'lines',
         name: 'Normal Compression Line',
         line: {
-            color: '#ff9800',
+            color: NCL_COLOR,
             width: 4,
             dash: 'dash'
         }
@@ -163,35 +162,36 @@ function create3DPlot(data) {
         type: 'surface',
         name: 'Critical State Surface',
         opacity: 0.3,
-        colorscale: 'Viridis',
+        colorscale: [[0, alpha(CSL_COLOR, 0.15)], [1, CSL_COLOR]],
         showscale: false
     };
 
     const layout = {
         title: {
-            text: 'Critical State Line in 3D Space',
-            font: { size: 18, color: '#212121' }
+            text: 'Critical state line',
+            font: { size: 18, color: colors.textPrimary }
         },
         scene: {
             xaxis: {
                 title: sigmaScale === 'log' ? 'σ (kPa) - Log Scale' : 'σ (kPa)',
                 type: sigmaScale === 'log' ? 'log' : 'linear',
-                color: '#212121'
+                color: colors.textPrimary
             },
             yaxis: {
                 title: 'τ (kPa)',
-                color: '#212121'
+                color: colors.textPrimary
             },
             zaxis: {
                 title: 'Void Ratio e',
-                color: '#212121'
+                color: colors.textPrimary
             },
             camera: {
                 eye: { x: 1.5, y: 1.5, z: 1.5 }
             }
         },
         margin: { l: 0, r: 0, b: 0, t: 40 },
-        font: { family: 'Inter, sans-serif' }
+        font: { family: FONT_FAMILY, color: colors.textPrimary },
+        paper_bgcolor: colors.surfaceColor
     };
 
     return {
@@ -209,29 +209,29 @@ function createTauSigmaPlot(data) {
         mode: 'lines',
         name: 'Critical State Line',
         line: {
-            color: '#646ef6',
+            color: CSL_COLOR,
             width: 3
         }
     };
 
     const layout = {
         title: {
-            text: 'Critical State Line - Stress Space (τ vs σ)',
-            font: { size: 18, color: '#212121' }
+            text: 'Stress space',
+            font: { size: 18, color: colors.textPrimary }
         },
         xaxis: {
             title: sigmaScale === 'log' ? 'σ (kPa) - Log Scale' : 'σ (kPa)',
             type: sigmaScale === 'log' ? 'log' : 'linear',
-            color: '#212121'
+            color: colors.textPrimary
         },
         yaxis: {
             title: 'τ (kPa)',
-            color: '#212121'
+            color: colors.textPrimary
         },
         margin: { l: 60, r: 40, b: 60, t: 60 },
-        font: { family: 'Inter, sans-serif' },
-        plot_bgcolor: '#fafafa',
-        paper_bgcolor: 'white'
+        font: { family: FONT_FAMILY, color: colors.textPrimary },
+        plot_bgcolor: colors.surfaceMuted,
+        paper_bgcolor: colors.surfaceColor
     };
 
     return {
@@ -249,7 +249,7 @@ function createESigmaPlot(data) {
         mode: 'lines',
         name: 'Critical State Line',
         line: {
-            color: '#646ef6',
+            color: CSL_COLOR,
             width: 3
         }
     };
@@ -261,7 +261,7 @@ function createESigmaPlot(data) {
         mode: 'lines',
         name: 'Normal Compression Line',
         line: {
-            color: '#ff9800',
+            color: NCL_COLOR,
             width: 3,
             dash: 'dash'
         }
@@ -269,22 +269,22 @@ function createESigmaPlot(data) {
 
     const layout = {
         title: {
-            text: 'Critical State Line - Void Ratio Space (e vs ln σ)',
-            font: { size: 18, color: '#212121' }
+            text: 'Void ratio space',
+            font: { size: 18, color: colors.textPrimary }
         },
         xaxis: {
             title: sigmaScale === 'log' ? 'σ (kPa) - Log Scale' : 'σ (kPa)',
             type: sigmaScale === 'log' ? 'log' : 'linear',
-            color: '#212121'
+            color: colors.textPrimary
         },
         yaxis: {
             title: 'Void Ratio e',
-            color: '#212121'
+            color: colors.textPrimary
         },
         margin: { l: 60, r: 40, b: 60, t: 60 },
-        font: { family: 'Inter, sans-serif' },
-        plot_bgcolor: '#fafafa',
-        paper_bgcolor: 'white'
+        font: { family: FONT_FAMILY, color: colors.textPrimary },
+        plot_bgcolor: colors.surfaceMuted,
+        paper_bgcolor: colors.surfaceColor
     };
 
     return {

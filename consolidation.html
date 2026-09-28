@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>1D Consolidation Explorer</title>
+    <title>1D Consolidation</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -13,9 +13,34 @@
 <body>
     <div class="container">
         <header>
-            <h1>1D Consolidation Explorer</h1>
-            <p>When a wide load goes on a saturated clay, the water takes it all. As the water drains away it hands the load over to the grains, and the ground settles as it does. See how fast that handover happens, and what drainage, drains and overconsolidation do to it.</p>
+            <h1>1D Consolidation</h1>
         </header>
+
+        <section id="about">
+            <p>When a wide load goes on a saturated clay, the water takes it all. As the water drains away it hands
+                the load over to the grains, and the ground settles as it does. See how fast that handover happens,
+                and what drainage, drains and overconsolidation do to it.</p>
+            <h3>What you are seeing</h3>
+            <ul>
+                <li><strong>Settlement with time.</strong> The settlement curve shows the handover in time (solid
+                    blue). The dashed grey line is the final settlement; the black dot and dotted line mark the
+                    profile time. With drains on, the dotted grey curve is the same layer without them.</li>
+                <li><strong>Load share.</strong> The handover through the layer at the profile time: at each depth
+                    the brown width is the grains' share of the added load, Δσ′, and the blue width is the water's,
+                    the excess pore pressure <em>u</em>. The grains take over first next to the drains.</li>
+            </ul>
+            <h3>The model</h3>
+            <p><strong>Drainage:</strong> Drained boundaries force <em>u</em> = 0. Undrained boundaries trap water
+                and slow dissipation.</p>
+            <p><strong>Drains</strong> shorten the drainage path to about half their spacing, so the time falls with
+                its square. The radial flow to a drain is approximated here by one-dimensional flow over that
+                distance, combined with vertical drainage by Carrillo's rule, 1 − <em>U</em> = (1 −
+                <em>U</em><sub>v</sub>)(1 − <em>U</em><sub>r</sub>): a scaling estimate, not a design
+                calculation.</p>
+            <p><strong>Reloading</strong> below the preconsolidation stress uses C<sub>r</sub> instead of
+                C<sub>c</sub>: m<sub>v</sub> is six times smaller and, with the same permeability, c<sub>v</sub> is
+                six times larger. The settlement is smaller and faster.</p>
+        </section>
 
         <div class="main-layout">
             <div class="column">
@@ -23,7 +48,7 @@
                     <h2>Soil and Loading</h2>
 
                     <div class="input-group">
-                        <label for="stress-increment">Stress increase Δσ (kPa):</label>
+                        <label for="stress-increment" data-tip="The added vertical stress from a wide load, applied at once. At first the pore water carries all of it.">Stress increase Δσ</label>
                         <div class="slider-container">
                             <input type="range" id="stress-increment" min="25" max="250" value="100" step="5">
                             <span class="slider-value" id="stressIncrementValue">100</span>
@@ -32,7 +57,7 @@
                     </div>
 
                     <div class="input-group">
-                        <label for="layer-thickness">Layer thickness H (m):</label>
+                        <label for="layer-thickness" data-tip="Thickness of the clay layer.">Layer thickness <em>H</em></label>
                         <div class="slider-container">
                             <input type="range" id="layer-thickness" min="2" max="12" value="6" step="0.5">
                             <span class="slider-value" id="layerThicknessValue">6.0</span>
@@ -41,7 +66,7 @@
                     </div>
 
                     <div class="input-group">
-                        <label for="cv">Coefficient of consolidation c<sub>v</sub> (m²/day):</label>
+                        <label for="cv" data-tip="Coefficient of consolidation: how fast the excess pore pressure dissipates. The time to reach a given degree of consolidation scales with Hdr²/cv.">Consolidation coefficient c<sub>v</sub></label>
                         <div class="slider-container">
                             <input type="range" id="cv" min="0.05" max="2" value="0.1" step="0.05">
                             <span class="slider-value" id="cvValue">0.10</span>
@@ -50,7 +75,7 @@
                     </div>
 
                     <div class="input-group">
-                        <label for="mv">Compressibility m<sub>v</sub> (m²/kN):</label>
+                        <label for="mv" data-tip="Coefficient of volume compressibility: vertical strain per unit increase in effective stress. The final settlement is mv Δσ H.">Compressibility m<sub>v</sub></label>
                         <div class="slider-container">
                             <input type="range" id="mv" min="0.0002" max="0.002" value="0.0004" step="0.0001">
                             <span class="slider-value" id="mvValue">0.0004</span>
@@ -61,29 +86,29 @@
                     <h2>Drainage</h2>
 
                     <div class="checkbox-grid">
-                        <label class="checkbox-item" for="drainage-top">
+                        <label class="checkbox-item" for="drainage-top" data-tip="A drained top boundary, such as a sand layer, holds u = 0. Untick it for an impermeable boundary.">
                             <input type="checkbox" id="drainage-top" checked>
                             <span>Top drained</span>
                         </label>
-                        <label class="checkbox-item" for="drainage-bottom">
+                        <label class="checkbox-item" for="drainage-bottom" data-tip="A drained bottom boundary holds u = 0. Untick it for an impermeable base.">
                             <input type="checkbox" id="drainage-bottom" checked>
                             <span>Bottom drained</span>
                         </label>
                     </div>
 
                     <div class="input-group">
-                        <label for="loading">Loading:</label>
+                        <label for="loading" data-tip="Past the preconsolidation stress the clay is normally consolidated and uses Cc. Below it, it is reloading on Cr = Cc/6: mv is six times smaller and cv six times larger.">Loading</label>
                         <select id="loading">
                             <option value="nc">Past σ′<sub>pc</sub>: normally consolidated</option>
                             <option value="oc">Below σ′<sub>pc</sub>: reloading, C<sub>c</sub>/C<sub>r</sub> = 6</option>
                         </select>
                     </div>
-                    <label class="checkbox-item" for="drains">
+                    <label class="checkbox-item" for="drains" data-tip="Vertical drains through the layer add sideways drainage over about half their spacing.">
                         <input type="checkbox" id="drains">
                         <span>Vertical drains</span>
                     </label>
                     <div class="input-group">
-                        <label for="drain-spacing">Drain spacing (m):</label>
+                        <label for="drain-spacing" data-tip="Distance between the vertical drains. Used only when the drains are on.">Drain spacing</label>
                         <div class="slider-container">
                             <input type="range" id="drain-spacing" min="0.5" max="5" value="2" step="0.1">
                             <span class="slider-value" id="drainSpacingValue">2.0</span>
@@ -93,7 +118,7 @@
                     <h2>Time View</h2>
 
                     <div class="input-group">
-                        <label for="t-max">Maximum time shown (days):</label>
+                        <label for="t-max" data-tip="The length of the time axis on the settlement plot.">Time shown</label>
                         <div class="slider-container">
                             <input type="range" id="t-max" min="30" max="365" value="365" step="5">
                             <span class="slider-value" id="tMaxValue">365</span>
@@ -102,7 +127,7 @@
                     </div>
 
                     <div class="input-group">
-                        <label for="profile-time">Profile time (days):</label>
+                        <label for="profile-time" data-tip="The time at which the load-share profile and the outputs are worked out, marked on the settlement plot.">Profile time</label>
                         <div class="slider-container">
                             <input type="range" id="profile-time" min="0" max="365" value="30" step="1">
                             <span class="slider-value" id="profileTimeValue">30</span>
@@ -110,42 +135,41 @@
                         </div>
                     </div>
 
-                    <button id="reset-button" type="button">Reset to Default</button>
                 </section>
 
                 <section id="results-section">
                     <h2>Important Outputs</h2>
                     <div class="results-grid">
                         <div class="result-item">
-                            <span class="label">Drainage condition</span>
+                            <span class="label" data-tip="Which boundaries drain, set by the two checkboxes.">Drainage condition</span>
                             <span id="drainageCondition">Double drainage</span>
                         </div>
                         <div class="result-item">
-                            <span class="label">Drainage path H<sub>dr</sub></span>
+                            <span class="label" data-tip="The longest distance the water travels to a drained boundary: H/2 with double drainage, H with single. The drains are not included.">Drainage path H<sub>dr</sub></span>
                             <span id="drainagePath">3.00 m</span>
                         </div>
                         <div class="result-item emphasis">
-                            <span class="label">Settlement at profile time</span>
+                            <span class="label" data-tip="The settlement reached at the profile time: the final settlement times the degree of consolidation.">Settlement at profile time</span>
                             <span id="currentSettlement">0.00 mm</span>
                         </div>
                         <div class="result-item">
-                            <span class="label">Degree of consolidation</span>
+                            <span class="label" data-tip="Average degree of consolidation U at the profile time: the fraction of the final settlement reached. With drains it combines vertical and sideways drainage.">Degree of consolidation</span>
                             <span id="currentDegree">0.0%</span>
                         </div>
                         <div class="result-item">
-                            <span class="label">Final settlement</span>
+                            <span class="label" data-tip="mv Δσ H: the settlement once all the excess pore pressure has gone. Shown as zero when nothing drains.">Final settlement</span>
                             <span id="finalSettlement">0.00 mm</span>
                         </div>
                         <div class="result-item">
-                            <span class="label">Mid-depth excess pore pressure</span>
+                            <span class="label" data-tip="The water's share u of the added load at mid-depth, at the profile time.">Mid-depth excess pore pressure</span>
                             <span id="midDepthPressure">0.0 kPa</span>
                         </div>
                         <div class="result-item">
-                            <span class="label">Time to 90%</span>
+                            <span class="label" data-tip="The time for the average degree of consolidation to reach 90%.">Time to 90%</span>
                             <span id="t90">—</span>
                         </div>
                         <div class="result-item">
-                            <span class="label">c<sub>v</sub> and m<sub>v</sub> in use</span>
+                            <span class="label" data-tip="The values used in the calculation: when reloading, cv is six times larger and mv six times smaller than the sliders.">c<sub>v</sub> and m<sub>v</sub> in use</span>
                             <span id="inUse">—</span>
                         </div>
                     </div>
@@ -157,12 +181,6 @@
                     <div class="graphs-container">
                         <div id="settlementPlot" class="graph"></div>
                         <div id="profilePlot" class="graph"></div>
-                    </div>
-                    <div class="info-panel">
-                        <p><strong>Interpretation:</strong> The settlement curve shows the handover in time. The profile shows it through the layer: at each depth the brown width is the grains' share of the added load and the blue width is the water's. The grains take over first next to the drains.</p>
-                        <p><strong>Drains</strong> shorten the drainage path to about half their spacing, so the time falls with its square. The radial flow to a drain is approximated here by one-dimensional flow over that distance, combined with vertical drainage by Carrillo's rule, 1 − U = (1 − U<sub>v</sub>)(1 − U<sub>r</sub>): a scaling estimate, not a design calculation.</p>
-                        <p><strong>Reloading</strong> below the preconsolidation stress uses C<sub>r</sub> instead of C<sub>c</sub>: m<sub>v</sub> is six times smaller and, with the same permeability, c<sub>v</sub> is six times larger. The settlement is smaller and faster.</p>
-                        <p><strong>Drainage:</strong> Drained boundaries force u = 0. Undrained boundaries trap water and slow dissipation.</p>
                     </div>
                 </section>
             </div>

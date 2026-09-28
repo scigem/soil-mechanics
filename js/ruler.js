@@ -1,4 +1,4 @@
-import '../css/main.css';
+import './ui.js';
 import '../css/ruler.css';
 
 // Define the number of divisions on each axis

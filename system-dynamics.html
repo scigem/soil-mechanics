@@ -12,13 +12,38 @@
 
 <body>
     <div class="container">
+        <header>
+            <h1>System Dynamics</h1>
+        </header>
+
+        <section id="about">
+            <p>A system dynamics model follows a stock <em>x</em> through time by its rate of change
+                d<em>x</em>/d<em>t</em>, the balance of what flows in and out, which depends on <em>x</em> itself.
+                This page solves a family of first-order models: exponential growth and decay; a constant input
+                <em>u</em> with decay, which settles at <em>u</em>/<em>r</em>; and logistic growth towards a
+                carrying capacity <em>k</em>, with and without a harvest. With a constant harvest <em>h</em>, the
+                normalised harvest <em>H</em> = 4<em>h</em>/(<em>rk</em>) compares it with the largest growth the
+                logistic model can supply, <em>rk</em>/4 at <em>x</em> = <em>k</em>/2. Below 1 there are two
+                equilibria; at 1 they merge at <em>k</em>/2; above 1 there are none and the stock collapses.</p>
+            <h3>What you are seeing</h3>
+            <ul>
+                <li><strong>The plot.</strong> The state <em>x</em>(<em>t</em>) in blue on the left axis, and its
+                    rate of change d<em>x</em>/d<em>t</em> in orange on the right axis, from <em>t</em> = 0 to
+                    <em>t</em><sub>max</sub>. Where a model's stock would go negative it is shown as zero.</li>
+                <li><strong>Differential equation.</strong> The model being solved.</li>
+                <li><strong>Analytical solution.</strong> Its closed-form solution, or a note on its equilibria.
+                    The two constant-harvest cases with <em>H</em> &le; 1 are integrated numerically (fourth-order
+                    Runge-Kutta); the others are plotted from the closed form.</li>
+            </ul>
+        </section>
+
         <div class="main-layout">
             <section id="input-section">
                 <div class="column">
-                    <h2>System Dynamics Models</h2>
+                    <h2>Model</h2>
 
                     <div class="input-group">
-                        <label for="model-select">Select Model:</label>
+                        <label for="model-select" data-tip="The model to solve. Each sets how the rate of change dx/dt depends on the state x.">Model</label>
                         <select id="model-select">
                             <option value="exp-growth">Exponential Growth</option>
                             <option value="exp-decay">Exponential Decay</option>
@@ -35,14 +60,10 @@
                         <!-- Parameters will be dynamically inserted here -->
                     </div>
 
-                    <h3>Time Controls</h3>
+                    <h3>Time</h3>
                     <div class="input-group">
-                        <label for="t-max">Maximum Time (t<sub>max</sub>):</label>
+                        <label for="t-max" data-tip="The time the plot runs to, in the same time units as the rates.">End time <em>t</em><sub>max</sub></label>
                         <input type="number" id="t-max" value="10" step="1" min="1" max="100">
-                    </div>
-
-                    <div class="button-group">
-                        <button id="reset-button">Reset Parameters</button>
                     </div>
 
                     <div id="equation-display">
@@ -53,17 +74,8 @@
 
             <section id="visualization-section">
                 <div id="plot-container"></div>
-                <div id="info-panel">
-                    <h3>System Dynamics</h3>
-                    <p>Explore various differential equation models and their solutions over time.</p>
-                    <ul>
-                        <li><strong>x(t):</strong> System state at time t</li>
-                        <li><strong>dx/dt:</strong> Rate of change of the system</li>
-                        <li><strong>Parameters:</strong> Control system behavior (growth rate, carrying capacity, etc.)</li>
-                    </ul>
-                    <div id="solution-display">
-                        <!-- Analytical solution will be displayed here -->
-                    </div>
+                <div id="solution-display">
+                    <!-- Analytical solution will be displayed here -->
                 </div>
             </section>
         </div>

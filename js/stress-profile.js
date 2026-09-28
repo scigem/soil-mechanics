@@ -1,4 +1,4 @@
-import '../css/main.css';
+import { alpha, colors } from './ui.js';
 import '../css/stress-profile.css';
 import Plotly from 'plotly.js-dist';
 
@@ -14,11 +14,12 @@ const DEFAULTS = {
     t3: 4, g3: 19, gs3: 21,
 };
 
-const LAYER_COLOURS = ['#b5651d', '#9c7a4e', '#836048'];
-const WATER_COLOUR = '#29a3e3';
-const COLOUR_SIGMA = '#212121';
-const COLOUR_U = '#29a3e3';
-const COLOUR_EFF = '#ff6f00';
+const LAYER_COLOURS = [colors.soilLayer1, colors.soilLayer2, colors.soilLayer3];
+const COLOUR_SIGMA = colors.totalStress;
+const COLOUR_U = colors.porePressure;
+const COLOUR_EFF = colors.effectiveStress;
+const FONT_FAMILY = getComputedStyle(document.documentElement).getPropertyValue('--font-body').trim()
+    || 'Inter, sans-serif';
 
 const plotConfig = { responsive: true, displayModeBar: false };
 
@@ -190,7 +191,7 @@ function buildShapes(state, profile, maxStress) {
         shapes.push({
             type: 'rect', xref: 'x', yref: 'y',
             x0: 0, x1: 1, y0: top, y1: top + layer.thickness,
-            fillcolor: layer.colour, line: { color: '#ffffff', width: 1 },
+            fillcolor: layer.colour, line: { color: colors.surfaceColor, width: 1 },
             layer: 'below',
         });
         top += layer.thickness;
@@ -202,14 +203,14 @@ function buildShapes(state, profile, maxStress) {
         shapes.push({
             type: 'rect', xref: 'x', yref: 'y',
             x0: 0, x1: 1, y0: saturatedTop, y1: state.totalDepth,
-            fillcolor: 'rgba(41, 163, 227, 0.24)', line: { width: 0 },
+            fillcolor: alpha(colors.water, 0.24), line: { width: 0 },
         });
     }
     if (profile.pond > 0) {
         shapes.push({
             type: 'rect', xref: 'x', yref: 'y',
             x0: 0, x1: 1, y0: -profile.pond, y1: 0,
-            fillcolor: 'rgba(41, 163, 227, 0.75)', line: { width: 0 },
+            fillcolor: alpha(colors.water, 0.75), line: { width: 0 },
         });
     }
     if (state.capillary > 0 && state.waterTable > 0) {
@@ -217,7 +218,7 @@ function buildShapes(state, profile, maxStress) {
             type: 'rect', xref: 'x', yref: 'y',
             x0: 0, x1: 1,
             y0: Math.max(0, state.waterTable - state.capillary), y1: state.waterTable,
-            fillcolor: 'rgba(41, 163, 227, 0.16)', line: { width: 0 },
+            fillcolor: alpha(colors.water, 0.16), line: { width: 0 },
         });
     }
 
@@ -228,7 +229,7 @@ function buildShapes(state, profile, maxStress) {
             xref, yref: index === 0 ? 'y' : 'y2',
             x0: index === 0 ? 0 : 0, x1: index === 0 ? 1 : maxStress,
             y0: state.waterTable, y1: state.waterTable,
-            line: { color: '#0b6ea8', width: 2.5, dash: 'dash' },
+            line: { color: colors.waterDark, width: 2.5, dash: 'dash' },
         });
     });
 
@@ -239,7 +240,7 @@ function buildShapes(state, profile, maxStress) {
             xref, yref: index === 0 ? 'y' : 'y2',
             x0: 0, x1: index === 0 ? 1 : maxStress,
             y0: state.probe, y1: state.probe,
-            line: { color: '#9e9e9e', width: 1.5, dash: 'dot' },
+            line: { color: colors.muted, width: 1.5, dash: 'dot' },
         });
     });
 
@@ -254,7 +255,7 @@ function buildAnnotations(state) {
             xref: 'x', yref: 'y', x: 0.5, y: top + layer.thickness / 2,
             text: `${layer.name}<br>γ<sub>bulk</sub> = ${layer.gamma.toFixed(1)} | γ<sub>sat</sub> = ${layer.gammaSat.toFixed(1)}`,
             showarrow: false,
-            font: { size: 11, color: '#ffffff' },
+            font: { size: 11, color: colors.surfaceColor },
             align: 'center',
         });
         top += layer.thickness;
@@ -263,7 +264,7 @@ function buildAnnotations(state) {
         xref: 'x', yref: 'y', x: 1, y: state.waterTable,
         xanchor: 'right', yanchor: 'bottom',
         text: '\u25bd WT', showarrow: false,
-        font: { size: 12, color: '#0b6ea8' },
+        font: { size: 12, color: colors.waterDark },
     });
     return annotations;
 }
@@ -291,7 +292,7 @@ function createPlot(state, profile) {
         traces.push({
             x: reference.sigmaEff, y: reference.depths,
             name: "σ' reference", type: 'scatter', mode: 'lines',
-            line: { color: '#bdbdbd', width: 2.5, dash: 'dash' },
+            line: { color: colors.faint, width: 2.5, dash: 'dash' },
             xaxis: 'x2', yaxis: 'y2',
             hoverinfo: 'skip',
         });
@@ -317,7 +318,7 @@ function createPlot(state, profile) {
         plot_bgcolor: 'rgba(0,0,0,0)',
         showlegend: true,
         legend: { orientation: 'h', x: 0.35, y: 1.08 },
-        font: { family: 'Inter, sans-serif', size: 12 },
+        font: { family: FONT_FAMILY, size: 12, color: colors.textPrimary },
         xaxis: {
             domain: [0, 0.24], range: [0, 1], anchor: 'y',
             showticklabels: false, showgrid: false, zeroline: false, fixedrange: true,
@@ -329,7 +330,7 @@ function createPlot(state, profile) {
         xaxis2: {
             domain: [0.36, 1], range: [Math.min(0, Math.min(...profile.u) * 1.2), maxStress],
             anchor: 'y2', title: { text: 'Stress (kPa)' },
-            zeroline: true, zerolinecolor: '#bdbdbd', fixedrange: true,
+            zeroline: true, zerolinecolor: colors.faint, fixedrange: true,
         },
         yaxis2: {
             domain: [0, 1], range: yRange, anchor: 'x2',
@@ -432,9 +433,13 @@ Object.values(inputs).forEach((input) => {
 });
 
 el('freeze-button').addEventListener('click', freezeReference);
-el('reset-button').addEventListener('click', () => {
-    reference = null;
+
+// The shared Reset puts the sliders back; restore the probe's range (a thinner
+// profile may have clamped it) and the starting reference, the default scenario.
+document.addEventListener('tool-reset', () => {
+    inputs.probe.max = String(DEFAULTS.t1 + DEFAULTS.t2 + DEFAULTS.t3);
     applyPreset({ ...DEFAULTS });
+    freezeReference();
 });
 
 window.addEventListener('resize', () => Plotly.Plots.resize(profilePlot));

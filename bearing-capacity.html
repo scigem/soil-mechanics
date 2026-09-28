@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bearing Capacity: a Quarter Turn</title>
+    <title>Bearing Capacity</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -13,25 +13,42 @@
 <body>
     <div class="container">
         <header>
-            <h1>Bearing Capacity: a Quarter Turn</h1>
-            <p class="subtitle">Under a strip footing the tilt of the stress points down; beside it, under the
-                surcharge, it lies flat. Between them it turns through a right angle, and turning a tilt that is at
-                the cap multiplies the squeeze by e<sup>2 tan φ′ Δβ</sup>. Slide the turn along the fan to follow
-                it.</p>
+            <h1>Bearing Capacity</h1>
         </header>
+
+        <section id="about">
+            <p>Under a strip footing the tilt of the stress points down; beside it, under the surcharge, it lies
+                flat. Between them it turns through a right angle, a quarter turn, and turning a tilt that is at the
+                cap multiplies the squeeze by e<sup>2 tan φ′ Δβ</sup>. Slide the turn along the fan to follow
+                it.</p>
+            <h3>What you are seeing</h3>
+            <ul>
+                <li><strong>The mechanism.</strong> Prandtl's mechanism, to scale: the active wedge under the
+                    footing (orange), the fan (blue) and the passive wedge under the surcharge (purple). Ticks show
+                    the direction of the tilt in each zone. The thick blue ray is the point you have reached round
+                    the fan, and the black tick on it is the tilt there.</li>
+                <li><strong>The squeeze along the way.</strong> The squeeze <em>p</em>′ on a log scale, read from
+                    the footing out to the surcharge, through the active zone, the fan and the passive zone. The
+                    ratio across each zone is written along its bottom. The black dot and dashed line mark where
+                    the slider is.</li>
+            </ul>
+            <h3>Assumptions</h3>
+            <p>The soil's own weight is left out, as in Prandtl's solution: it adds the
+                ½γB<em>N</em><sub>γ</sub> term, which has no closed form.</p>
+        </section>
 
         <div class="main-layout">
             <section id="input-section">
                 <h2>Soil</h2>
                 <div class="input-group">
-                    <label for="phi">Friction angle φ′ (°)</label>
+                    <label for="phi" data-tip="The effective friction angle of the soil. At φ′ = 0 the soil is undrained clay with strength s_u.">Friction angle φ′</label>
                     <div class="slider-container">
                         <input type="range" id="phi" min="0" max="45" step="0.5" value="30">
                         <span class="slider-value" id="phi-value"></span>
                     </div>
                 </div>
                 <div class="input-group">
-                    <label for="c">Cohesion <em>c′</em>, or <em>s</em><sub>u</sub> at φ′ = 0 (kPa)</label>
+                    <label for="c" data-tip="The effective cohesion c′, or the undrained shear strength s_u when φ′ = 0, in kPa.">Cohesion <em>c′</em></label>
                     <div class="slider-container">
                         <input type="range" id="c" min="0" max="80" step="1" value="0">
                         <span class="slider-value" id="c-value"></span>
@@ -40,7 +57,7 @@
 
                 <h2>Footing</h2>
                 <div class="input-group">
-                    <label for="sv0">Surcharge beside the footing σ<sub>v0</sub>′ (kPa)</label>
+                    <label for="sv0" data-tip="The vertical effective stress at footing level beside the footing, from the soil above it or a load on the ground.">Surcharge σ<sub>v0</sub>′</label>
                     <div class="slider-container">
                         <input type="range" id="sv0" min="0" max="100" step="1" value="18">
                         <span class="slider-value" id="sv0-value"></span>
@@ -49,27 +66,24 @@
 
                 <h2>Follow the turn</h2>
                 <div class="input-group">
-                    <label for="psi">How far round the fan, out from under the footing (°)</label>
+                    <label for="psi" data-tip="How far round the fan, out from under the footing: 0° is the edge of the active wedge, 90° the edge of the passive wedge.">Angle round the fan</label>
                     <div class="slider-container">
                         <input type="range" id="psi" min="0" max="90" step="1" value="45">
                         <span class="slider-value" id="psi-value"></span>
                     </div>
                 </div>
                 <button id="play">Play the turn</button>
-                <p class="note">The soil's own weight is left out, as in Prandtl's solution: it adds the ½γB<em>N</em><sub>γ</sub>
-                    term, which has no closed form.</p>
             </section>
 
             <section id="visualization-section">
                 <div class="panels">
                     <figure class="wide">
                         <canvas id="mech-canvas"></canvas>
-                        <figcaption>The mechanism, to scale. Ticks show the direction of the tilt.</figcaption>
+                        <figcaption>The mechanism</figcaption>
                     </figure>
                     <figure class="wide">
                         <canvas id="ladder-canvas"></canvas>
-                        <figcaption>The squeeze <em>p</em>′ along the way, from the footing out to the surcharge (log
-                            scale)</figcaption>
+                        <figcaption>The squeeze along the way</figcaption>
                     </figure>
                 </div>
                 <div id="readout"></div>

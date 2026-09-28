@@ -1,6 +1,9 @@
-import '../css/main.css';
+import { alpha, colors } from './ui.js';
 import '../css/consolidation.css';
 import Plotly from 'plotly.js-dist';
+
+const FONT_FAMILY = getComputedStyle(document.documentElement).getPropertyValue('--font-body').trim()
+    || 'Inter, sans-serif';
 
 const DEFAULTS = {
     stressIncrement: 100,
@@ -32,7 +35,6 @@ const loadingInput = document.getElementById('loading');
 const drainsInput = document.getElementById('drains');
 const drainSpacingInput = document.getElementById('drain-spacing');
 const REload = 6; // Cc / Cr
-const resetButton = document.getElementById('reset-button');
 
 const settlementPlot = document.getElementById('settlementPlot');
 const profilePlot = document.getElementById('profilePlot');
@@ -297,7 +299,7 @@ function updatePlots() {
             mode: 'lines',
             name: state.drains ? 'Settlement, with drains' : 'Settlement',
             line: {
-                color: '#646ef6',
+                color: colors.primary,
                 width: 3,
             },
         },
@@ -307,7 +309,7 @@ function updatePlots() {
             type: 'scatter',
             mode: 'lines',
             name: 'Without drains',
-            line: { color: '#9aa0b4', width: 2, dash: 'dot' },
+            line: { color: colors.structure, width: 2, dash: 'dot' },
         }] : []),
         {
             x: [state.profileTime],
@@ -316,7 +318,7 @@ function updatePlots() {
             mode: 'markers',
             name: 'Selected time',
             marker: {
-                color: '#ff9800',
+                color: colors.ink,
                 size: 10,
             },
         },
@@ -327,7 +329,7 @@ function updatePlots() {
             mode: 'lines',
             name: 'Final settlement',
             line: {
-                color: '#9aa0b4',
+                color: colors.structure,
                 width: 2,
                 dash: 'dash',
             },
@@ -352,9 +354,9 @@ function updatePlots() {
             x: 0,
             y: 1.15,
         },
-        font: { family: 'Inter, sans-serif' },
-        paper_bgcolor: 'white',
-        plot_bgcolor: '#fafafa',
+        font: { family: FONT_FAMILY, color: colors.textPrimary },
+        paper_bgcolor: colors.surfaceColor,
+        plot_bgcolor: colors.surfaceMuted,
         shapes: [
             {
                 type: 'line',
@@ -363,7 +365,7 @@ function updatePlots() {
                 y0: 0,
                 y1: finalSettlement,
                 line: {
-                    color: 'rgba(255, 152, 0, 0.35)',
+                    color: alpha(colors.ink, 0.35),
                     width: 2,
                     dash: 'dot',
                 },
@@ -378,9 +380,9 @@ function updatePlots() {
             type: 'scatter',
             mode: 'lines',
             name: "Grains' share, Δσ′",
-            line: { color: '#6b3512', width: 2.5 },
+            line: { color: colors.soilEdge, width: 2.5 },
             fill: 'tozerox',
-            fillcolor: 'rgba(168, 85, 31, 0.45)',
+            fillcolor: alpha(colors.soil, 0.45),
         },
         {
             x: depths.map(() => state.stressIncrement),
@@ -388,15 +390,15 @@ function updatePlots() {
             type: 'scatter',
             mode: 'lines',
             name: "Water's share, u",
-            line: { color: '#0b6ea8', width: 1.5 },
+            line: { color: colors.waterDark, width: 1.5 },
             fill: 'tonextx',
-            fillcolor: 'rgba(41, 163, 227, 0.3)',
+            fillcolor: alpha(colors.water, 0.3),
         },
     ];
 
     const profileLayout = {
         title: {
-            text: `Who carries the load at t = ${state.profileTime.toFixed(0)} days`,
+            text: `Load share at t = ${state.profileTime.toFixed(0)} days`,
             font: { size: 16 },
         },
         xaxis: {
@@ -413,9 +415,9 @@ function updatePlots() {
             x: 0,
             y: 1.15,
         },
-        font: { family: 'Inter, sans-serif' },
-        paper_bgcolor: 'white',
-        plot_bgcolor: '#fafafa',
+        font: { family: FONT_FAMILY, color: colors.textPrimary },
+        paper_bgcolor: colors.surfaceColor,
+        plot_bgcolor: colors.surfaceMuted,
     };
 
     const plotConfig = {
@@ -459,7 +461,8 @@ function resetToDefaults() {
     input.addEventListener('change', updatePlots);
 });
 
-resetButton.addEventListener('click', resetToDefaults);
+// the shared Reset button fires tool-reset: set the defaults again and redraw
+document.addEventListener('tool-reset', resetToDefaults);
 
 window.addEventListener('resize', () => {
     Plotly.Plots.resize(settlementPlot);

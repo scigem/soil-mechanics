@@ -100,6 +100,14 @@
     --dilate: #ef6c00;
     --contract: #0b6ea8;
     --structure: #9e9e9e;
+    --accent: #ff9800;                  /* a second highlight, e.g. a rate or a fan */
+    --state-active: #ef6c00;            /* the earth pressure dial and the cap */
+    --state-rest: #2e7d32;
+    --state-passive: #6a1b9a;
+    --plane: #2e7d32;                   /* slip planes */
+    --zone-dilate: #e7a36a;             /* a shear zone that is expanding */
+    --zone-contract: #9fb9d6;           /* ... and one that is compacting */
+    --load: #b71c1c;                    /* applied loads drawn as arrows */
     --safe-bg: #e8f5e9;
     --safe-fg: #1b5e20;
     --warn-bg: #fff3e0;

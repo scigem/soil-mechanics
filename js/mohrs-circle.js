@@ -1,4 +1,4 @@
-import '../css/main.css';
+import { alpha, colors, font, tip } from './ui.js';
 import '../css/mohrs-circle.css';
 
 // A stress in a long (two-dimensional) body has a size p' and a tilt. The tilt
@@ -11,16 +11,19 @@ import '../css/mohrs-circle.css';
 // Compression is positive throughout.
 
 const COLORS = {
-    ink: '#212121',
-    muted: '#757575',
-    faint: '#bdbdbd',
-    grid: '#eeeeee',
-    circle: '#646ef6',
-    cap: '#ef6c00',
-    beyond: '#c62828',
-    allowed: 'rgba(100, 110, 246, 0.08)',
-    plane: '#2e7d32',
-    water: '#0b6ea8',
+    ink: colors.ink,
+    muted: colors.muted,
+    faint: colors.faint,
+    grid: colors.grid,
+    circle: colors.friction,
+    cap: colors.stateActive,
+    beyond: colors.failFg,
+    allowed: alpha(colors.friction, 0.08),
+    // the chosen plane: a green kept apart from the circle, the cap and the
+    // failure colours; the palette has no neutral green
+    plane: colors.plane,
+    element: alpha(colors.soilLight, 0.13),
+    halo: colors.surfaceColor,
 };
 
 const ids = ['p', 'tilt', 'beta', 'phi', 'cohesion', 'theta'];
@@ -77,7 +80,7 @@ function prepare(canvas) {
     const ctx = canvas.getContext('2d');
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, rect.width, rect.height);
-    ctx.font = "13px 'Inter', sans-serif";
+    ctx.font = font(13);
     ctx.lineJoin = 'round';
     ctx.lineCap = 'round';
     return { ctx, w: rect.width, h: rect.height };
@@ -96,7 +99,7 @@ function niceStep(range, target) {
     return 10 * m;
 }
 
-function dot(ctx, x, y, r, fill, stroke = '#ffffff') {
+function dot(ctx, x, y, r, fill, stroke = COLORS.halo) {
     ctx.beginPath();
     ctx.arc(x, y, r, 0, 2 * Math.PI);
     ctx.fillStyle = fill;
@@ -357,7 +360,7 @@ function drawElement(ctx, st, x, y, size, state) {
     const cx = x + m;
     const cy = y + m;
     const half = 0.28 * size;
-    ctx.fillStyle = '#fbf5ef';
+    ctx.fillStyle = COLORS.element;
     ctx.strokeStyle = COLORS.faint;
     ctx.lineWidth = 1;
     ctx.fillRect(cx - half, cy - half, 2 * half, 2 * half);
@@ -404,22 +407,22 @@ function drawReadout(st, state) {
         beyond: `Beyond the cap. No soil with φ′ = ${fmt(st.phi)}° can carry this stress: it would already have slid.`,
     };
     const items = [
-        ["σ₁′", fmt(st.sigma1)],
-        ["σ₃′", fmt(st.sigma3)],
-        ["σᵥ′ (H)", fmt(st.sigmaV)],
-        ["σₕ′ (V)", fmt(st.sigmaH)],
-        ['τ on H', fmt(st.tau)],
-        ["K = σₕ′/σᵥ′", fmt(K, 3)],
-        ["q/p′", fmt(st.tilt, 3)],
-        ['cap on q/p′', fmt(st.capTilt, 3)],
-        ["φ′ mobilised", Number.isFinite(phiMob) ? `${fmt(phiMob)}°` : '—'],
-        ['FS = cap / tilt', fmt(fs, 2)],
-        ["σₙ′ on θ plane", fmt(st.planeSigma)],
-        ['τ on θ plane', fmt(st.planeTau)],
+        ["σ₁′", fmt(st.sigma1), 'The major principal effective stress, p′ + q, in kPa.'],
+        ["σ₃′", fmt(st.sigma3), 'The minor principal effective stress, p′ − q, in kPa.'],
+        ["σᵥ′ (H)", fmt(st.sigmaV), 'The effective normal stress on a horizontal plane (point H), p′(1 + C), in kPa.'],
+        ["σₕ′ (V)", fmt(st.sigmaH), 'The effective normal stress on a vertical plane (point V), p′(1 − C), in kPa.'],
+        ['τ on H', fmt(st.tau), 'The shear stress on a horizontal plane, p′S, in kPa.'],
+        ["K = σₕ′/σᵥ′", fmt(K, 3), 'The earth pressure coefficient: horizontal over vertical effective stress.'],
+        ["q/p′", fmt(st.tilt, 3), 'The size of the tilt: the radius of the circle over its centre.'],
+        ['cap on q/p′', fmt(st.capTilt, 3), 'The largest tilt friction allows: sin φ′, raised by cohesion to sin φ′ (p′ + c′ cot φ′)/p′.'],
+        ["φ′ mobilised", Number.isFinite(phiMob) ? `${fmt(phiMob)}°` : '—', 'The friction angle the soil is using to carry this stress. It reaches φ′ at the cap.'],
+        ['FS = cap / tilt', fmt(fs, 2), 'How far the tilt is from the cap: the cap on q/p′ over the tilt. At the cap it is 1.'],
+        ["σₙ′ on θ plane", fmt(st.planeSigma), 'The effective normal stress on the plane inclined at θ, in kPa.'],
+        ['τ on θ plane', fmt(st.planeTau), 'The shear stress on the plane inclined at θ, in kPa.'],
     ];
     readout.innerHTML =
         `<div class="status ${state}">${messages[state]}</div>` +
-        items.map(([k, v]) => `<div class="item"><span>${k}</span><strong>${v}</strong></div>`).join('');
+        items.map(([k, v, t]) => `<div class="item"><span>${k}${tip(t)}</span><strong>${v}</strong></div>`).join('');
     if (state === 'cap') {
         const a = 45 + st.phi / 2;
         readout.querySelector('.status').innerHTML +=

@@ -1,4 +1,4 @@
-import '../css/main.css';
+import { alpha, colors, tip } from './ui.js';
 import '../css/system-dynamics.css';
 import Plotly from 'plotly.js-dist';
 
@@ -6,10 +6,26 @@ import Plotly from 'plotly.js-dist';
 const modelSelect = document.getElementById('model-select');
 const parametersContainer = document.getElementById('parameters-container');
 const tMaxInput = document.getElementById('t-max');
-const resetButton = document.getElementById('reset-button');
 const plotContainer = document.getElementById('plot-container');
 const equationDisplay = document.getElementById('equation-display');
 const solutionDisplay = document.getElementById('solution-display');
+
+// Theme values Plotly needs that the palette does not carry: the body
+// typeface, and the accent colour used for the rate of change.
+const rootStyle = getComputedStyle(document.documentElement);
+const FONT_FAMILY = rootStyle.getPropertyValue('--font-body').trim();
+const RATE_COLOR = colors.accent;
+
+// A plain explanation for each parameter, keyed by its label.
+const PARAM_TIPS = {
+    'Growth rate (r)': 'The rate constant r, per unit time: the fractional growth of x per unit time while x is small.',
+    'Decay rate (r)': 'The rate constant r, per unit time: the fraction of x lost per unit time.',
+    'Initial value (x₀)': 'The state x at t = 0.',
+    'Input rate (u)': 'The constant inflow u, in units of x per unit time.',
+    'Carrying capacity (k)': 'The largest stock the logistic model can sustain: growth stops when x reaches k.',
+    'Harvest rate (r_h)': 'The fraction of the stock harvested per unit time. The stock persists only while r_h < r.',
+    'Normalized harvest (H)': 'H = 4h/(rk): the constant harvest h over the largest growth the logistic model can supply, rk/4.',
+};
 
 // Model definitions
 const models = {
@@ -203,6 +219,7 @@ function updateParametersUI() {
 
         const label = document.createElement('label');
         label.textContent = param.label;
+        if (PARAM_TIPS[param.label]) label.insertAdjacentHTML('beforeend', tip(PARAM_TIPS[param.label]));
         label.setAttribute('for', paramKey);
 
         const input = document.createElement('input');
@@ -229,12 +246,12 @@ function updateEquationDisplay() {
     const model = models[currentModel];
 
     equationDisplay.innerHTML = `
-        <h4>Differential Equation</h4>
+        <h4>Differential equation${tip('How the rate of change dx/dt depends on the state x in this model.')}</h4>
         <div class="equation">${model.equation}</div>
     `;
 
     solutionDisplay.innerHTML = `
-        <h4>Analytical Solution</h4>
+        <h4>Analytical solution${tip('The closed-form x(t) that solves the equation from x₀ at t = 0, or a note on its equilibria where the plot is integrated numerically.')}</h4>
         <div class="solution">${model.solution}</div>
     `;
 }
@@ -274,7 +291,7 @@ function updatePlot() {
         mode: 'lines',
         name: 'x(t)',
         line: {
-            color: '#646ef6',
+            color: colors.primary,
             width: 3
         },
         yaxis: 'y'
@@ -287,7 +304,7 @@ function updatePlot() {
         mode: 'lines',
         name: 'dx/dt',
         line: {
-            color: '#ff9800',
+            color: RATE_COLOR,
             width: 3
         },
         yaxis: 'y2'
@@ -295,34 +312,36 @@ function updatePlot() {
 
     const layout = {
         title: {
-            text: models[currentModel].name,
-            font: { size: 18, color: '#212121' }
+            text: modelSelect.selectedOptions[0].textContent,
+            font: { size: 18, color: colors.textPrimary }
         },
         xaxis: {
             title: 'Time (t)',
-            color: '#212121'
+            color: colors.textPrimary,
+            gridcolor: colors.grid
         },
         yaxis: {
             title: 'x(t)',
-            color: '#646ef6',
+            color: colors.primary,
+            gridcolor: colors.grid,
             side: 'left'
         },
         yaxis2: {
             title: 'dx/dt',
-            color: '#ff9800',
+            color: RATE_COLOR,
             overlaying: 'y',
             side: 'right'
         },
         margin: { l: 60, r: 60, b: 60, t: 60 },
-        font: { family: 'Inter, sans-serif' },
-        plot_bgcolor: '#fafafa',
-        paper_bgcolor: 'white',
+        font: { family: FONT_FAMILY },
+        plot_bgcolor: colors.surfaceMuted,
+        paper_bgcolor: colors.surfaceColor,
         showlegend: true,
         legend: {
             x: 0.02,
             y: 0.98,
-            bgcolor: 'rgba(255, 255, 255, 0.8)',
-            bordercolor: '#e0e0e0',
+            bgcolor: alpha(colors.surfaceColor, 0.8),
+            bordercolor: colors.borderColor,
             borderwidth: 1
         }
     };
@@ -345,12 +364,6 @@ modelSelect.addEventListener('change', () => {
 });
 
 tMaxInput.addEventListener('input', updatePlot);
-
-resetButton.addEventListener('click', () => {
-    updateParametersUI();
-    tMaxInput.value = 10;
-    updatePlot();
-});
 
 // Handle window resize
 window.addEventListener('resize', () => {

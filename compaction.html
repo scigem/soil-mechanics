@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Compaction Simulator</title>
+    <title>Phase Relations</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -13,9 +13,27 @@
 <body>
     <div class="container">
         <header>
-            <h1>Compaction Simulator</h1>
-            <!-- <p>Explore how compaction changes material index properties</p> -->
+            <h1>Phase Relations</h1>
         </header>
+
+        <section id="about">
+            <p>A soil is a skeleton of solid grains with water and air in the voids between them. Set the volume of
+                each and the page works out the phase relations: the masses, the moisture content, the void ratio,
+                porosity and saturation, and the densities and unit weights, taking ρ<sub>w</sub> = 1 g/cm³ and
+                G<sub>s</sub> = 2.7. The dry unit weight and moisture content then place the soil on a compaction
+                chart, where no soil can lie above the zero air voids line.</p>
+            <h3>What you are seeing</h3>
+            <ul>
+                <li><strong>The volume column.</strong> The volumes of solid (brown), water (blue) and air (white),
+                    stacked to scale; its height is the total volume <em>V</em>.</li>
+                <li><strong>The compaction chart.</strong> Dry unit weight against moisture content. The dashed blue
+                    line is the zero air voids line, γ<sub>dry</sub> = <em>g</em>ρ<sub>w</sub><em>G</em><sub>s</sub>/(1 +
+                    <em>m</em><sub>c</sub><em>G</em><sub>s</sub>): the voids are full of water, <em>S</em> = 1. The
+                    black dot is the current soil; remove the air and it moves onto the line.</li>
+                <li><strong>Derived quantities.</strong> Every phase relation for the current volumes; the ? by each
+                    gives its definition.</li>
+            </ul>
+        </section>
 
         <div class="main-layout">
             <!-- Parameters Column -->
@@ -24,7 +42,7 @@
                     <h2>Parameters</h2>
 
                     <div class="input-group">
-                        <label for="Vs">V<sub>s</sub> (Volume of Solids):</label>
+                        <label for="Vs" data-tip="Volume of the solid grains. Their mass is Gs ρw Vs.">Solids V<sub>s</sub></label>
                         <div class="slider-container">
                             <input type="range" id="Vs" name="Vs" min="0" max="100" value="50">
                             <span class="slider-value" id="VsValue">50</span>
@@ -33,7 +51,7 @@
                     </div>
 
                     <div class="input-group">
-                        <label for="Vw">V<sub>w</sub> (Volume of Water):</label>
+                        <label for="Vw" data-tip="Volume of water in the voids. Its mass is ρw Vw.">Water V<sub>w</sub></label>
                         <div class="slider-container">
                             <input type="range" id="Vw" name="Vw" min="0" max="100" value="50">
                             <span class="slider-value" id="VwValue">50</span>
@@ -42,7 +60,7 @@
                     </div>
 
                     <div class="input-group">
-                        <label for="Va">V<sub>a</sub> (Volume of Air):</label>
+                        <label for="Va" data-tip="Volume of air in the voids. Air has no mass, so it adds volume but no weight.">Air V<sub>a</sub></label>
                         <div class="slider-container">
                             <input type="range" id="Va" name="Va" min="0" max="100" value="50">
                             <span class="slider-value" id="VaValue">50</span>
@@ -50,10 +68,9 @@
                         </div>
                     </div>
 
-                    <!-- <div class="material-properties"> -->
                     <h3>Material Properties</h3>
-                    <p>ρ<sub>w</sub> = 1 g/cm³, G<sub>s</sub> = 2.7</p>
-                    <!-- </div> -->
+                    <p><span data-tip="Density of water, taken as 1 g/cm³.">ρ<sub>w</sub> = 1 g/cm³</span>,
+                        <span data-tip="Specific gravity of the solids: the density of the grains over that of water. 2.7 is typical of many soils.">G<sub>s</sub> = 2.7</span></p>
                 </section>
 
                 <section id="results-section">
@@ -61,71 +78,71 @@
                         <h3>Derived Quantities</h3>
                         <div class="results-grid" id="valuesContainer">
                             <div class="result-item">
-                                <span class="label">V:</span>
+                                <span class="label" data-tip="Total volume, V = Vs + Vw + Va.">V</span>
                                 <span id="VValue"></span> cm³
                             </div>
                             <div class="result-item">
-                                <span class="label">V<sub>v</sub>:</span>
+                                <span class="label" data-tip="Volume of voids, Vv = Vw + Va.">V<sub>v</sub></span>
                                 <span id="VvValue"></span> cm³
                             </div>
                             <div class="result-item">
-                                <span class="label">m<sub>w</sub>:</span>
+                                <span class="label" data-tip="Mass of water, mw = ρw Vw.">m<sub>w</sub></span>
                                 <span id="mwValue"></span> g
                             </div>
                             <div class="result-item">
-                                <span class="label">m<sub>s</sub>:</span>
+                                <span class="label" data-tip="Mass of solids, ms = Gs ρw Vs.">m<sub>s</sub></span>
                                 <span id="msValue"></span> g
                             </div>
                             <div class="result-item">
-                                <span class="label">m:</span>
+                                <span class="label" data-tip="Total mass, m = ms + mw. The air has no mass.">m</span>
                                 <span id="mValue"></span> g
                             </div>
                             <div class="result-item">
-                                <span class="label">mc:</span>
+                                <span class="label" data-tip="Moisture content, mc = mw/ms, as a decimal.">mc</span>
                                 <span id="mcValue"></span>
                             </div>
                             <div class="result-item">
-                                <span class="label">e:</span>
+                                <span class="label" data-tip="Void ratio, e = Vv/Vs.">e</span>
                                 <span id="eValue"></span>
                             </div>
                             <div class="result-item">
-                                <span class="label">ν:</span>
+                                <span class="label" data-tip="Volume fraction of solids, ν = Vs/V = 1 − n.">ν</span>
                                 <span id="nuValue"></span>
                             </div>
                             <div class="result-item">
-                                <span class="label">n:</span>
+                                <span class="label" data-tip="Porosity, n = Vv/V.">n</span>
                                 <span id="nValue"></span>
                             </div>
                             <div class="result-item">
-                                <span class="label">S:</span>
+                                <span class="label" data-tip="Degree of saturation, S = Vw/Vv: the fraction of the voids filled with water.">S</span>
                                 <span id="SValue"></span>
                             </div>
                             <div class="result-item">
-                                <span class="label">A:</span>
+                                <span class="label" data-tip="Air content: the volume of air as a fraction of the whole volume, A = Va/V. It sets the air-voids lines on the compaction chart.">A</span>
                                 <span id="AValue"></span>
                             </div>
                             <div class="result-item">
-                                <span class="label">ρ<sub>dry</sub>:</span>
+                                <span class="label" data-tip="Dry density, ρdry = ms/V.">ρ<sub>dry</sub></span>
                                 <span id="rhodValue"></span> g/cm³
                             </div>
                             <div class="result-item">
-                                <span class="label">ρ<sub>bulk</sub>:</span>
+                                <span class="label" data-tip="Bulk density, ρbulk = (ms + mw)/V.">ρ<sub>bulk</sub></span>
                                 <span id="rhobValue"></span> g/cm³
                             </div>
                             <div class="result-item">
-                                <span class="label">ρ<sub>sat</sub>:</span>
+                                <span class="label" data-tip="Saturated density: the density if the voids were full of water, ρsat = (Gs + e)ρw/(1 + e).">ρ<sub>sat</sub></span>
                                 <span id="rhosatValue"></span> g/cm³
                             </div>
                             <div class="result-item">
-                                <span class="label">γ<sub>dry</sub>:</span>
+                                <span class="label" data-tip="Dry unit weight, γdry = ρdry g, with g = 9.81 m/s².">γ<sub>dry</sub></span>
                                 <span id="gammadValue"></span> kN/m³
                             </div>
                             <div class="result-item">
-                                <span class="label">γ<sub>bulk</sub>:</span>
+                                <span class="label" data-tip="Bulk unit weight, γbulk = ρbulk g.">γ<sub>bulk</sub></span>
                                 <span id="gammabValue"></span> kN/m³
                             </div>
                             <div class="result-item">
-                                <span class="label">γ<sub>sat</sub>:</span>
+                                <span class="label" data-tip="Saturated unit weight, γsat = ρsat g.">γ<sub>sat</sub></span>
                                 <span id="gammasatValue"></span> kN/m³
                             </div>
                         </div>
@@ -136,7 +153,6 @@
             <!-- Visualization Column -->
             <div class="column">
                 <section id="visualization-section">
-                    <!-- <h2>Compaction Visualization</h2> -->
                     <div class="graphs-container">
                         <div id="ternaryGraph" class="graph"></div>
                         <div id="dryWeightGraph" class="graph"></div>

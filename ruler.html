@@ -4,31 +4,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
-    </style>
-    <title>Rulers</title>
+    <title>Void Ratio Ruler</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
-    <h1>Solid fraction, Porosity, and Void ratio</h1>
+    <header>
+        <h1>Void Ratio Ruler</h1>
+    </header>
+
+    <section id="about">
+        <p>Three equivalent ways to say how densely the grains are packed. The solid fraction &nu; is the volume
+            of solids over the total volume. The porosity <em>n</em> = 1 &minus; &nu; is the volume of voids over
+            the total volume. The void ratio <em>e</em> = <em>n</em>/(1 &minus; <em>n</em>) = 1/&nu; &minus; 1 is
+            the volume of voids over the volume of solids. The rulers are lined up so that one vertical line reads
+            all three for the same packing.</p>
+        <h3>What you are seeing</h3>
+        <ul>
+            <li><strong>The rulers.</strong> Solid fraction from 0 to 1, left to right; porosity the same scale
+                reversed; and the void ratio at the same tick positions, so its spacing is not even and it grows
+                without limit towards &nu; = 0.</li>
+            <li><strong>The cursor.</strong> Move the mouse, or drag a finger, across the rulers: the vertical line
+                and the numbers beside it give &nu;, <em>n</em> and <em>e</em> at that point.</li>
+            <li><strong>The arrow.</strong> Loose packings lie to the left, dense ones to the right.</li>
+        </ul>
+    </section>
     <div class="container">
 
         <div class="ruler-container">
-            <div class="axis-label">Solid Fraction (&nu;)</div>
+            <div class="axis-label" data-tip="Volume of solids over total volume, from 0 (no grains) to 1 (no voids).">Solid fraction &nu;</div>
             <div class="ruler" id="solid-fraction"></div>
             <div class="marker" id="marker-solid-fraction"></div>
 
         </div>
 
         <div class="ruler-container">
-            <div class="axis-label">Porosity (n)</div>
+            <div class="axis-label" data-tip="Volume of voids over total volume: n = 1 − ν.">Porosity <em>n</em></div>
             <div class="ruler" id="porosity"></div>
             <div class="marker" id="marker-porosity"></div>
         </div>
 
         <div class="ruler-container">
-            <div class="axis-label">Void Ratio (e)</div>
+            <div class="axis-label" data-tip="Volume of voids over volume of solids: e = n / (1 − n) = 1/ν − 1. Sands typically lie between about 0.4 and 1.">Void ratio <em>e</em></div>
             <div class="ruler" id="void-ratio"></div>
             <div class="marker" id="marker-void-ratio"></div>
         </div>
