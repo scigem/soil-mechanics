@@ -13,7 +13,8 @@
 
     /* type */
     --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-    --font-canvas: 'Inter', sans-serif;      /* labels drawn on canvases */
+    --font-canvas: 'Inter', sans-serif;
+    /* labels drawn on canvases */
     --font-size-base: 1rem;
     --font-size-small: 0.85rem;
     --font-size-tiny: 0.75rem;
@@ -24,8 +25,10 @@
 
     /* page and surfaces */
     --page-bg: #ffffff;
-    --surface-color: #ffffff;               /* panels and cards */
-    --surface-muted: #fafafa;               /* insets: value boxes, secondary buttons */
+    --surface-color: #ffffff;
+    /* panels and cards */
+    --surface-muted: #fafafa;
+    /* insets: value boxes, secondary buttons */
     --border-color: #e0e0e0;
     --border-radius: 8px;
     --border-radius-small: 4px;
@@ -36,9 +39,10 @@
     /* text */
     --text-primary: #212121;
     --text-secondary: #757575;
-    --title-color: #646ef6;
+    --title-color: #212121;
     --title-size: 2rem;
-    --section-label-color: #757575;         /* the small caps headings in the controls */
+    --section-label-color: #757575;
+    /* the small caps headings in the controls */
 
     /* accent */
     --primary-color: #646ef6;
@@ -76,7 +80,7 @@
     --background-color: var(--surface-muted);
     --transition: all 0.2s ease-in-out;
 
-/* Shared palette for the schematics and plots. Canvas and Plotly code
+    /* Shared palette for the schematics and plots. Canvas and Plotly code
        reads these through js/ui.js (colors), so every tool draws soil, water
        and stress the same way. They match the figures in the course notes. */
     --soil: #a8551f;
@@ -100,14 +104,20 @@
     --dilate: #ef6c00;
     --contract: #0b6ea8;
     --structure: #9e9e9e;
-    --accent: #ff9800;                  /* a second highlight, e.g. a rate or a fan */
-    --state-active: #ef6c00;            /* the earth pressure dial and the cap */
+    --accent: #ff9800;
+    /* a second highlight, e.g. a rate or a fan */
+    --state-active: #ef6c00;
+    /* the earth pressure dial and the cap */
     --state-rest: #2e7d32;
     --state-passive: #6a1b9a;
-    --plane: #2e7d32;                   /* slip planes */
-    --zone-dilate: #e7a36a;             /* a shear zone that is expanding */
-    --zone-contract: #9fb9d6;           /* ... and one that is compacting */
-    --load: #b71c1c;                    /* applied loads drawn as arrows */
+    --plane: #2e7d32;
+    /* slip planes */
+    --zone-dilate: #e7a36a;
+    /* a shear zone that is expanding */
+    --zone-contract: #9fb9d6;
+    /* ... and one that is compacting */
+    --load: #b71c1c;
+    /* applied loads drawn as arrows */
     --safe-bg: #e8f5e9;
     --safe-fg: #1b5e20;
     --warn-bg: #fff3e0;
@@ -487,18 +497,18 @@ dialog.about .close {
 }
 
 /* A variable's ? sits at the right-hand end of its label. */
-label > .tip,
-.item > span > .tip,
-h2 > .tip,
-h3 > .tip,
-th > .tip {
+label>.tip,
+.item>span>.tip,
+h2>.tip,
+h3>.tip,
+th>.tip {
     float: right;
     margin-left: 0.5rem;
     margin-top: 0.15rem;
 }
 
 /* ...except in compact rows, where the label is a narrow column of its own. */
-.compact label > .tip {
+.compact label>.tip {
     float: none;
     margin-left: 0.3rem;
     margin-top: 0;
@@ -574,6 +584,7 @@ button.reset:hover {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
     button,
     #tooltip {
         transition: none;
