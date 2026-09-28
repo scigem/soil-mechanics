@@ -91,9 +91,15 @@ function pack(x0, y0, x1, y1, rMean, seed) {
     return p.map((q, i) => [q[0], q[1], r[i]]);
 }
 
-// box halves in units of the box width
-const BOTTOM = pack(0, 0, 1, 0.4, 0.042, 11);
-const TOP = pack(0, 0, 1, 0.4, 0.042, 29);
+// One sample filling both halves, in units of the box width. The halves meet
+// at y = 0.4; shearing concentrates in a band a couple of grains thick there.
+const SAMPLE = pack(0, 0, 1, 0.8, 0.042, 11);
+const MID = 0.4;
+const BAND = 0.06; // half-thickness of the shear zone
+
+// How much of the top half's motion a grain at height y shares: nothing well
+// below the band, all of it well above, and a smooth ramp across the band.
+const share = (y) => 0.5 * (1 + Math.tanh((y - MID) / BAND));
 
 // ---------------------------------------------------------------- helpers
 
@@ -149,11 +155,13 @@ function drawBox(s, m) {
     const Y = (v) => 0.86 * h - v * width;
     const k = at(m, s.x);
     const shift = (s.x / XMAX) * 0.3;              // 10 mm drawn as 0.3 box widths
-    const lift = 5 * (m.Y[k] / 60);                 // box 60 mm wide, rise exaggerated five times
-    const gap = 0.012;
+    const lift = 3 * (m.Y[k] / 60);                 // box 60 mm wide, rise exaggerated three times
+    const gap = 0.0;
 
-    // bottom half
-    for (const [x, y, r] of BOTTOM) {
+    // The sample. Grains move sideways with the top half in proportion to how
+    // far up the shear zone they sit, and the zone thickens as the sample
+    // dilates: grains in it spread apart, and everything above rides up.
+    const drawGrain = (x, y, r) => {
         ctx.beginPath();
         ctx.arc(X(x), Y(y), r * width, 0, 2 * Math.PI);
         ctx.fillStyle = COLORS.grain;
@@ -163,39 +171,44 @@ function drawBox(s, m) {
         ctx.strokeStyle = COLORS.grainEdge;
         ctx.lineWidth = 0.5;
         ctx.stroke();
+    };
+    for (const [x, y, r] of SAMPLE) {
+        const f = share(y);
+        drawGrain(x + shift * f, y + lift * f, r);
     }
-    ctx.strokeStyle = COLORS.ink;
-    ctx.lineWidth = 2;
-    ctx.strokeRect(X(0), Y(0.4), width, 0.4 * width);
 
-    // top half, moved and lifted. A sample that is sinking cannot push into the
-    // bottom half, so its top half is drawn squashed instead.
-    const rise = Math.max(lift, 0);
-    const squash = Math.min(lift, 0);
-    const sy = (0.4 + squash) / 0.4;
-    for (const [x, y, r] of TOP) {
-        ctx.beginPath();
-        ctx.arc(X(x + shift), Y(y * sy + 0.4 + gap + rise), r * width, 0, 2 * Math.PI);
-        ctx.fillStyle = COLORS.grain;
-        ctx.globalAlpha = 0.85;
-        ctx.fill();
-        ctx.globalAlpha = 1;
-        ctx.strokeStyle = COLORS.grainEdge;
-        ctx.lineWidth = 0.5;
-        ctx.stroke();
-    }
+    // the two halves of the box: the bottom one fixed, the top one pushed
+    // sideways and carried up by the sample
     ctx.strokeStyle = COLORS.ink;
-    ctx.lineWidth = 2;
-    ctx.strokeRect(X(shift), Y(0.8 + gap + rise + squash), width, (0.4 + squash) * width);
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.moveTo(X(0), Y(MID));
+    ctx.lineTo(X(0), Y(0));
+    ctx.lineTo(X(1), Y(0));
+    ctx.lineTo(X(1), Y(MID));
+    ctx.stroke();
+    const topBase = MID + gap + lift;
+    ctx.beginPath();
+    ctx.moveTo(X(shift), Y(topBase));
+    ctx.lineTo(X(shift), Y(0.8 + lift + gap));
+    ctx.moveTo(X(shift + 1), Y(topBase));
+    ctx.lineTo(X(shift + 1), Y(0.8 + lift + gap));
+    ctx.stroke();
+    // the loading plate on top of the sample
+    ctx.fillStyle = '#9e9e9e';
+    ctx.fillRect(X(shift), Y(0.8 + lift + gap) - 6, width, 6);
+    // the shear zone
+    ctx.fillStyle = 'rgba(239,108,0,0.08)';
+    ctx.fillRect(X(0), Y(MID + 2 * BAND + lift), width + shift * width, (4 * BAND + lift) * width);
 
     // loads
-    const topY = Y(0.8 + gap + rise + squash);
+    const topY = Y(0.8 + lift + gap) - 6;
     const midX = X(shift + 0.5);
     arrow(ctx, midX, topY - 0.22 * width, midX, topY - 4, COLORS.ink, 2.5, 10);
     label(ctx, `N  (σ′ = ${s.sigma} kPa)`, midX + 8, topY - 0.16 * width, COLORS.ink, 'left');
     const ratio = m.R[k];
     const Tlen = 0.08 * width + 0.25 * width * Math.max(0, ratio);
-    const Ty = Y(0.6 + gap + rise + squash / 2);
+    const Ty = Y(0.6 + lift);
     arrow(ctx, X(shift) - Tlen - 6, Ty, X(shift) - 4, Ty, COLORS.friction, 2.5, 10);
     label(ctx, 'T', X(shift) - Tlen - 12, Ty, COLORS.friction, 'right');
 

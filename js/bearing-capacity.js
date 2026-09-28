@@ -36,7 +36,8 @@ function solve() {
     const s = Object.fromEntries(ids.map((id) => [id, parseFloat(inputs[id].value)]));
     const phi = rad(s.phi);
     const sin = Math.sin(phi);
-    const turned = rad(s.psi); // angle turned so far, from the passive side
+    const fromActive = rad(s.psi);            // how far round the fan, out from the footing
+    const turned = Math.PI / 2 - fromActive;  // the same point, measured from the passive side
     let pP, pA, pNow, qult, Nq, Nc, Kp, turn;
     if (s.phi < 0.25) {
         // frictionless: the cap is a fixed q = s_u, and turning adds 2 s_u per radian
@@ -60,7 +61,7 @@ function solve() {
         pA = pPs * turn - shift;
         qult = pPs * turn * (1 + sin) - shift;
     }
-    return { ...s, phiRad: phi, sin, turned, pP, pA, pNow, qult, Nq, Nc, Kp, turn };
+    return { ...s, phiRad: phi, sin, turned, fromActive, pP, pA, pNow, qult, Nq, Nc, Kp, turn };
 }
 
 // ---------------------------------------------------------------- helpers
@@ -158,7 +159,7 @@ function drawMechanism(st) {
         poly(ctx, [[1, 0], g.D, g.E].map(m), 'rgba(106,27,154,0.14)', COLORS.ink);
 
         // the highlighted ray: how far the tilt has turned
-        const psiA = Math.PI / 2 - st.turned;
+        const psiA = st.fromActive;
         const rr = g.r(psiA);
         const end = [1 + rr * Math.cos(g.start + psiA), rr * Math.sin(g.start + psiA)];
         ctx.strokeStyle = COLORS.fan;
@@ -227,7 +228,8 @@ function drawLadder(st) {
     const right = 20;
     const top = 16;
     const bottom = 34;
-    const xs = { surcharge: 0, passive: 0.18, fan0: 0.3, fan1: 0.72, active: 0.84, footing: 1.0 };
+    // read left to right: out from the footing, round the fan, to the surcharge
+    const xs = { footing: 0.0, active: 0.16, fan0: 0.28, fan1: 0.72, passive: 0.84, surcharge: 1.0 };
     const X = (f) => left + f * (w - left - right);
 
     const positive = [st.sv0, st.pP, st.pA, st.qult].filter((v) => v > 0);
@@ -263,19 +265,19 @@ function drawLadder(st) {
         ctx.fillRect(X(a), top, X(b) - X(a), h - top - bottom);
         label(ctx, name, (X(a) + X(b)) / 2, h - bottom + 14, COLORS.muted);
     };
-    zone(xs.passive - 0.05, xs.fan0, 'rgba(106,27,154,0.07)', 'passive zone');
+    zone(xs.active - 0.05, xs.fan0, 'rgba(239,108,0,0.08)', 'active zone');
     zone(xs.fan0, xs.fan1, 'rgba(100,110,246,0.08)', 'the fan: a quarter turn');
-    zone(xs.fan1, xs.active + 0.05, 'rgba(239,108,0,0.08)', 'active zone');
+    zone(xs.fan1, xs.passive + 0.05, 'rgba(106,27,154,0.07)', 'passive zone');
 
     // the path of p'
     ctx.strokeStyle = COLORS.fan;
     ctx.lineWidth = 3;
     ctx.beginPath();
-    ctx.moveTo(X(xs.passive - 0.05), Y(st.pP));
-    ctx.lineTo(X(xs.fan0), Y(st.pP));
+    ctx.moveTo(X(xs.active - 0.05), Y(st.pA));
+    ctx.lineTo(X(xs.fan0), Y(st.pA));
     for (let k = 0; k <= 60; k++) {
-        const f = k / 60;
-        const turned = f * (Math.PI / 2);
+        const f = k / 60;                      // fraction of the way out from the active side
+        const turned = (1 - f) * (Math.PI / 2); // measured from the passive side
         let p;
         if (st.phi < 0.25) p = st.pP + 2 * st.c * turned;
         else {
@@ -284,7 +286,7 @@ function drawLadder(st) {
         }
         ctx.lineTo(X(xs.fan0 + f * (xs.fan1 - xs.fan0)), Y(p));
     }
-    ctx.lineTo(X(xs.active + 0.05), Y(st.pA));
+    ctx.lineTo(X(xs.passive + 0.05), Y(st.pP));
     ctx.stroke();
 
     // the two ends
@@ -295,25 +297,24 @@ function drawLadder(st) {
         ctx.fill();
         label(ctx, text, X(x), Y(p) + dy, colour, align);
     };
-    if (st.sv0 > 0) point(xs.surcharge + 0.04, st.sv0, COLORS.passive, `σv0′ ${st.sv0.toFixed(0)}`, 'left', 14);
-    point(xs.passive, st.pP, COLORS.passive, `p′ ${st.pP.toFixed(0)}`);
+    point(xs.footing + 0.03, st.qult, COLORS.active, `q_ult ${st.qult.toFixed(0)}`, 'left');
     point(xs.active, st.pA, COLORS.active, `p′ ${st.pA.toFixed(0)}`);
-    point(xs.footing - 0.03, st.qult, COLORS.active, `q_ult ${st.qult.toFixed(0)}`, 'right');
+    point(xs.passive, st.pP, COLORS.passive, `p′ ${st.pP.toFixed(0)}`);
+    if (st.sv0 > 0) point(xs.surcharge - 0.04, st.sv0, COLORS.passive, `σv0′ ${st.sv0.toFixed(0)}`, 'right', 14);
 
-    // multipliers
+    // the ratio across each zone, written along the bottom of the zone
     ctx.font = "12px 'Inter', sans-serif";
-    if (st.phi >= 0.25) {
-        label(ctx, `× 1/(1 − sin φ′)`, X(0.1), Y(Math.sqrt(Math.max(st.sv0, lo) * st.pP)) - 14, COLORS.passive);
-        label(ctx, `× e^{π tan φ′} = × ${st.turn.toFixed(2)}`, X(0.58), Y(Math.sqrt(st.pP * st.pA)) + 26, COLORS.fan, 'left');
-        label(ctx, `× (1 + sin φ′)`, X(0.92), Y(Math.sqrt(st.pA * st.qult)) + 18, COLORS.active);
-    } else {
-        label(ctx, '+ s_u', X(0.1), Y(Math.sqrt(Math.max(st.sv0, lo) * st.pP)) - 14, COLORS.passive);
-        label(ctx, '+ π s_u', X(0.58), Y(Math.sqrt(st.pP * st.pA)) + 26, COLORS.fan, 'left');
-        label(ctx, '+ s_u', X(0.92), Y(Math.sqrt(st.pA * st.qult)) + 18, COLORS.active);
-    }
+    const yTag = h - bottom - 10;
+    const tags = st.phi >= 0.25
+        ? [['q_ult / p′ = 1 + sin φ′', COLORS.active], [`across the fan: × e^{π tan φ′} = ${st.turn.toFixed(2)}`, COLORS.fan],
+           ['p′ / σv0′ = 1/(1 − sin φ′)', COLORS.passive]]
+        : [['q_ult − p = s_u', COLORS.active], ['across the fan: + π s_u', COLORS.fan], ['p − σv0 = s_u', COLORS.passive]];
+    label(ctx, tags[0][0], X(xs.active - 0.05) + 4, yTag, tags[0][1], 'left');
+    label(ctx, tags[1][0], X(0.5 * (xs.fan0 + xs.fan1)), yTag, tags[1][1]);
+    label(ctx, tags[2][0], X(xs.passive + 0.05) - 4, yTag, tags[2][1], 'right');
 
     // where the slider is
-    const f = st.turned / (Math.PI / 2);
+    const f = st.fromActive / (Math.PI / 2);
     const xNow = xs.fan0 + f * (xs.fan1 - xs.fan0);
     ctx.setLineDash([3, 3]);
     ctx.strokeStyle = COLORS.ink;
@@ -327,7 +328,7 @@ function drawLadder(st) {
     ctx.arc(X(xNow), Y(st.pNow), 6, 0, 2 * Math.PI);
     ctx.fillStyle = COLORS.ink;
     ctx.fill();
-    label(ctx, `turned ${st.psi}°: p′ = ${st.pNow.toFixed(0)}`, X(xNow) + 8, Y(st.pNow) - 12, COLORS.ink, 'left');
+    label(ctx, `${st.psi}° out from the footing: p′ = ${st.pNow.toFixed(0)}`, X(xNow) + 8, Y(st.pNow) - 12, COLORS.ink, 'left');
 }
 
 // ---------------------------------------------------------------- readout
