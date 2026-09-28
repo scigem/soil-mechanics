@@ -830,6 +830,9 @@ import"./main-CKabMwJn.js";const o=`<!DOCTYPE html>
                     passive (purple), water, <em>K</em> = 1 (blue), at rest (green) and active (orange); the arrow
                     from the centre is the tilt now, and the arrow below it the trip from rest. Drag along the axis
                     to move <em>C</em>.</li>
+                <li><strong>The dial.</strong> The same line opened out: <em>K</em> against <em>C</em>, on a log
+                    scale. The curve is solid blue between friction's two stops and dotted beyond them, where the
+                    shaded regions are out of reach. Drag along it to move <em>C</em>.</li>
                 <li><strong>The wall.</strong> The grains push on the wall with <em>K</em>γ<em>z</em>: the
                     pressure diagram grows with depth, with the at-rest diagram dashed in green for comparison. At
                     a stop, the sliding wedge and its slip plane are drawn, at 45° + φ′/2 (active) or 45° − φ′/2
@@ -896,12 +899,16 @@ import"./main-CKabMwJn.js";const o=`<!DOCTYPE html>
 
             <section id="visualization-section">
                 <div class="panels">
-                    <figure class="wide">
+                    <figure>
+                        <canvas id="dial-canvas"></canvas>
+                        <figcaption>The dial</figcaption>
+                    </figure>
+                    <figure>
                         <canvas id="wall-canvas"></canvas>
                         <figcaption>The wall</figcaption>
                     </figure>
                     <figure>
-                        <canvas id="dial-canvas"></canvas>
+                        <canvas id="disc-canvas"></canvas>
                         <figcaption>The tilt on the disc</figcaption>
                     </figure>
                     <figure>
