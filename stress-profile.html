@@ -4,15 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stress Profile Explorer</title>
+    <title>Stress Profile</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <script type="module" crossorigin src="/soil-mechanics/assets/stress-profile-BoGK4pQb.js"></script>
-  <link rel="modulepreload" crossorigin href="/soil-mechanics/assets/modulepreload-polyfill-B5Qt9EMX.js">
+  <script type="module" crossorigin src="/soil-mechanics/assets/stress-profile-CfZ1iXSU.js"></script>
+  <link rel="modulepreload" crossorigin href="/soil-mechanics/assets/main-Xfqt2xr9.js">
+  <link rel="modulepreload" crossorigin href="/soil-mechanics/assets/ui-tU1-thhr.js">
   <link rel="modulepreload" crossorigin href="/soil-mechanics/assets/plotly-Blke_pAn.js">
-  <link rel="stylesheet" crossorigin href="/soil-mechanics/assets/stress-profile-DAQwc1Ge.css">
-  <link rel="stylesheet" crossorigin href="/soil-mechanics/assets/main-1i5AokFJ.css">
+  <link rel="stylesheet" crossorigin href="/soil-mechanics/assets/main-D8yoG6GQ.css">
+  <link rel="stylesheet" crossorigin href="/soil-mechanics/assets/stress-profile-6OJzk5oB.css">
 </head>
 
 <body>
@@ -21,13 +22,41 @@
             <h1>Stress Profile</h1>
         </header>
 
+        <section id="about">
+            <p>The vertical stresses in the ground, down through three layers of soil. The total stress
+                <em>&sigma;</em> is the weight of everything above a point: any surcharge <em>q</em>, any ponded
+                water, and each layer's unit weight times its thickness, with <em>&gamma;</em><sub>bulk</sub> above
+                the water table and <em>&gamma;</em><sub>sat</sub> below it. The pore pressure is hydrostatic from
+                the water table, <em>u</em> = <em>&gamma;</em><sub>w</sub>(<em>z</em> &minus; <em>z</em><sub>w</sub>),
+                and negative (suction) through the capillary fringe above it. The effective stress,
+                <em>&sigma;&prime;</em> = <em>&sigma;</em> &minus; <em>u</em>, is what the grains carry: only a
+                change in <em>&sigma;&prime;</em> makes the soil settle or swell.</p>
+            <h3>What you are seeing</h3>
+            <ul>
+                <li><strong>The soil column</strong> (left). Each layer in its own brown, labelled with its unit
+                    weights. Soil below the water table is tinted blue, the capillary fringe a paler blue, and
+                    ponded water above the ground is solid blue. The dashed dark blue line (&#9661; WT) is the
+                    water table; the grey dotted line is the probe depth.</li>
+                <li><strong>The stress plot</strong> (right). Total stress <em>&sigma;</em> in black, pore pressure
+                    <em>u</em> in blue, effective stress <em>&sigma;&prime;</em> in thick orange. The grey dashed
+                    line is <em>&sigma;&prime;</em> for the frozen reference. The dots mark the three values at the
+                    probe depth.</li>
+                <li><strong>At the probe depth.</strong> The three stresses at the probe, and how far
+                    <em>&sigma;&prime;</em> has moved from the reference: shown orange when it has risen (the soil
+                    will settle) and green when it has fallen (the soil will swell). The note below explains what
+                    the change means.</li>
+            </ul>
+            <p>The reference starts as the default scenario. Press <em>Freeze reference</em> to make the current
+                scenario the one to compare against.</p>
+        </section>
+
         <div class="main-layout">
             <div class="column">
                 <section id="input-section">
                     <h2>Scenario</h2>
 
                     <div class="input-group">
-                        <label for="water-table">Water table depth (negative = ponded water):</label>
+                        <label for="water-table" data-tip="Depth of the water table below the ground surface. A negative value puts the water table above the ground: ponded water that deep sits on the surface.">Water table depth</label>
                         <div class="slider-container">
                             <input type="range" id="water-table" min="-4" max="12" value="0" step="0.1">
                             <span class="slider-value" id="waterTableValue">0.0</span>
@@ -36,7 +65,7 @@
                     </div>
 
                     <div class="input-group">
-                        <label for="surcharge">Surface surcharge <i>q</i>:</label>
+                        <label for="surcharge" data-tip="A uniform load spread over the whole ground surface, such as a wide fill. It adds the same amount to the total stress at every depth.">Surface surcharge <i>q</i></label>
                         <div class="slider-container">
                             <input type="range" id="surcharge" min="0" max="150" value="0" step="5">
                             <span class="slider-value" id="surchargeValue">0</span>
@@ -45,7 +74,7 @@
                     </div>
 
                     <div class="input-group">
-                        <label for="capillary">Capillary rise <i>h</i><sub>c</sub> above water table:</label>
+                        <label for="capillary" data-tip="Height above the water table to which capillarity draws water up. In this fringe the pore pressure is negative (suction). Near zero for sands, metres for clays.">Capillary rise <i>h</i><sub>c</sub></label>
                         <div class="slider-container">
                             <input type="range" id="capillary" min="0" max="5" value="0" step="0.1">
                             <span class="slider-value" id="capillaryValue">0.0</span>
@@ -54,7 +83,7 @@
                     </div>
 
                     <div class="input-group">
-                        <label for="probe">Probe depth:</label>
+                        <label for="probe" data-tip="The depth at which the stresses are read out below, and marked by the dotted line.">Probe depth</label>
                         <div class="slider-container">
                             <input type="range" id="probe" min="0" max="12" value="8" step="0.1">
                             <span class="slider-value" id="probeValue">8.0</span>
@@ -67,7 +96,7 @@
                     <div class="layer-block" id="layer-1-block">
                         <div class="layer-head"><span class="swatch" id="swatch-1"></span>Layer 1</div>
                         <div class="input-group compact">
-                            <label for="t1">Thickness</label>
+                            <label for="t1" data-tip="Thickness of layer 1. Set it to zero to remove the layer.">Thickness</label>
                             <div class="slider-container">
                                 <input type="range" id="t1" min="0" max="10" value="5" step="0.5">
                                 <span class="slider-value" id="t1Value">5.0</span>
@@ -75,7 +104,7 @@
                             </div>
                         </div>
                         <div class="input-group compact">
-                            <label for="g1" title="Bulk unit weight">&gamma;<sub>bulk</sub></label>
+                            <label for="g1" data-tip="Bulk unit weight of layer 1: the weight per volume of the soil above the water table. Typically 16 to 20 kN/m³.">&gamma;<sub>bulk</sub></label>
                             <div class="slider-container">
                                 <input type="range" id="g1" min="13" max="22" value="18" step="0.5">
                                 <span class="slider-value" id="g1Value">18.0</span>
@@ -83,7 +112,7 @@
                             </div>
                         </div>
                         <div class="input-group compact">
-                            <label for="gs1" title="Saturated unit weight">&gamma;<sub>sat</sub></label>
+                            <label for="gs1" data-tip="Saturated unit weight of layer 1: the weight per volume with every void full of water, used below the water table. Never less than γbulk; typically 18 to 22 kN/m³.">&gamma;<sub>sat</sub></label>
                             <div class="slider-container">
                                 <input type="range" id="gs1" min="15" max="24" value="20" step="0.5">
                                 <span class="slider-value" id="gs1Value">20.0</span>
@@ -95,7 +124,7 @@
                     <div class="layer-block" id="layer-2-block">
                         <div class="layer-head"><span class="swatch" id="swatch-2"></span>Layer 2</div>
                         <div class="input-group compact">
-                            <label for="t2">Thickness</label>
+                            <label for="t2" data-tip="Thickness of layer 2. Set it to zero to remove the layer.">Thickness</label>
                             <div class="slider-container">
                                 <input type="range" id="t2" min="0" max="10" value="3" step="0.5">
                                 <span class="slider-value" id="t2Value">3.0</span>
@@ -103,7 +132,7 @@
                             </div>
                         </div>
                         <div class="input-group compact">
-                            <label for="g2" title="Bulk unit weight">&gamma;<sub>bulk</sub></label>
+                            <label for="g2" data-tip="Bulk unit weight of layer 2: the weight per volume of the soil above the water table. Typically 16 to 20 kN/m³.">&gamma;<sub>bulk</sub></label>
                             <div class="slider-container">
                                 <input type="range" id="g2" min="13" max="22" value="17" step="0.5">
                                 <span class="slider-value" id="g2Value">17.0</span>
@@ -111,7 +140,7 @@
                             </div>
                         </div>
                         <div class="input-group compact">
-                            <label for="gs2" title="Saturated unit weight">&gamma;<sub>sat</sub></label>
+                            <label for="gs2" data-tip="Saturated unit weight of layer 2: the weight per volume with every void full of water, used below the water table. Never less than γbulk; typically 18 to 22 kN/m³.">&gamma;<sub>sat</sub></label>
                             <div class="slider-container">
                                 <input type="range" id="gs2" min="15" max="24" value="19" step="0.5">
                                 <span class="slider-value" id="gs2Value">19.0</span>
@@ -123,7 +152,7 @@
                     <div class="layer-block" id="layer-3-block">
                         <div class="layer-head"><span class="swatch" id="swatch-3"></span>Layer 3</div>
                         <div class="input-group compact">
-                            <label for="t3">Thickness</label>
+                            <label for="t3" data-tip="Thickness of layer 3. Set it to zero to remove the layer.">Thickness</label>
                             <div class="slider-container">
                                 <input type="range" id="t3" min="0" max="10" value="4" step="0.5">
                                 <span class="slider-value" id="t3Value">4.0</span>
@@ -131,7 +160,7 @@
                             </div>
                         </div>
                         <div class="input-group compact">
-                            <label for="g3" title="Bulk unit weight">&gamma;<sub>bulk</sub></label>
+                            <label for="g3" data-tip="Bulk unit weight of layer 3: the weight per volume of the soil above the water table. Typically 16 to 20 kN/m³.">&gamma;<sub>bulk</sub></label>
                             <div class="slider-container">
                                 <input type="range" id="g3" min="13" max="22" value="19" step="0.5">
                                 <span class="slider-value" id="g3Value">19.0</span>
@@ -139,7 +168,7 @@
                             </div>
                         </div>
                         <div class="input-group compact">
-                            <label for="gs3" title="Saturated unit weight">&gamma;<sub>sat</sub></label>
+                            <label for="gs3" data-tip="Saturated unit weight of layer 3: the weight per volume with every void full of water, used below the water table. Never less than γbulk; typically 18 to 22 kN/m³.">&gamma;<sub>sat</sub></label>
                             <div class="slider-container">
                                 <input type="range" id="gs3" min="15" max="24" value="21" step="0.5">
                                 <span class="slider-value" id="gs3Value">21.0</span>
@@ -150,7 +179,6 @@
 
                     <div class="preset-row">
                         <button id="freeze-button" type="button">Freeze reference</button>
-                        <button id="reset-button" type="button" class="secondary">Reset</button>
                     </div>
                 </section>
             </div>
@@ -163,19 +191,19 @@
                     <h2>At the probe depth</h2>
                     <div class="results-grid">
                         <div class="result-item">
-                            <span class="label">Total stress &sigma;</span>
+                            <span class="label" data-tip="The weight of everything above this depth per unit area: surcharge, ponded water and soil.">Total stress &sigma;</span>
                             <span id="sigmaOut">157.0</span>
                         </div>
                         <div class="result-item">
-                            <span class="label">Pore pressure <i>u</i></span>
+                            <span class="label" data-tip="The pressure in the water in the pores, γw times the depth below the water table. Negative in the capillary fringe.">Pore pressure <i>u</i></span>
                             <span id="uOut">78.5</span>
                         </div>
                         <div class="result-item emphasis">
-                            <span class="label">Effective stress &sigma;&prime;</span>
+                            <span class="label" data-tip="σ′ = σ − u: the part of the stress carried by the grains through their contacts. It sets the stiffness and strength of the soil.">Effective stress &sigma;&prime;</span>
                             <span id="sigmaEffOut">78.5</span>
                         </div>
                         <div class="result-item">
-                            <span class="label">Change vs reference</span>
+                            <span class="label" data-tip="How far σ′ at this depth has moved from the frozen reference. A rise compresses the soil (settlement); a fall lets it swell.">Change vs reference</span>
                             <span id="deltaOut">0.0</span>
                         </div>
                     </div>

@@ -4,44 +4,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mohr's Circle and the Friction Cap</title>
+    <title>Mohr's Circle</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <script type="module" crossorigin src="/soil-mechanics/assets/mohrs-circle-mFhGxScH.js"></script>
-  <link rel="modulepreload" crossorigin href="/soil-mechanics/assets/modulepreload-polyfill-B5Qt9EMX.js">
-  <link rel="stylesheet" crossorigin href="/soil-mechanics/assets/mohrs-circle-WAwGOlE0.css">
-  <link rel="stylesheet" crossorigin href="/soil-mechanics/assets/main-1i5AokFJ.css">
+  <script type="module" crossorigin src="/soil-mechanics/assets/mohrs-circle-DxHsy3R9.js"></script>
+  <link rel="modulepreload" crossorigin href="/soil-mechanics/assets/main-Xfqt2xr9.js">
+  <link rel="modulepreload" crossorigin href="/soil-mechanics/assets/ui-tU1-thhr.js">
+  <link rel="stylesheet" crossorigin href="/soil-mechanics/assets/main-D8yoG6GQ.css">
+  <link rel="stylesheet" crossorigin href="/soil-mechanics/assets/mohrs-circle-cur1IBrU.css">
 </head>
 
 <body>
     <div class="container">
         <header>
-            <h1>Mohr's Circle and the Friction Cap</h1>
-            <p class="subtitle">A stress has a size <em>p′</em> and a tilt: an arrow whose length is <em>q/p′</em> and
-                whose direction is that of σ<sub>1</sub>′. Friction caps the length at sin φ′. Drag in the right-hand
-                panel to set the tilt.</p>
+            <h1>Mohr's Circle</h1>
         </header>
+
+        <section id="about">
+            <p>A stress has a size <em>p′</em> and a tilt: an arrow whose length is <em>q/p′</em> and whose
+                direction is that of σ<sub>1</sub>′. Friction caps the length at sin φ′. Drag in the right-hand
+                panel to set the tilt.</p>
+            <h3>What you are seeing</h3>
+            <ul>
+                <li><strong>The Mohr circle.</strong> Centre <em>p′</em>, radius <em>q</em>, drawn blue inside
+                    the cap, orange at it and red beyond it. The blue lines are the Mohr–Coulomb envelope, with the
+                    allowed wedge between them shaded. H and V are the stresses on horizontal and vertical planes,
+                    the ends of one diameter. The green dot is the chosen θ plane. At the cap, dashed radii go to
+                    the points where the circle touches the lines.</li>
+                <li><strong>The tilt.</strong> The tilt as a point (<em>C</em>, <em>S</em>) =
+                    (<em>q/p′</em>)(cos 2β, sin 2β). The shaded disc is the cap; the dotted circle is
+                    <em>q/p′</em> = 1. The active, passive and at-rest (K₀) states are marked on the <em>C</em>
+                    axis. Drag anywhere to set the tilt. The small element in the corner shows which way
+                    σ<sub>1</sub>′ pushes, and the chosen plane in green.</li>
+                <li><strong>The status bar.</strong> Whether the stress is inside the cap, at it, or beyond
+                    it.</li>
+            </ul>
+            <h3>Conventions</h3>
+            <p>Compression is positive throughout.</p>
+        </section>
 
         <div class="main-layout">
             <section id="input-section">
                 <h2>Stress</h2>
                 <div class="input-group">
-                    <label for="p">Mean stress <em>p′</em> (kPa)</label>
+                    <label for="p" data-tip="The mean effective stress, (σ₁′ + σ₃′)/2: the centre of the Mohr circle, in kPa.">Mean stress <em>p′</em></label>
                     <div class="slider-container">
                         <input type="range" id="p" min="10" max="300" step="1" value="100">
                         <span class="slider-value" id="p-value"></span>
                     </div>
                 </div>
                 <div class="input-group">
-                    <label for="tilt">Size of the tilt <em>q/p′</em></label>
+                    <label for="tilt" data-tip="The length of the tilt: q/p′, where q = (σ₁′ − σ₃′)/2 is the radius of the circle. 0 is isotropic; friction caps it at sin φ′.">Size of the tilt <em>q/p′</em></label>
                     <div class="slider-container">
                         <input type="range" id="tilt" min="0" max="1" step="0.001" value="0.3">
                         <span class="slider-value" id="tilt-value"></span>
                     </div>
                 </div>
                 <div class="input-group">
-                    <label for="beta">Direction of σ<sub>1</sub>′ from vertical, β (°)</label>
+                    <label for="beta" data-tip="The direction of the major principal stress σ₁′, measured from the vertical. 0° is vertical, ±90° horizontal.">Direction of σ<sub>1</sub>′, β</label>
                     <div class="slider-container">
                         <input type="range" id="beta" min="-90" max="90" step="1" value="0">
                         <span class="slider-value" id="beta-value"></span>
@@ -50,14 +71,14 @@
 
                 <h2>Soil</h2>
                 <div class="input-group">
-                    <label for="phi">Friction angle φ′ (°)</label>
+                    <label for="phi" data-tip="The effective friction angle of the soil. It sets the slope of the Mohr–Coulomb lines and the cap, sin φ′.">Friction angle φ′</label>
                     <div class="slider-container">
                         <input type="range" id="phi" min="10" max="45" step="0.5" value="30">
                         <span class="slider-value" id="phi-value"></span>
                     </div>
                 </div>
                 <div class="input-group">
-                    <label for="cohesion">Cohesion <em>c′</em> (kPa)</label>
+                    <label for="cohesion" data-tip="The effective cohesion, in kPa. It acts as a built-in pressure c′ cot φ′, moving the apex of the lines to the left.">Cohesion <em>c′</em></label>
                     <div class="slider-container">
                         <input type="range" id="cohesion" min="0" max="50" step="1" value="0">
                         <span class="slider-value" id="cohesion-value"></span>
@@ -66,7 +87,7 @@
 
                 <h2>A plane</h2>
                 <div class="input-group">
-                    <label for="theta">Plane inclined at θ to the horizontal (°)</label>
+                    <label for="theta" data-tip="A plane through the element, inclined at θ to the horizontal. The readout gives the stresses on it.">Plane angle θ</label>
                     <div class="slider-container">
                         <input type="range" id="theta" min="-90" max="90" step="1" value="0">
                         <span class="slider-value" id="theta-value"></span>
@@ -86,11 +107,11 @@
                 <div class="panels">
                     <figure>
                         <canvas id="mohr-canvas"></canvas>
-                        <figcaption>The Mohr circle: centre <em>p′</em>, radius <em>q</em></figcaption>
+                        <figcaption>The Mohr circle</figcaption>
                     </figure>
                     <figure>
                         <canvas id="disc-canvas"></canvas>
-                        <figcaption>The tilt: (<em>C</em>, <em>S</em>) = (<em>q/p′</em>)(cos 2β, sin 2β)</figcaption>
+                        <figcaption>The tilt</figcaption>
                     </figure>
                 </div>
                 <div id="readout"></div>

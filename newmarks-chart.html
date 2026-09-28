@@ -8,58 +8,82 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <script type="module" crossorigin src="/soil-mechanics/assets/newmarks-chart-D1DcThlj.js"></script>
-  <link rel="modulepreload" crossorigin href="/soil-mechanics/assets/modulepreload-polyfill-B5Qt9EMX.js">
+  <script type="module" crossorigin src="/soil-mechanics/assets/newmarks-chart-C_GHbTaG.js"></script>
+  <link rel="modulepreload" crossorigin href="/soil-mechanics/assets/main-Xfqt2xr9.js">
+  <link rel="modulepreload" crossorigin href="/soil-mechanics/assets/ui-tU1-thhr.js">
   <link rel="modulepreload" crossorigin href="/soil-mechanics/assets/fan-MKLHg6y_.js">
-  <link rel="stylesheet" crossorigin href="/soil-mechanics/assets/newmarks-chart-f_vfoU7z.css">
-  <link rel="stylesheet" crossorigin href="/soil-mechanics/assets/main-1i5AokFJ.css">
+  <link rel="stylesheet" crossorigin href="/soil-mechanics/assets/main-D8yoG6GQ.css">
+  <link rel="stylesheet" crossorigin href="/soil-mechanics/assets/newmarks-chart-BczrJXCu.css">
 </head>
 
 <body>
     <div class="container">
         <header>
             <h1>Newmark's Chart</h1>
-            <p>Draw your foundation to scale on the chart. The chart calculates the vertical stress increase beneath the centre of the chart.</p>
         </header>
+
+        <section id="about">
+            <p>Draw your foundation to scale on the chart, and the chart gives the vertical stress increase beneath
+                its centre, at depth <i>z</i>. Ring <i>i</i> is drawn at the radius <i>a</i> of a uniformly loaded disc
+                that gives &sigma;<sub><i>z</i></sub>/<i>q</i> = <i>i</i>/rings at depth <i>z</i>, from Fröhlich's
+                &sigma;<sub><i>z</i></sub>/<i>q</i> = 1 &minus; [1 + (<i>a</i>/<i>z</i>)&sup2;]<sup>&minus;<i>n</i>/2</sup>,
+                and the rings are cut into equal sectors. Every cell then carries the same unit influence,
+                1/(rings &times; sectors), so Δσ<sub><i>z</i></sub> = <i>q</i> &times; (cells covered) &times;
+                (unit influence). With &phi; = 0 the concentration factor is <i>n</i> = 3 and this is Newmark's
+                Boussinesq chart; a friction angle sets <i>n</i> from &phi;, which moves the rings.</p>
+            <h3>What you are seeing</h3>
+            <ul>
+                <li><strong>The chart.</strong> The rings and sectors, with the <i>r</i>/<i>z</i> of each ring
+                    labelled along the diagonal. The last ring, out to infinity, is not drawn. The black bar at the
+                    bottom left is the scale: its length on the chart is the depth <i>z</i>.</li>
+                <li><strong>Your sketch.</strong> Drag on the chart to draw the loaded area, in orange. Cells whose
+                    centre lies inside it are shaded orange and counted.</li>
+                <li><strong>The results.</strong> The concentration factor, the unit influence of one cell, the
+                    cells covered, the influence value <i>I</i>, and the stress increase, with the calculation
+                    written out.</li>
+            </ul>
+            <p>The sketch is held in <i>r</i>/<i>z</i>. Changing the rings, sectors or &phi; redraws it at the new
+                scale of the chart, so it stays the same footing; changing <i>z</i> leaves it where it is on the
+                chart, so it then stands for a footing scaled with <i>z</i>.</p>
+        </section>
 
         <div class="main-layout">
             <div class="column">
                 <section id="input-section">
-                    <h2>Chart Controls</h2>
+                    <h2>Chart</h2>
 
                     <div class="input-group">
-                        <label for="pressure">Applied pressure q (kPa):</label>
+                        <label for="pressure" data-tip="The uniform pressure on the loaded area you draw, in kPa.">Applied pressure <i>q</i></label>
                         <input type="number" id="pressure" value="150" min="0" step="5">
                     </div>
 
                     <div class="input-group">
                         <div class="input-group">
-                            <label for="rings">Rings:</label>
+                            <label for="rings" data-tip="How many rings the influence is split into; each carries 1/rings of it. More rings give a finer chart.">Rings</label>
                             <input type="number" id="rings" value="20" min="4" max="50" step="1">
                         </div>
 
                         <div class="input-group">
-                            <label for="sectors">Sectors:</label>
+                            <label for="sectors" data-tip="How many equal angular sectors each ring is cut into. More sectors give smaller cells.">Sectors</label>
                             <input type="number" id="sectors" value="50" min="8" max="100" step="2">
                         </div>
                     </div>
 
                     <div class="input-group">
-                        <label for="friction">Friction angle &phi; (&deg;), 0 for Boussinesq:</label>
+                        <label for="friction" data-tip="Sets the concentration factor n, in degrees. 0 gives Boussinesq (n = 3), the classical chart.">Friction angle &phi;</label>
                         <input type="number" id="friction" value="0" min="0" max="45" step="0.5">
                     </div>
 
                     <div class="button-row">
-                        <button id="clear-drawing" type="button">Clear Drawing</button>
-                        <button id="reset-button" type="button" class="secondary-button">Reset Defaults</button>
+                        <button id="clear-drawing" type="button">Clear drawing</button>
                     </div>
                 </section>
 
                 <section id="scale-section">
-                    <h2>Depth and Scale Helpers</h2>
+                    <h2>Depth</h2>
 
                     <div class="input-group">
-                        <label for="depth">Depth z (m):</label>
+                        <label for="depth" data-tip="Depth below the chart centre at which the stress is found, in metres. The scale bar on the chart is this long.">Depth <i>z</i></label>
                         <input type="number" id="depth" value="5" min="0.1" step="0.1">
                     </div>
                 </section>
@@ -69,29 +93,29 @@
 
                     <div class="results-grid">
                         <div class="result-item">
-                            <span class="label">Concentration factor <i>n</i></span>
+                            <span class="label" data-tip="Fröhlich’s exponent: 3 for Boussinesq, larger when a friction angle focuses the load.">Concentration factor <i>n</i></span>
                             <span id="exponent">3.00</span>
                         </div>
                         <div class="result-item">
-                            <span class="label">Unit influence per cell</span>
+                            <span class="label" data-tip="The share of q that one cell contributes: 1/(rings × sectors).">Unit influence per cell</span>
                             <span id="unit-influence">0.0000</span>
                         </div>
                         <div class="result-item">
-                            <span class="label">Covered cells</span>
+                            <span class="label" data-tip="The number of cells whose centre lies inside the area you drew.">Covered cells</span>
                             <span id="covered-cells">0</span>
                         </div>
                         <div class="result-item">
-                            <span class="label">Influence value I</span>
+                            <span class="label" data-tip="Covered cells times the unit influence: Δσz/q at depth z under the chart centre.">Influence value I</span>
                             <span id="influence-value">0.0000</span>
                         </div>
                         <div class="result-item emphasis">
-                            <span class="label">Stress increase Δσ<sub>z</sub></span>
+                            <span class="label" data-tip="The vertical stress increase at depth z beneath the chart centre, q × I.">Stress increase Δσ<sub>z</sub></span>
                             <span id="stress-result">0.00 kPa</span>
                         </div>
                     </div>
 
                     <div class="formula-card">
-                        <h3>Calculation</h3>
+                        <h3 data-tip="The stress increase worked out from the applied pressure and the influence value.">Calculation</h3>
                         <p id="formula-text">Δσ<sub>z</sub> = q × I</p>
                         <!-- <p id="assumption-text">The chart is truncated at the selected r/z cutoff, so the total captured influence is less than 1.0.</p> -->
                     </div>

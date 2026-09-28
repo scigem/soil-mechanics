@@ -8,11 +8,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <script type="module" crossorigin src="/soil-mechanics/assets/sieve-analysis-mr8P0_Fe.js"></script>
-  <link rel="modulepreload" crossorigin href="/soil-mechanics/assets/modulepreload-polyfill-B5Qt9EMX.js">
+  <script type="module" crossorigin src="/soil-mechanics/assets/sieve-analysis-D0vUQSnh.js"></script>
+  <link rel="modulepreload" crossorigin href="/soil-mechanics/assets/main-Xfqt2xr9.js">
+  <link rel="modulepreload" crossorigin href="/soil-mechanics/assets/ui-tU1-thhr.js">
   <link rel="modulepreload" crossorigin href="/soil-mechanics/assets/plotly-Blke_pAn.js">
-  <link rel="stylesheet" crossorigin href="/soil-mechanics/assets/sieve-analysis-U5pnaoxN.css">
-  <link rel="stylesheet" crossorigin href="/soil-mechanics/assets/main-1i5AokFJ.css">
+  <link rel="stylesheet" crossorigin href="/soil-mechanics/assets/main-D8yoG6GQ.css">
+  <link rel="stylesheet" crossorigin href="/soil-mechanics/assets/sieve-analysis-4CYlCudE.css">
 </head>
 
 <body>
@@ -20,6 +21,26 @@
         <header>
             <h1>Sieve Analysis</h1>
         </header>
+
+        <section id="about">
+            <p>A sieve analysis shakes a dry sample through a stack of sieves, from coarse at the top to fine at
+                the bottom, and weighs what each one retains. Adding up the retained masses from the top gives the
+                percentage of the sample finer than each sieve, the percent passing. Plotted against the log of the
+                aperture, this is the grading curve. From it come the sizes <em>D</em><sub>10</sub>,
+                <em>D</em><sub>30</sub> and <em>D</em><sub>60</sub>, which 10%, 30% and 60% of the sample is finer
+                than, and from those the coefficients of uniformity and curvature that describe how well graded
+                the soil is.</p>
+            <h3>What you are seeing</h3>
+            <ul>
+                <li><strong>Mass retained.</strong> The mass, in grams, left on each sieve and in the pan. Change
+                    any of them to change the sample.</li>
+                <li><strong>The grading curve.</strong> Percent passing each sieve against its aperture, on a log
+                    axis. The pan is counted in the total but has no aperture, so it is not plotted.</li>
+                <li><strong>Key results.</strong> The total mass, the fines passing 0.075 mm, and the characteristic
+                    sizes and coefficients. Each <em>D</em> is interpolated linearly in log size between the two
+                    sieves either side of it; a dash means the curve does not reach that percentage.</li>
+            </ul>
+        </section>
 
         <div class="main-layout">
             <div class="column">
@@ -38,31 +59,31 @@
                     <h2>Key results</h2>
                     <div class="results-grid">
                         <div class="result-item">
-                            <span class="label">Total mass</span>
+                            <span class="label" data-tip="The sum of the masses on every sieve and in the pan, in grams.">Total mass</span>
                             <span><span id="totalMassValue">0</span> g</span>
                         </div>
                         <div class="result-item">
-                            <span class="label">Passing 0.075 mm</span>
+                            <span class="label" data-tip="The percentage of the sample finer than the 0.075 mm sieve: the fines, silt and clay.">Passing 0.075 mm</span>
                             <span id="finesValue">0%</span>
                         </div>
                         <div class="result-item">
-                            <span class="label">D<sub>10</sub></span>
+                            <span class="label" data-tip="The size that 10% of the sample, by mass, is finer than. Sometimes called the effective size.">D<sub>10</sub></span>
                             <span id="d10Value">—</span>
                         </div>
                         <div class="result-item">
-                            <span class="label">D<sub>30</sub></span>
+                            <span class="label" data-tip="The size that 30% of the sample, by mass, is finer than.">D<sub>30</sub></span>
                             <span id="d30Value">—</span>
                         </div>
                         <div class="result-item">
-                            <span class="label">D<sub>60</sub></span>
+                            <span class="label" data-tip="The size that 60% of the sample, by mass, is finer than.">D<sub>60</sub></span>
                             <span id="d60Value">—</span>
                         </div>
                         <div class="result-item">
-                            <span class="label">C<sub>u</sub></span>
+                            <span class="label" data-tip="Coefficient of uniformity, D60 / D10. Near 1 for a soil of one size; larger for a wider spread of sizes.">C<sub>u</sub></span>
                             <span id="cuValue">—</span>
                         </div>
                         <div class="result-item">
-                            <span class="label">C<sub>c</sub></span>
+                            <span class="label" data-tip="Coefficient of curvature, D30² / (D10 D60). It describes the shape of the curve between D10 and D60.">C<sub>c</sub></span>
                             <span id="ccValue">—</span>
                         </div>
                     </div>

@@ -4,15 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>1D Compression Explorer</title>
+    <title>1D Compression</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <script type="module" crossorigin src="/soil-mechanics/assets/1d-compression-h6zMXQ9_.js"></script>
-  <link rel="modulepreload" crossorigin href="/soil-mechanics/assets/modulepreload-polyfill-B5Qt9EMX.js">
+  <script type="module" crossorigin src="/soil-mechanics/assets/1d-compression-kLeB7Lv-.js"></script>
+  <link rel="modulepreload" crossorigin href="/soil-mechanics/assets/main-Xfqt2xr9.js">
+  <link rel="modulepreload" crossorigin href="/soil-mechanics/assets/ui-tU1-thhr.js">
   <link rel="modulepreload" crossorigin href="/soil-mechanics/assets/plotly-Blke_pAn.js">
-  <link rel="stylesheet" crossorigin href="/soil-mechanics/assets/1d-compression-CKDsQ6-k.css">
-  <link rel="stylesheet" crossorigin href="/soil-mechanics/assets/main-1i5AokFJ.css">
+  <link rel="stylesheet" crossorigin href="/soil-mechanics/assets/main-D8yoG6GQ.css">
+  <link rel="stylesheet" crossorigin href="/soil-mechanics/assets/1d-compression-DfGuzOfH.css">
 </head>
 
 <body>
@@ -21,13 +22,36 @@
             <h1>1D Compression</h1>
         </header>
 
+        <section id="about">
+            <p>Loaded in one dimension, as in an oedometer, a soil's void ratio falls with the logarithm of the
+                vertical effective stress. Below its preconsolidation stress σ′<sub>pc</sub>, the largest stress it
+                has carried, it follows a stiff recompression line of slope κ. Loaded past σ′<sub>pc</sub>, it yields
+                onto the virgin compression line of slope λ, and σ′<sub>pc</sub> moves up to the new past maximum.
+                Unloading from the peak follows a swelling line of slope κ, so the soil keeps most of the compression
+                and is left overconsolidated.</p>
+            <h3>What you are seeing</h3>
+            <ul>
+                <li><strong>The chart.</strong> Void ratio against vertical effective stress, on a logarithmic
+                    axis, so every line is straight. The dashed black line is the virgin compression line; the
+                    dotted grey line is the initial recompression line, up to the initial σ′<sub>pc</sub> (dotted
+                    grey vertical line).</li>
+                <li><strong>The path.</strong> Loading (solid blue) runs from the initial stress to the peak, along
+                    the recompression line and then, if the peak passes σ′<sub>pc</sub>, along the virgin line.
+                    Unloading (solid orange) runs back from the peak to the final stress, on the current
+                    unload–reload line (dash-dot orange). If the soil yielded, the dashed orange vertical line marks
+                    the new σ′<sub>pc</sub>. The black points are the initial, peak and final states.</li>
+                <li><strong>The outputs.</strong> The overconsolidation ratios and void ratios of those states, and a
+                    note on whether the soil yielded.</li>
+            </ul>
+        </section>
+
         <div class="main-layout">
             <div class="column">
                 <section id="input-section">
                     <h2>Stress History</h2>
 
                     <div class="input-group">
-                        <label for="initial-stress">Initial vertical stress σ′<sub>0</sub> (kPa):</label>
+                        <label for="initial-stress" data-tip="The vertical effective stress the soil starts at, before this loading.">Initial stress σ′<sub>0</sub></label>
                         <div class="slider-container">
                             <input type="range" id="initial-stress" min="20" max="250" value="50" step="5">
                             <span class="slider-value" id="initialStressValue">50</span>
@@ -36,7 +60,7 @@
                     </div>
 
                     <div class="input-group">
-                        <label for="precon-stress">Initial preconsolidation stress σ′<sub>pc</sub> (kPa):</label>
+                        <label for="precon-stress" data-tip="The largest vertical effective stress the soil has carried in the past. Below it the soil is stiff; beyond it, it yields. It cannot be less than σ′0.">Preconsolidation stress σ′<sub>pc</sub></label>
                         <div class="slider-container">
                             <input type="range" id="precon-stress" min="30" max="400" value="150" step="5">
                             <span class="slider-value" id="preconStressValue">150</span>
@@ -45,7 +69,7 @@
                     </div>
 
                     <div class="input-group">
-                        <label for="peak-stress">Peak loading stress σ′<sub>max</sub> (kPa):</label>
+                        <label for="peak-stress" data-tip="The largest vertical effective stress applied in this loading, before unloading.">Peak stress σ′<sub>max</sub></label>
                         <div class="slider-container">
                             <input type="range" id="peak-stress" min="30" max="600" value="300" step="5">
                             <span class="slider-value" id="peakStressValue">300</span>
@@ -54,7 +78,7 @@
                     </div>
 
                     <div class="input-group">
-                        <label for="final-stress">Stress after unloading σ′<sub>f</sub> (kPa):</label>
+                        <label for="final-stress" data-tip="The vertical effective stress after unloading from the peak. It cannot exceed the peak.">Final stress σ′<sub>f</sub></label>
                         <div class="slider-container">
                             <input type="range" id="final-stress" min="20" max="500" value="100" step="5">
                             <span class="slider-value" id="finalStressValue">100</span>
@@ -65,7 +89,7 @@
                     <h2>Compressibility</h2>
 
                     <div class="input-group">
-                        <label for="lambda">Virgin compression slope λ:</label>
+                        <label for="lambda" data-tip="Slope of the virgin compression line: the fall in void ratio per unit increase in ln σ′.">Compression slope λ</label>
                         <div class="slider-container">
                             <input type="range" id="lambda" min="0.08" max="0.35" value="0.18" step="0.01">
                             <span class="slider-value" id="lambdaValue">0.18</span>
@@ -74,7 +98,7 @@
                     </div>
 
                     <div class="input-group">
-                        <label for="kappa">Swelling / recompression slope κ:</label>
+                        <label for="kappa" data-tip="Slope of the swelling and recompression lines, per unit ln σ′. Much smaller than λ: unloading and reloading are stiff.">Swelling slope κ</label>
                         <div class="slider-container">
                             <input type="range" id="kappa" min="0.01" max="0.10" value="0.04" step="0.005">
                             <span class="slider-value" id="kappaValue">0.040</span>
@@ -83,7 +107,7 @@
                     </div>
 
                     <div class="input-group">
-                        <label for="precon-void-ratio">Void ratio at initial σ′<sub>pc</sub>:</label>
+                        <label for="precon-void-ratio" data-tip="The void ratio on the virgin compression line at the initial preconsolidation stress. It fixes where the lines sit.">Void ratio at σ′<sub>pc</sub></label>
                         <div class="slider-container">
                             <input type="range" id="precon-void-ratio" min="0.60" max="1.40" value="1.00" step="0.02">
                             <span class="slider-value" id="preconVoidRatioValue">1.00</span>
@@ -91,7 +115,6 @@
                         </div>
                     </div>
 
-                    <button id="reset-button" type="button">Reset to Default</button>
                 </section>
 
 
@@ -105,23 +128,23 @@
                     <h2>Important Outputs</h2>
                     <div class="results-grid">
                         <div class="result-item">
-                            <span class="label">Initial OCR</span>
+                            <span class="label" data-tip="Overconsolidation ratio before loading: σ′pc/σ′0.">Initial OCR</span>
                             <span id="initialOCR">3.00</span>
                         </div>
                         <div class="result-item emphasis">
-                            <span class="label">Current OCR</span>
+                            <span class="label" data-tip="Overconsolidation ratio after unloading: the current σ′pc over σ′f. The current σ′pc is the larger of the initial σ′pc and the peak stress.">Current OCR</span>
                             <span id="currentOCR">3.00</span>
                         </div>
                         <div class="result-item">
-                            <span class="label">Initial void ratio</span>
+                            <span class="label" data-tip="Void ratio at σ′0, on the initial recompression line.">Initial void ratio</span>
                             <span id="initialVoidRatio">1.04</span>
                         </div>
                         <div class="result-item">
-                            <span class="label">Peak void ratio</span>
+                            <span class="label" data-tip="Void ratio at the peak stress: on the virgin line if the peak passes σ′pc, otherwise on the recompression line.">Peak void ratio</span>
                             <span id="peakVoidRatio">0.88</span>
                         </div>
                         <div class="result-item">
-                            <span class="label">Final void ratio</span>
+                            <span class="label" data-tip="Void ratio after unloading to σ′f, on the swelling line from the current σ′pc.">Final void ratio</span>
                             <span id="finalVoidRatio">0.92</span>
                         </div>
                     </div>
