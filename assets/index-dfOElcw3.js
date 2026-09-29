@@ -1,4 +1,4 @@
-import"./main-CKabMwJn.js";const o=`<!DOCTYPE html>
+import"./main-Cbx4pfPv.js";const o=`<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -819,14 +819,20 @@ import"./main-CKabMwJn.js";const o=`<!DOCTYPE html>
             <p>Behind a smooth wall with level ground, the tilt of the stress can only be vertical or horizontal, so it is
                 one number, <em>C</em>, and <em>K</em> = σ<sub>h</sub>′/σ<sub>v</sub>′ = (1 − <em>C</em>)/(1 +
                 <em>C</em>). Friction stops <em>C</em> at ± sin φ′: the active and passive states. Drag along the
-                dial, or move the wall.</p>
+                disc, or move the wall.</p>
             <h3>What you are seeing</h3>
             <ul>
-                <li><strong>The dial.</strong> <em>K</em> = (1 − <em>C</em>)/(1 + <em>C</em>) against the tilt
-                    <em>C</em>, on a log scale. The curve is solid blue between friction's two stops and dotted
-                    beyond them, where the shaded regions are out of reach. The dots mark passive (purple), water,
-                    <em>K</em> = 1 (blue), at rest (green) and active (orange); the large dot is the dial now, and
-                    the arrow is the trip from rest to here. Drag along it to move <em>C</em>.</li>
+                <li><strong>The tilt on the disc.</strong> The same disc as the Mohr circle tool: every stress
+                    state is a point (<em>C</em>, <em>S</em>), and friction keeps it inside the blue circle of
+                    radius sin φ′. With a smooth wall and level ground there is no shear on horizontal planes, so
+                    <em>S</em> = 0 and the state can only move along the horizontal axis: this is the dial. The
+                    scale under the axis reads <em>K</em> = (1 − <em>C</em>)/(1 + <em>C</em>). The dots mark
+                    passive (purple), water, <em>K</em> = 1 (blue), at rest (green) and active (orange); the arrow
+                    from the centre is the tilt now, and the arrow below it the trip from rest. Drag along the axis
+                    to move <em>C</em>.</li>
+                <li><strong>The dial.</strong> The same line opened out: <em>K</em> against <em>C</em>, on a log
+                    scale. The curve is solid blue between friction's two stops and dotted beyond them, where the
+                    shaded regions are out of reach. Drag along it to move <em>C</em>.</li>
                 <li><strong>The wall.</strong> The grains push on the wall with <em>K</em>γ<em>z</em>: the
                     pressure diagram grows with depth, with the at-rest diagram dashed in green for comparison. At
                     a stop, the sliding wedge and its slip plane are drawn, at 45° + φ′/2 (active) or 45° − φ′/2
@@ -893,13 +899,17 @@ import"./main-CKabMwJn.js";const o=`<!DOCTYPE html>
 
             <section id="visualization-section">
                 <div class="panels">
-                    <figure class="wide">
+                    <figure>
                         <canvas id="dial-canvas"></canvas>
                         <figcaption>The dial</figcaption>
                     </figure>
                     <figure>
                         <canvas id="wall-canvas"></canvas>
                         <figcaption>The wall</figcaption>
+                    </figure>
+                    <figure>
+                        <canvas id="disc-canvas"></canvas>
+                        <figcaption>The tilt on the disc</figcaption>
                     </figure>
                     <figure>
                         <canvas id="mohr-canvas"></canvas>
@@ -1293,7 +1303,7 @@ import"./main-CKabMwJn.js";const o=`<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Soil Mechanics Visualisation Tools</title>
+    <title>Soil Mechanics Teaching Tools</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -1302,7 +1312,7 @@ import"./main-CKabMwJn.js";const o=`<!DOCTYPE html>
 <body>
     <main class="home-shell">
         <section class="hero">
-            <h1>Interactive teaching tools</h1>
+            <h1>Soil mechanics teaching tools</h1>
         </section>
 
         <section aria-labelledby="tool-list-heading" class="tool-library">
@@ -1461,7 +1471,10 @@ import"./main-CKabMwJn.js";const o=`<!DOCTYPE html>
                     it.</li>
             </ul>
             <h3>Conventions</h3>
-            <p>Compression is positive throughout.</p>
+            <p>Compression is positive throughout. β (the direction of σ<sub>1</sub>′ from the vertical) and θ (the
+                plane from the horizontal) are both measured anticlockwise. τ on a horizontal plane is positive when
+                the soil above pushes the soil below to the right, so H sits at (σ<sub>v</sub>′, τ) and a plane at θ
+                plots 2θ clockwise from H. These are the conventions of the course notes and data sheets.</p>
         </section>
 
         <div class="main-layout">
@@ -2340,4 +2353,4 @@ import"./main-CKabMwJn.js";const o=`<!DOCTYPE html>
     <script type="module" src="./js/system-dynamics.js"><\/script>
 </body>
 
-</html>`,S=Object.assign({"../1d-compression.html":o,"../bearing-capacity.html":r,"../compaction.html":d,"../consolidation.html":c,"../critical-state.html":h,"../darcy-flow.html":p,"../earth-pressures.html":u,"../elastic-footing.html":m,"../footing-settlement.html":v,"../index.html":g,"../infinite-slope.html":f,"../mohrs-circle.html":b,"../newmarks-chart.html":w,"../proctor.html":y,"../ruler.html":T,"../shear-box.html":k,"../sieve-analysis.html":x,"../stress-profile.html":V,"../system-dynamics.html":C}),D=document.querySelector("#tool-grid"),a=(n,t)=>{const e=n.match(t);return e?e[1].replace(/\s+/g," ").trim():""},z=n=>n.replace(/[-_]+/g," ").replace(/\b\w/g,t=>t.toUpperCase()),P=Object.entries(S).map(([n,t])=>{const e=n.split("/").pop();if(!e||e==="index.html")return null;const s=a(t,/<h1[^>]*>([\s\S]*?)<\/h1>/i)||a(t,/<title>([\s\S]*?)<\/title>/i)||z(e.replace(/\.html$/,""));return{fileName:e,href:`./${e}`,title:s.replace(/<[^>]+>/g,"")}}).filter(Boolean).sort((n,t)=>n.title.localeCompare(t.title));D.replaceChildren(...P.map((n,t)=>{const e=document.createElement("a");e.className="tool-card",e.href=n.href;const s=document.createElement("span");s.className="tool-card-index";const i=document.createElement("h3");i.textContent=n.title;const l=document.createElement("p");return l.textContent=n.fileName,e.append(s,i),e}));
+</html>`,S=Object.assign({"../1d-compression.html":o,"../bearing-capacity.html":r,"../compaction.html":d,"../consolidation.html":c,"../critical-state.html":h,"../darcy-flow.html":p,"../earth-pressures.html":u,"../elastic-footing.html":m,"../footing-settlement.html":v,"../index.html":g,"../infinite-slope.html":f,"../mohrs-circle.html":b,"../newmarks-chart.html":w,"../proctor.html":y,"../ruler.html":T,"../shear-box.html":k,"../sieve-analysis.html":x,"../stress-profile.html":V,"../system-dynamics.html":C}),z=document.querySelector("#tool-grid"),a=(n,t)=>{const e=n.match(t);return e?e[1].replace(/\s+/g," ").trim():""},D=n=>n.replace(/[-_]+/g," ").replace(/\b\w/g,t=>t.toUpperCase()),P=Object.entries(S).map(([n,t])=>{const e=n.split("/").pop();if(!e||e==="index.html")return null;const s=a(t,/<h1[^>]*>([\s\S]*?)<\/h1>/i)||a(t,/<title>([\s\S]*?)<\/title>/i)||D(e.replace(/\.html$/,""));return{fileName:e,href:`./${e}`,title:s.replace(/<[^>]+>/g,"")}}).filter(Boolean).sort((n,t)=>n.title.localeCompare(t.title));z.replaceChildren(...P.map((n,t)=>{const e=document.createElement("a");e.className="tool-card",e.href=n.href;const s=document.createElement("span");s.className="tool-card-index";const i=document.createElement("h3");i.textContent=n.title;const l=document.createElement("p");return l.textContent=n.fileName,e.append(s,i),e}));
