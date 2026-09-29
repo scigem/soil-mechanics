@@ -6,10 +6,10 @@ import '../css/proctor.css';
 // book/images/new/compaction/_proctor.py, which draws the figures there.
 //
 // Two limits act on each blow.
-//   The grains' limit (dry side): the energy per volume E squeezes a loose fill
-//   by about a quarter, so a blow applies sigma_b = E / 0.25. It compacts the
-//   network along a log law measured from the stress already holding the
-//   grains, the soil's own p_r plus the water's squeeze sigma_s:
+//   The grains' limit (dry side): the blows are roughly equivalent to a static
+//   pressure sigma_b = E, the energy per volume. They compact the network along
+//   a log law measured from the stress already holding the grains, the soil's
+//   own p_r plus the water's squeeze sigma_s:
 //   e_d = eN - C log10(sigma_b / (p_r + sigma_s)).
 //   In a clay sigma_s = S s(S) (Bishop's chi ~ S, van Genuchten's s), which
 //   grows without limit as it dries; in a sand the bridges give
@@ -22,16 +22,15 @@ import '../css/proctor.css';
 const GAMMA_W = 9.81;
 const E_STANDARD = (3 * 25 * 2.7 * 9.81 * 0.3) / 1e-3 / 1e3;   // 596 kPa
 const E_MODIFIED = (5 * 25 * 4.9 * 9.81 * 0.45) / 1e-3 / 1e3;  // 2704 kPa
-const BLOW_STRAIN = 0.25;   // sigma_b = E / BLOW_STRAIN
-const blow = (E) => E / BLOW_STRAIN;
+const blow = (E) => E;   // the equivalent static pressure of the blows
 const E_LO = 100;
 const E_HI = 6000;
 const E_MIN_VOID = 0.2;
 
 const SOILS = {
-    sand: { name: 'clean sand', kind: 'bridges', Gs: 2.65, sigma_b: 9, S_b: 0.03, eN: 0.914, C: 0.10, p_r: 1, A: 0, e_ref: 0.62, e_max: 0.95, y: [14.4, 18.2], x: 26 },
-    clay: { name: 'lean clay', kind: 'pores', Gs: 2.70, s_a: 100, n: 1.3, eN: 0.641, C: 0.30, p_r: 10, A: 0.06, e_ref: 1.0, e_max: 1.0, y: [13.0, 21.0], x: 30 },
-    fat: { name: 'fat clay', kind: 'pores', Gs: 2.70, s_a: 10, n: 1.2, eN: 1.401, C: 0.60, p_r: 60, A: 0.05, e_ref: 1.3, e_max: 1.3, y: [11.5, 19.0], x: 38 },
+    sand: { name: 'clean sand', kind: 'bridges', Gs: 2.65, sigma_b: 2.25, S_b: 0.03, eN: 0.914, C: 0.10, p_r: 0.25, A: 0, e_ref: 0.62, e_max: 0.95, y: [14.4, 18.2], x: 26 },
+    clay: { name: 'lean clay', kind: 'pores', Gs: 2.70, s_a: 25, n: 1.3, eN: 0.641, C: 0.30, p_r: 2.5, A: 0.06, e_ref: 1.0, e_max: 1.0, y: [13.0, 21.0], x: 30 },
+    fat: { name: 'fat clay', kind: 'pores', Gs: 2.70, s_a: 2.5, n: 1.2, eN: 1.401, C: 0.60, p_r: 15, A: 0.05, e_ref: 1.3, e_max: 1.3, y: [11.5, 19.0], x: 38 },
 };
 
 const COLORS = {
@@ -447,7 +446,7 @@ function drawReadout(s) {
         status = `Wet of the optimum: the air is trapped (A ≈ ${(100 * r.A).toFixed(1)}%), and the water, which cannot leave in a blow, takes it.`;
         cls = 'beyond';
     } else {
-        status = `Dry of the optimum: suction holds the grains with ${kpa(r.sigma)} kPa, against a blow of about ${kpa(blow(s.E))} kPa. Add water to weaken it.`;
+        status = `Dry of the optimum: suction holds the grains with ${kpa(r.sigma)} kPa, against a blow of ${kpa(blow(s.E))} kPa. Add water to weaken it.`;
         cls = 'cap';
     }
     readout.innerHTML = items.map(([a, b, t]) => `<div class="item"><span>${a}${tip(t)}</span><strong>${b}</strong></div>`).join('')
