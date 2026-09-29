@@ -34,8 +34,9 @@
                 <li><strong>The status bar.</strong> Which limit is in charge: the suction, or the trapped air.</li>
             </ul>
             <h3>The model</h3>
-            <p>A schematic model, tuned only to land near typical results. The grains' limit follows a log law in
-                the energy, resisted by the suction squeeze; the water's limit is the air-voids line of the air that
+            <p>A schematic model, tuned only to land near typical results. The grains' limit is the compression law of
+                1D settlement: the void ratio falls by C for each tenfold of the blow's stress over the stress already
+                holding the grains, which the suction adds to; the water's limit is the air-voids line of the air that
                 cannot get out. A sand drains during the blows, so only the saturation line limits it. The same
                 model draws the figures in the course notes.</p>
         </section>
@@ -58,7 +59,7 @@
                     <button id="modified">Modified</button>
                 </div>
                 <div class="input-group" style="margin-top: 0.6rem">
-                    <label for="energy" data-tip="E = nNmgh/V: the energy of all the blows per volume of soil. Its units, kJ/m³, are kPa: it is a stress. Standard is 596 kPa, Modified 2704 kPa.">Energy <em>E</em></label>
+                    <label for="energy" data-tip="E = nNmgh/V: the energy of all the blows per volume of soil. Its units, kJ/m³, are kPa. Work is stress times strain, so a blow that squeezes the soil by about a quarter applies about 4E: some 2.4 MPa in the Standard test (596 kJ/m³), 10.8 MPa in the Modified (2704 kJ/m³).">Energy <em>E</em></label>
                     <div class="slider-container">
                         <input type="range" id="energy" min="0" max="1" step="0.001" value="0.5">
                         <span class="slider-value" id="energy-value"></span>
