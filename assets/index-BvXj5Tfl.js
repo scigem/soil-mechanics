@@ -1725,8 +1725,9 @@ import"./main-Cbx4pfPv.js";const o=`<!DOCTYPE html>
                 <li><strong>The status bar.</strong> Which limit is in charge: the suction, or the trapped air.</li>
             </ul>
             <h3>The model</h3>
-            <p>A schematic model, tuned only to land near typical results. The grains' limit follows a log law in
-                the energy, resisted by the suction squeeze; the water's limit is the air-voids line of the air that
+            <p>A schematic model, tuned only to land near typical results. The grains' limit is the compression law of
+                1D settlement: the void ratio falls by C for each tenfold of the blow's stress over the stress already
+                holding the grains, which the suction adds to; the water's limit is the air-voids line of the air that
                 cannot get out. A sand drains during the blows, so only the saturation line limits it. The same
                 model draws the figures in the course notes.</p>
         </section>
@@ -1749,7 +1750,7 @@ import"./main-Cbx4pfPv.js";const o=`<!DOCTYPE html>
                     <button id="modified">Modified</button>
                 </div>
                 <div class="input-group" style="margin-top: 0.6rem">
-                    <label for="energy" data-tip="E = nNmgh/V: the energy of all the blows per volume of soil. Its units, kJ/m³, are kPa: it is a stress. Standard is 596 kPa, Modified 2704 kPa.">Energy <em>E</em></label>
+                    <label for="energy" data-tip="E = nNmgh/V: the energy of all the blows per volume of soil. Its units, kJ/m³, are kPa. Work is stress times strain, so a blow that squeezes the soil by about a quarter applies about 4E: some 2.4 MPa in the Standard test (596 kJ/m³), 10.8 MPa in the Modified (2704 kJ/m³).">Energy <em>E</em></label>
                     <div class="slider-container">
                         <input type="range" id="energy" min="0" max="1" step="0.001" value="0.5">
                         <span class="slider-value" id="energy-value"></span>
@@ -2353,4 +2354,4 @@ import"./main-Cbx4pfPv.js";const o=`<!DOCTYPE html>
     <script type="module" src="./js/system-dynamics.js"><\/script>
 </body>
 
-</html>`,S=Object.assign({"../1d-compression.html":o,"../bearing-capacity.html":r,"../compaction.html":d,"../consolidation.html":c,"../critical-state.html":h,"../darcy-flow.html":p,"../earth-pressures.html":u,"../elastic-footing.html":m,"../footing-settlement.html":v,"../index.html":g,"../infinite-slope.html":f,"../mohrs-circle.html":b,"../newmarks-chart.html":w,"../proctor.html":y,"../ruler.html":T,"../shear-box.html":k,"../sieve-analysis.html":x,"../stress-profile.html":V,"../system-dynamics.html":C}),z=document.querySelector("#tool-grid"),a=(n,t)=>{const e=n.match(t);return e?e[1].replace(/\s+/g," ").trim():""},D=n=>n.replace(/[-_]+/g," ").replace(/\b\w/g,t=>t.toUpperCase()),P=Object.entries(S).map(([n,t])=>{const e=n.split("/").pop();if(!e||e==="index.html")return null;const s=a(t,/<h1[^>]*>([\s\S]*?)<\/h1>/i)||a(t,/<title>([\s\S]*?)<\/title>/i)||D(e.replace(/\.html$/,""));return{fileName:e,href:`./${e}`,title:s.replace(/<[^>]+>/g,"")}}).filter(Boolean).sort((n,t)=>n.title.localeCompare(t.title));z.replaceChildren(...P.map((n,t)=>{const e=document.createElement("a");e.className="tool-card",e.href=n.href;const s=document.createElement("span");s.className="tool-card-index";const i=document.createElement("h3");i.textContent=n.title;const l=document.createElement("p");return l.textContent=n.fileName,e.append(s,i),e}));
+</html>`,S=Object.assign({"../1d-compression.html":o,"../bearing-capacity.html":r,"../compaction.html":d,"../consolidation.html":c,"../critical-state.html":h,"../darcy-flow.html":p,"../earth-pressures.html":u,"../elastic-footing.html":m,"../footing-settlement.html":v,"../index.html":g,"../infinite-slope.html":f,"../mohrs-circle.html":b,"../newmarks-chart.html":w,"../proctor.html":y,"../ruler.html":T,"../shear-box.html":k,"../sieve-analysis.html":x,"../stress-profile.html":V,"../system-dynamics.html":C}),D=document.querySelector("#tool-grid"),a=(n,t)=>{const e=n.match(t);return e?e[1].replace(/\s+/g," ").trim():""},z=n=>n.replace(/[-_]+/g," ").replace(/\b\w/g,t=>t.toUpperCase()),P=Object.entries(S).map(([n,t])=>{const e=n.split("/").pop();if(!e||e==="index.html")return null;const s=a(t,/<h1[^>]*>([\s\S]*?)<\/h1>/i)||a(t,/<title>([\s\S]*?)<\/title>/i)||z(e.replace(/\.html$/,""));return{fileName:e,href:`./${e}`,title:s.replace(/<[^>]+>/g,"")}}).filter(Boolean).sort((n,t)=>n.title.localeCompare(t.title));D.replaceChildren(...P.map((n,t)=>{const e=document.createElement("a");e.className="tool-card",e.href=n.href;const s=document.createElement("span");s.className="tool-card-index";const i=document.createElement("h3");i.textContent=n.title;const l=document.createElement("p");return l.textContent=n.fileName,e.append(s,i),e}));
