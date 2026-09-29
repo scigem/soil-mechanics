@@ -1750,7 +1750,7 @@ import"./main-Cbx4pfPv.js";const o=`<!DOCTYPE html>
                     <button id="modified">Modified</button>
                 </div>
                 <div class="input-group" style="margin-top: 0.6rem">
-                    <label for="energy" data-tip="E = nNmgh/V: the energy of all the blows per volume of soil. Its units, kJ/m³, are kPa, and the blows compact about as much as a static pressure of the same size. Standard is 596 kPa, Modified 2704 kPa.">Energy <em>E</em></label>
+                    <label for="energy" data-tip="E = nNmgh/V: the energy of all the blows per volume of soil. Its units, kJ/m³, are kPa, and the model treats the blows as a static pressure of the same size (an assumption). Standard is 596 kPa, Modified 2704 kPa.">Energy <em>E</em></label>
                     <div class="slider-container">
                         <input type="range" id="energy" min="0" max="1" step="0.001" value="0.5">
                         <span class="slider-value" id="energy-value"></span>
