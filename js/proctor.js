@@ -6,8 +6,8 @@ import '../css/proctor.css';
 // book/images/new/compaction/_proctor.py, which draws the figures there.
 //
 // Two limits act on each blow.
-//   The grains' limit (dry side): the blows are roughly equivalent to a static
-//   pressure sigma_b = E, the energy per volume. They compact the network along
+//   The grains' limit (dry side): the blows are treated as a static pressure
+//   sigma_b = E, the energy per volume (an assumption). They compact the network along
 //   a log law measured from the stress already holding the grains, the soil's
 //   own p_r plus the water's squeeze sigma_s:
 //   e_d = eN - C log10(sigma_b / (p_r + sigma_s)).
