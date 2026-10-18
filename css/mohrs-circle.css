@@ -2,12 +2,52 @@
 @import './panel-tool.css';
 
 .panels {
-    grid-template-columns: 1.35fr 1fr;
+    grid-template-columns: 1fr 1fr;
 }
 
 #mohr-canvas {
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 1 / 1;
 }
+
+#box-canvas,
+#ellipse-canvas {
+    aspect-ratio: 1 / 1;
+}
+
+.panels figcaption strong {
+    display: block;
+    font-weight: 500;
+}
+
+.view-control {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0.5rem 0;
+}
+
+.view-control select {
+    width: auto;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background: var(--surface-color);
+    color: var(--text-primary);
+    font: inherit;
+}
+
+.view-description {
+    display: block;
+    margin-top: 0.35rem;
+    line-height: 1.5;
+    font-variant-numeric: tabular-nums;
+}
+
+.normal-key { color: var(--friction); }
+.shear-key { color: var(--state-active); }
+.plane-key { color: var(--plane); }
 
 #disc-canvas {
     aspect-ratio: 1 / 1;

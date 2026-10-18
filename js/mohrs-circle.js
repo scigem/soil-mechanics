@@ -1,4 +1,5 @@
 import { alpha, colors, font, tip } from './ui.js';
+import { stressTensor, traction } from './stress-tensor.mjs';
 import '../css/mohrs-circle.css';
 
 // A stress in a long (two-dimensional) body has a size p' and a tilt. The tilt
@@ -24,6 +25,9 @@ const COLORS = {
     plane: colors.plane,
     element: alpha(colors.soilLight, 0.13),
     halo: colors.surfaceColor,
+    normal: colors.friction,
+    shear: colors.stateActive,
+    minor: colors.waterDark,
 };
 
 const ids = ['p', 'tilt', 'beta', 'phi', 'cohesion', 'theta'];
@@ -32,6 +36,9 @@ const outputs = Object.fromEntries(ids.map((id) => [id, document.getElementById(
 const readout = document.getElementById('readout');
 const mohrCanvas = document.getElementById('mohr-canvas');
 const discCanvas = document.getElementById('disc-canvas');
+const boxCanvas = document.getElementById('box-canvas');
+const ellipseCanvas = document.getElementById('ellipse-canvas');
+const vectorMode = document.getElementById('vector-mode');
 
 const rad = (deg) => (deg * Math.PI) / 180;
 const deg = (r) => (r * 180) / Math.PI;
@@ -52,11 +59,7 @@ function read() {
         q,
         C,
         S,
-        sigma1: s.p + q,
-        sigma3: s.p - q,
-        sigmaV: s.p * (1 + C),
-        sigmaH: s.p * (1 - C),
-        tau: s.p * S,
+        ...stressTensor(s.p, q, s.beta),
         capTilt,
         planeSigma: s.p + q * Math.cos(planeAngle),
         planeTau: q * Math.sin(planeAngle),
@@ -390,6 +393,181 @@ function drawElement(ctx, st, x, y, size, state) {
     if (st.tilt > 0.02) label(ctx, 'σ₁′', cx + dx + (dx >= 0 ? 4 : -4), cy + dy, colour, dx >= 0 ? 'left' : 'right');
 }
 
+// ---------------------------------------------------------------- physical views
+
+function stressScale(ctx, w, h, scale, maxStress) {
+    const value = niceStep(maxStress, 4);
+    const length = value * scale;
+    const x = w - 24 - length;
+    const y = h - 22;
+    ctx.strokeStyle = COLORS.muted;
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(x, y - 3);
+    ctx.lineTo(x, y + 3);
+    ctx.moveTo(x, y);
+    ctx.lineTo(x + length, y);
+    ctx.lineTo(x + length, y - 3);
+    ctx.moveTo(x + length, y);
+    ctx.lineTo(x + length, y + 3);
+    ctx.stroke();
+    label(ctx, `${value} kPa`, x + length / 2, y - 10, COLORS.muted);
+}
+
+function drawBox(st) {
+    const { ctx, w, h } = prepare(boxCanvas);
+    const size = Math.min(w, h);
+    const cx = w / 2;
+    const cy = h * 0.46;
+    const half = 0.19 * size;
+    const scale = 0.25 * size / niceCeil(st.sigma1);
+    const components = vectorMode.value === 'components';
+    document.getElementById('vector-legend').innerHTML = components ?
+        '<span class="normal-key">Normal</span> · <span class="shear-key">shear</span>' : 'Black: resultant';
+    const X = (x) => cx + x;
+    const Y = (y) => cy - y;
+    ctx.fillStyle = COLORS.element;
+    ctx.strokeStyle = COLORS.ink;
+    ctx.lineWidth = 1.5;
+    ctx.fillRect(cx - half, cy - half, 2 * half, 2 * half);
+    ctx.strokeRect(cx - half, cy - half, 2 * half, 2 * half);
+
+    // Show the chosen plane in the same physical orientation as theta.
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(cx - half, cy - half, 2 * half, 2 * half);
+    ctx.clip();
+    const t = rad(st.theta);
+    ctx.strokeStyle = COLORS.plane;
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([5, 4]);
+    ctx.beginPath();
+    ctx.moveTo(X(-2 * half * Math.cos(t)), Y(-2 * half * Math.sin(t)));
+    ctx.lineTo(X(2 * half * Math.cos(t)), Y(2 * half * Math.sin(t)));
+    ctx.stroke();
+    ctx.restore();
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(-t);
+    label(ctx, 'θ', 8, -10, COLORS.plane, 'left');
+    ctx.restore();
+    label(ctx, 'H', cx, cy - half + 14, COLORS.muted);
+    label(ctx, 'V', cx + half - 14, cy, COLORS.muted);
+
+    const vector = (start, v, color) => {
+        const length = Math.hypot(v.x, v.y) * scale;
+        // A vanishing stress has no arrow, rather than a spurious arrowhead.
+        if (length < 0.5) return;
+        arrow(ctx, X(start.x), Y(start.y), X(start.x + v.x * scale),
+            Y(start.y + v.y * scale), color, 2, Math.min(8, length * 0.4));
+    };
+    for (const n of [{ x: 0, y: 1 }, { x: 1, y: 0 }, { x: 0, y: -1 }, { x: -1, y: 0 }]) {
+        const v = traction(st, n);
+        const normalStress = -(v.x * n.x + v.y * n.y);
+        const normal = { x: -normalStress * n.x, y: -normalStress * n.y };
+        const shear = { x: v.x - normal.x, y: v.y - normal.y };
+        const tangent = { x: -n.y, y: n.x };
+        for (const offset of components ? [-0.55, 0.55] : [-0.55, 0, 0.55]) {
+            const end = {
+                x: half * (n.x + offset * tangent.x),
+                y: half * (n.y + offset * tangent.y),
+            };
+            const force = components ? normal : v;
+            vector({ x: end.x - force.x * scale, y: end.y - force.y * scale },
+                force, components ? COLORS.normal : COLORS.ink);
+        }
+        if (components) {
+            // Tangential arrows sit just outside each face, centred on it.
+            vector({ x: n.x * (half + 0.04 * size) - shear.x * scale / 2,
+                y: n.y * (half + 0.04 * size) - shear.y * scale / 2 }, shear, COLORS.shear);
+        }
+    }
+
+    const origin = { x: 26, y: h - 26 };
+    arrow(ctx, origin.x, origin.y, origin.x + 26, origin.y, COLORS.muted, 1, 5);
+    arrow(ctx, origin.x, origin.y, origin.x, origin.y - 26, COLORS.muted, 1, 5);
+    label(ctx, 'x', origin.x + 34, origin.y, COLORS.muted);
+    label(ctx, 'y', origin.x, origin.y - 34, COLORS.muted);
+    stressScale(ctx, w, h, scale, st.sigma1);
+    const summary = `σᵥ′ = ${fmt(st.sigmaV)}, σₕ′ = ${fmt(st.sigmaH)}, τ on H = ${fmt(st.tau)} kPa`;
+    document.getElementById('box-summary').textContent = summary;
+    boxCanvas.setAttribute('aria-label', `Square stress element. ${summary}. ${components ?
+        'Blue arrows show normal compression; orange arrows show shear.' :
+        'Black arrows show the resultant traction on each face.'}`);
+}
+
+function drawEllipse(st, state) {
+    const { ctx, w, h } = prepare(ellipseCanvas);
+    const size = Math.min(w, h);
+    const cx = w / 2;
+    const cy = (h - 70) / 2;
+    const scale = Math.min(0.34 * size, 0.43 * (h - 90)) / niceCeil(st.sigma1);
+    const a = st.sigma1 * scale;
+    const b = st.sigma3 * scale;
+    const X = (x) => cx + x * scale;
+    const Y = (y) => cy - y * scale;
+    const colour = state === 'safe' ? COLORS.circle : state === 'cap' ? COLORS.cap : COLORS.beyond;
+
+    // Reference circle: an isotropic tensor with the same mean stress.
+    ctx.strokeStyle = COLORS.faint;
+    ctx.lineWidth = 1;
+    ctx.setLineDash([3, 4]);
+    ctx.beginPath();
+    ctx.arc(cx, cy, st.p * scale, 0, 2 * Math.PI);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // The image of the unit-normal circle under the stress tensor. Its
+    // semiaxes are the eigenvalues, not their square roots (nor strain).
+    ctx.strokeStyle = colour;
+    ctx.fillStyle = alpha(colour, 0.08);
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    if (b < 1e-8) {
+        ctx.moveTo(X(-st.sigma1 * st.major.x), Y(-st.sigma1 * st.major.y));
+        ctx.lineTo(X(st.sigma1 * st.major.x), Y(st.sigma1 * st.major.y));
+    } else {
+        ctx.ellipse(cx, cy, a, b, -Math.PI / 2 - rad(st.beta), 0, 2 * Math.PI);
+        ctx.fill();
+    }
+    ctx.stroke();
+
+    if (st.q > 1e-8) {
+        for (const [direction, value, text, color] of [
+            [st.major, st.sigma1, 'σ₁′', COLORS.normal],
+            [st.minor, st.sigma3, 'σ₃′', COLORS.minor],
+        ]) {
+            const length = value * scale;
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.moveTo(X(-value * direction.x), Y(-value * direction.y));
+            ctx.lineTo(X(value * direction.x), Y(value * direction.y));
+            ctx.stroke();
+            // Keep the zero eigenvalue's label away from the origin.
+            const offset = Math.max(length, 18) + 14;
+            label(ctx, text, cx + offset * direction.x, cy - offset * direction.y, color);
+        }
+    }
+
+    const t = rad(st.theta);
+    const v = traction(st, { x: -Math.sin(t), y: Math.cos(t) });
+    const length = Math.hypot(v.x, v.y) * scale;
+    if (length > 0.5) arrow(ctx, cx, cy, X(v.x), Y(v.y), COLORS.plane, 2, Math.min(8, length * 0.4));
+    dot(ctx, X(v.x), Y(v.y), 4.5, COLORS.plane);
+    dot(ctx, cx, cy, 2, COLORS.muted);
+    ctx.font = font(Math.min(13, (w - 24) / 21));
+    label(ctx, st.q < 1e-8 ? 'Isotropic: every direction is principal' :
+        st.sigma3 < 1e-8 ? 'σ₃′ = 0: the ellipse becomes a line' : `Principal direction β = ${st.beta}°`,
+    cx, h - 62, COLORS.muted);
+    ctx.font = font(13);
+    stressScale(ctx, w, h, scale, st.sigma1);
+    const summary = `Semiaxes: σ₁′ = ${fmt(st.sigma1)} kPa; σ₃′ = ${fmt(st.sigma3)} kPa.`;
+    document.getElementById('ellipse-summary').textContent = summary;
+    ellipseCanvas.setAttribute('aria-label', `Principal stress ellipse. ${summary} ${st.q < 1e-8 ?
+        'Isotropic circle; principal directions are undetermined.' : `Major axis ${st.beta} degrees anticlockwise from vertical.`}`);
+}
+
 // ---------------------------------------------------------------- readout
 
 // A plane at θ is the same plane at θ ± 180°: report it inside the slider's range.
@@ -446,10 +624,17 @@ function update() {
     const state = status(st);
     drawMohr(st, state);
     drawDisc(st, state);
+    drawBox(st);
+    drawEllipse(st, state);
     drawReadout(st, state);
 }
 
 for (const id of ids) inputs[id].addEventListener('input', update);
+vectorMode.addEventListener('change', update);
+document.addEventListener('tool-reset', () => {
+    vectorMode.value = 'components';
+    update();
+});
 
 function setTilt(t, beta) {
     inputs.tilt.value = Math.max(0, Math.min(1, t));
