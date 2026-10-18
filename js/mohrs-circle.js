@@ -556,11 +556,49 @@ function drawEllipse(st, state) {
     if (length > 0.5) arrow(ctx, cx, cy, X(v.x), Y(v.y), COLORS.plane, 2, Math.min(8, length * 0.4));
     dot(ctx, X(v.x), Y(v.y), 4.5, COLORS.plane);
     dot(ctx, cx, cy, 2, COLORS.muted);
-    ctx.font = font(Math.min(13, (w - 24) / 21));
-    label(ctx, st.q < 1e-8 ? 'Isotropic: every direction is principal' :
-        st.sigma3 < 1e-8 ? 'σ₃′ = 0: the ellipse becomes a line' : `Principal direction β = ${st.beta}°`,
-    cx, h - 62, COLORS.muted);
-    ctx.font = font(13);
+    if (st.q > 1e-8) {
+        // Beta is measured anticlockwise from the upward vertical to sigma_1'.
+        const beta = rad(st.beta);
+        const start = -Math.PI / 2;
+        const end = start - beta;
+        const radius = Math.min(34, 0.36 * a);
+        ctx.strokeStyle = COLORS.muted;
+        ctx.lineWidth = 1;
+        ctx.setLineDash([3, 4]);
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.lineTo(cx, cy - a);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        label(ctx, 'vertical', cx + 7, cy - a + 4, COLORS.muted, 'left', 'top');
+        ctx.beginPath();
+        ctx.arc(cx, cy, radius, start, end, beta > 0);
+        ctx.stroke();
+        if (Math.abs(st.beta) >= 5) {
+            const direction = beta > 0 ? -1 : 1;
+            const x = cx + radius * Math.cos(end);
+            const y = cy + radius * Math.sin(end);
+            arrow(ctx, x + 6 * direction * Math.sin(end), y - 6 * direction * Math.cos(end),
+                x, y, COLORS.muted, 1, 5);
+        }
+        const middle = start - beta / 2;
+        const lx = cx + (radius + 14) * Math.cos(middle) + (Math.abs(st.beta) < 10 ? -12 : 0);
+        const ly = cy + (radius + 14) * Math.sin(middle);
+        // A halo keeps the angle label readable where it crosses an axis.
+        ctx.strokeStyle = COLORS.halo;
+        ctx.lineWidth = 4;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.strokeText('β', lx, ly);
+        label(ctx, 'β', lx, ly, COLORS.muted);
+    }
+    const note = st.q < 1e-8 ? 'Isotropic: every direction is principal' :
+        st.sigma3 < 1e-8 ? 'σ₃′ = 0: the ellipse becomes a line' : '';
+    if (note) {
+        ctx.font = font(Math.min(13, (w - 24) / 21));
+        label(ctx, note, cx, h - 62, COLORS.muted);
+        ctx.font = font(13);
+    }
     stressScale(ctx, w, h, scale, st.sigma1);
     const summary = `Semiaxes: σ₁′ = ${fmt(st.sigma1)} kPa; σ₃′ = ${fmt(st.sigma3)} kPa.`;
     document.getElementById('ellipse-summary').textContent = summary;
