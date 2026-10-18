@@ -1453,8 +1453,8 @@ import"./main-Cbx4pfPv.js";const o=`<!DOCTYPE html>
 
         <section id="about">
             <p>A stress has a size <em>p′</em> and a tilt: an arrow whose length is <em>q/p′</em> and whose
-                direction is that of σ<sub>1</sub>′. Friction caps the length at sin φ′. Drag in the right-hand
-                panel to set the tilt.</p>
+                direction is that of σ<sub>1</sub>′. Friction caps the length at sin φ′. Drag in the C/S
+                panel to set the tilt. All four views show the same two-dimensional stress state.</p>
             <h3>What you are seeing</h3>
             <ul>
                 <li><strong>The Mohr circle.</strong> Centre <em>p′</em>, radius <em>q</em>, drawn blue inside
@@ -1469,6 +1469,16 @@ import"./main-Cbx4pfPv.js";const o=`<!DOCTYPE html>
                     σ<sub>1</sub>′ pushes, and the chosen plane in green.</li>
                 <li><strong>The status bar.</strong> Whether the stress is inside the cap, at it, or beyond
                     it.</li>
+                <li><strong>The stress element.</strong> A square of soil with compressive normal and shear
+                    tractions on its four faces. Switch to resultants to combine them into one vector per
+                    location. Opposite faces balance. Arrow lengths represent stress (force per unit area),
+                    rather than force on a specified area. The dashed green line is the chosen θ plane.</li>
+                <li><strong>The stress ellipse.</strong> The locus of traction-vector tips as the face normal
+                    rotates. Its semiaxes are the eigenvalues σ<sub>1</sub>′ and σ<sub>3</sub>′, and its axes
+                    follow their eigenvectors. The dotted reference circle has radius p′. The green vector
+                    is the traction on the θ plane, acting on the side whose outward normal points up when
+                    θ = 0. Isotropic stress gives a circle with no preferred principal direction; σ<sub>3</sub>′ = 0
+                    gives a line. This is a stress diagram, not a deformed shape. Each view has its own scale.</li>
             </ul>
             <h3>Conventions</h3>
             <p>Compression is positive throughout. β (the direction of σ<sub>1</sub>′ from the vertical) and θ (the
@@ -1545,6 +1555,35 @@ import"./main-Cbx4pfPv.js";const o=`<!DOCTYPE html>
                     <figure>
                         <canvas id="disc-canvas"></canvas>
                         <figcaption>The tilt</figcaption>
+                    </figure>
+                    <figure>
+                        <canvas id="box-canvas" role="img" aria-describedby="box-description"></canvas>
+                        <figcaption>
+                            <strong>The stress element</strong>
+                            <label class="view-control" for="vector-mode">Arrows
+                                <select id="vector-mode">
+                                    <option value="components">Normal + shear</option>
+                                    <option value="resultants">Resultant traction</option>
+                                </select>
+                            </label>
+                            <span id="box-description" class="view-description">
+                                <span id="vector-legend"><span class="normal-key">Normal</span> ·
+                                    <span class="shear-key">shear</span></span> · <span class="plane-key">θ plane</span>.
+                                Traction is force per unit area.
+                            </span>
+                            <span id="box-summary" class="view-description"></span>
+                        </figcaption>
+                    </figure>
+                    <figure>
+                        <canvas id="ellipse-canvas" role="img" aria-describedby="ellipse-description"></canvas>
+                        <figcaption>
+                            <strong>The principal stress ellipse</strong>
+                            <span id="ellipse-description" class="view-description">
+                                Axes follow the eigenvectors. <span class="plane-key">Green: traction on θ.</span>
+                                Dotted circle: p′. This is stress, not deformation.
+                            </span>
+                            <span id="ellipse-summary" class="view-description"></span>
+                        </figcaption>
                     </figure>
                 </div>
                 <div id="readout"></div>
@@ -2354,4 +2393,4 @@ import"./main-Cbx4pfPv.js";const o=`<!DOCTYPE html>
     <script type="module" src="./js/system-dynamics.js"><\/script>
 </body>
 
-</html>`,S=Object.assign({"../1d-compression.html":o,"../bearing-capacity.html":r,"../compaction.html":d,"../consolidation.html":c,"../critical-state.html":h,"../darcy-flow.html":p,"../earth-pressures.html":u,"../elastic-footing.html":m,"../footing-settlement.html":v,"../index.html":g,"../infinite-slope.html":f,"../mohrs-circle.html":b,"../newmarks-chart.html":w,"../proctor.html":y,"../ruler.html":T,"../shear-box.html":k,"../sieve-analysis.html":x,"../stress-profile.html":V,"../system-dynamics.html":C}),D=document.querySelector("#tool-grid"),i=(n,t)=>{const e=n.match(t);return e?e[1].replace(/\s+/g," ").trim():""},z=n=>n.replace(/[-_]+/g," ").replace(/\b\w/g,t=>t.toUpperCase()),P=Object.entries(S).map(([n,t])=>{const e=n.split("/").pop();if(!e||e==="index.html")return null;const s=i(t,/<h1[^>]*>([\s\S]*?)<\/h1>/i)||i(t,/<title>([\s\S]*?)<\/title>/i)||z(e.replace(/\.html$/,""));return{fileName:e,href:`./${e}`,title:s.replace(/<[^>]+>/g,"")}}).filter(Boolean).sort((n,t)=>n.title.localeCompare(t.title));D.replaceChildren(...P.map((n,t)=>{const e=document.createElement("a");e.className="tool-card",e.href=n.href;const s=document.createElement("span");s.className="tool-card-index";const a=document.createElement("h3");a.textContent=n.title;const l=document.createElement("p");return l.textContent=n.fileName,e.append(s,a),e}));
+</html>`,S=Object.assign({"../1d-compression.html":o,"../bearing-capacity.html":r,"../compaction.html":d,"../consolidation.html":c,"../critical-state.html":h,"../darcy-flow.html":p,"../earth-pressures.html":u,"../elastic-footing.html":m,"../footing-settlement.html":v,"../index.html":g,"../infinite-slope.html":f,"../mohrs-circle.html":b,"../newmarks-chart.html":w,"../proctor.html":y,"../ruler.html":T,"../shear-box.html":k,"../sieve-analysis.html":x,"../stress-profile.html":V,"../system-dynamics.html":C}),D=document.querySelector("#tool-grid"),i=(n,s)=>{const e=n.match(s);return e?e[1].replace(/\s+/g," ").trim():""},z=n=>n.replace(/[-_]+/g," ").replace(/\b\w/g,s=>s.toUpperCase()),P=Object.entries(S).map(([n,s])=>{const e=n.split("/").pop();if(!e||e==="index.html")return null;const t=i(s,/<h1[^>]*>([\s\S]*?)<\/h1>/i)||i(s,/<title>([\s\S]*?)<\/title>/i)||z(e.replace(/\.html$/,""));return{fileName:e,href:`./${e}`,title:t.replace(/<[^>]+>/g,"")}}).filter(Boolean).sort((n,s)=>n.title.localeCompare(s.title));D.replaceChildren(...P.map((n,s)=>{const e=document.createElement("a");e.className="tool-card",e.href=n.href;const t=document.createElement("span");t.className="tool-card-index";const a=document.createElement("h3");a.textContent=n.title;const l=document.createElement("p");return l.textContent=n.fileName,e.append(t,a),e}));
